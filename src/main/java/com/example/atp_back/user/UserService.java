@@ -19,6 +19,10 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
+    public void uploadUserImage(MultipartFile file) {
+        // TODO
+    }
+
     public void RegisterUser(SignupReq signupReq, MultipartFile file) {
         LocalDate thistime = LocalDate.now();
         User user = User.builder().name(signupReq.getName()).email(signupReq.getEmail())
@@ -26,10 +30,11 @@ public class UserService implements UserDetailsService {
                 .profileImage(signupReq.getImage())
                 .createdAt(thistime)
                 .updatedAt(thistime)
+                .role("ROLE_USER")
                 .tierGrade(UserTier.builder().grade("Bronze").build())
                 .build();
         userRepository.save(user);
-        // TODO: File upload
+        // TODO: File upload 위치 결정하고 업로드 함수 삽입
     }
 
     @Override
