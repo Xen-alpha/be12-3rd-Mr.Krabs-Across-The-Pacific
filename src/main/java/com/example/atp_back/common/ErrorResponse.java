@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ErrorResult implements BaseResult {
+public class ErrorResponse implements BaseResponse {
     private boolean isSuccess;
     private Integer code;
     private String message;
