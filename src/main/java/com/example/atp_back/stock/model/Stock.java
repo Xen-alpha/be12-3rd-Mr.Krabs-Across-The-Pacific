@@ -3,6 +3,8 @@ package com.example.atp_back.stock.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,4 +21,7 @@ public class Stock {
     private String code;
     @Column(nullable = false, length = 10)
     private String market;
+
+    @OneToMany(mappedBy = "stock")
+    private List<StockReply> replies;
 }
