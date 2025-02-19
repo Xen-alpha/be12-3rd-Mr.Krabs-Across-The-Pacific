@@ -52,12 +52,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void UpdateUser(SignupReq signupReq, MultipartFile file) {
+    public void UpdateUser(UserUpdateReq req, MultipartFile file) {
         LocalDate thistime = LocalDate.now();
-        User user = userRepository.findByEmail(signupReq.getEmail()).orElse(null);
+        User user = userRepository.findByEmail(req.getEmail()).orElse(null);
         if (user != null) {
-            user.setName(signupReq.getName());
-            user.setPassword(passwordEncoder.encode(signupReq.getPassword()));
+            user.setName(req.getName());
+            user.setEmail(req.getEmail());
+            user.setPassword(passwordEncoder.encode(req.getPassword()));
             user.setUpdatedAt(thistime);
         } else {
             throw new UsernameNotFoundException("User not found");

@@ -7,8 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ErrorResponse extends BaseResponse {
+public class ErrorResp<T> extends BaseResp<T> {
     private Integer code;
     private String message;
-
 }

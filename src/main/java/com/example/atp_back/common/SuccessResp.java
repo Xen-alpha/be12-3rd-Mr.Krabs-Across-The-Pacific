@@ -1,10 +1,9 @@
-package com.example.atp_back.user.model;
+package com.example.atp_back.common;
 
-import com.example.atp_back.common.BaseResponse;
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SignupResp extends BaseResponse {
+public class SuccessResp<T> extends BaseResp<T> {
 }

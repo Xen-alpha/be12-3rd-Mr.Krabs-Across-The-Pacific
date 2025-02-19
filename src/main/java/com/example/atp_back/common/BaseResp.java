@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BaseResponse {
+public class BaseResp<T> {
     private boolean isSuccess;
-
+    private T result;
 }
