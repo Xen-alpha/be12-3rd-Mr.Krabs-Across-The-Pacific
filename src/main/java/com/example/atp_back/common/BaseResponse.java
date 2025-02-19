@@ -15,6 +15,10 @@ public class BaseResponse<T> {
     private String message;
     private T result;
 
+    public boolean getIsSuccess() {
+        return isSuccess;
+    }
+
     public BaseResponse success(T result) {
         isSuccess = true;
         this.result = result;
