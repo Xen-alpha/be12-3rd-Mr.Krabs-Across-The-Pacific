@@ -17,6 +17,7 @@ public class UserTier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Column(nullable = false)
     private String grade;
 
     @OneToMany(mappedBy = "tierGrade")
