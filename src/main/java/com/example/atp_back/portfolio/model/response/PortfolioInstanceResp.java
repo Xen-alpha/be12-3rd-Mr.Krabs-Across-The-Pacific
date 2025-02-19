@@ -14,17 +14,17 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PortfolioInstanceRespDto{
+public class PortfolioInstanceResp {
     private Long idx;
     private String name;
     private String imageUrl;
-    private List<AcquisitionInstanceRespDto> acquisitionList = new ArrayList<>();
-    public static PortfolioInstanceRespDto from(Portfolio portfolio) {
-        return PortfolioInstanceRespDto.builder()
+    private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
+    public static PortfolioInstanceResp from(Portfolio portfolio) {
+        return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())
                 .imageUrl(portfolio.getImageUrl())
-                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceRespDto::from).collect(Collectors.toList()))
+                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
 }

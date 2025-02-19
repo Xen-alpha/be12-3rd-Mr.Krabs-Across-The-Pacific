@@ -14,24 +14,24 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PortfolioPageRespDto {
+public class PortfolioPageResp {
     private int page;
     private int size;
     private long totalElements;
     private int totalPages;
     private boolean hasNext;
     private boolean hasPrevious;
-    private List<PortfolioInstanceRespDto> portfolioList;
+    private List<PortfolioInstanceResp> portfolioList;
 
-    public static PortfolioPageRespDto from(Page<Portfolio> portfolioPage) {
-        return PortfolioPageRespDto.builder()
+    public static PortfolioPageResp from(Page<Portfolio> portfolioPage) {
+        return PortfolioPageResp.builder()
                 .page(portfolioPage.getNumber())
                 .size(portfolioPage.getSize())
                 .totalElements(portfolioPage.getTotalElements())
                 .totalPages(portfolioPage.getTotalPages())
                 .hasNext(portfolioPage.hasNext())
                 .hasPrevious(portfolioPage.hasPrevious())
-                .portfolioList(portfolioPage.stream().map(PortfolioInstanceRespDto::from).collect(Collectors.toList()))
+                .portfolioList(portfolioPage.stream().map(PortfolioInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
 }
