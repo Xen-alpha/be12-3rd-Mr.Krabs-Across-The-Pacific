@@ -1,5 +1,6 @@
 package com.example.atp_back.portfolio;
 
+import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
@@ -15,22 +16,28 @@ import org.springframework.web.bind.annotation.*;
 public class PortfolioController {
     private final PortfolioService portfolioService;
 
-    @PostMapping("/register")
-    public void register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
-        portfolioService.register(user, dto);
-    }
+  @PostMapping("/register")
+  public ResponseEntity<BaseResponse<Void>> register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
+    portfolioService.register(user, dto);
+
+    BaseResponse<Void> resp = new BaseResponse<>();
+    resp.success(null);
+
+    return ResponseEntity.ok(resp);
+  }
 
     @GetMapping("/list")
-    public ResponseEntity<PortfolioPageResp> list(int page, int size) {
-        PortfolioPageResp response = portfolioService.list(page, size);
+    public ResponseEntity<BaseResponse<PortfolioPageResp>> list(int page, int size) {
+      BaseResponse<PortfolioPageResp> resp = new BaseResponse<>();
+      resp.success(portfolioService.list(page, size));
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(resp);
     }
 
     @GetMapping("/{portfolioIdx}")
-    public ResponseEntity<PortfolioInstanceResp> read(@PathVariable Long portfolioIdx) {
-        PortfolioInstanceResp response = portfolioService.read(portfolioIdx);
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
+      BaseResponse<PortfolioInstanceResp> resp = new BaseResponse<>();
+      resp.success(portfolioService.read(portfolioIdx));
+        return ResponseEntity.ok(resp);
     }
 }
