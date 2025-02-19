@@ -19,4 +19,13 @@ public class UserController {
         resp.setIsSuccess(true);
         return ResponseEntity.ok(resp);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<SignupResp> update(@RequestPart SignupReq request, @RequestPart MultipartFile file) {
+        SignupResp resp = new SignupResp();
+        userService.UpdateUser(request, file);
+        resp.setIsSuccess(true);
+        return ResponseEntity.ok(resp);
+    }
+
 }

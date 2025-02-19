@@ -51,6 +51,19 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void UpdateUser(SignupReq signupReq, MultipartFile file) {
+        LocalDate thistime = LocalDate.now();
+        User user = userRepository.findByEmail(signupReq.getEmail()).orElse(null);
+        if (user != null) {
+            user.setName(signupReq.getName());
+            user.setPassword(passwordEncoder.encode(signupReq.getPassword()));
+            user.setUpdatedAt(thistime);
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
