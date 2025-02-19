@@ -19,6 +19,6 @@ public class UserTier {
     private Long idx;
     private String grade;
 
-    @OneToMany(mappedBy = "userTier")
+    @OneToMany(mappedBy = "tierGrade")
     List<User> userList;
 }

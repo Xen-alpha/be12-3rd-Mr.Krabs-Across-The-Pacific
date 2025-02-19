@@ -16,3 +16,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.security: DEBUG
+
+jwtData:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+filepath:
+  default: ${FILEPATH}

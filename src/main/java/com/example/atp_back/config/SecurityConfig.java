@@ -1,5 +1,7 @@
 package com.example.atp_back.config;
 
+import com.example.atp_back.config.filter.JwtFilter;
+import com.example.atp_back.config.filter.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,10 +31,18 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> {
-            authorizeRequests.requestMatchers( "/stock/**", "/portfolio/**", "/user/signup", "/login" ).permitAll()
+            authorizeRequests.requestMatchers( "/stock/**", "/portfolio/**", "/user/signup", "/login", "/logout" ).permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
                     .anyRequest().authenticated();
         });
+        http.logout(logout -> {
+            logout.logoutUrl("/logout").permitAll().deleteCookies("token");
+        });
+        // 세션은 그냥 쓰지 않음
+        http.sessionManagement(AbstractHttpConfigurer::disable);
+        // 기존 UPAF를 오버라이드하여 JWT 방식임을 정함
+        http.addFilterAt(new LoginFilter(authConfiguration.getAuthenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

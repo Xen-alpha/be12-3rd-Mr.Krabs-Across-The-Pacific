@@ -15,7 +15,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<SignupResp> signup(@RequestPart SignupReq request, @RequestPart MultipartFile file) {
         SignupResp resp = new SignupResp();
-        userService.
+        userService.RegisterUser(request, file);
         resp.setIsSuccess(true);
         return ResponseEntity.ok(resp);
     }
