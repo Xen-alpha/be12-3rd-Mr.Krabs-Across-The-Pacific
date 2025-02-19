@@ -1,5 +1,7 @@
 package com.example.atp_back.config;
 
+
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -27,6 +28,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
+        http.sessionManagement(AbstractHttpConfigurer::disable);
+        
         http.authorizeHttpRequests(authorizeRequests -> {
             authorizeRequests.requestMatchers( "/stock/**", "/portfolio/**", "/user/signup", "/login" ).permitAll()
                     .requestMatchers("/user/**").hasRole("USER")

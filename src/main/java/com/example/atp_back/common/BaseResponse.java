@@ -1,6 +1,23 @@
 package com.example.atp_back.common;
 
-public interface BaseResponse {
-    public boolean getIsSuccess();
-    public void setIsSuccess(boolean success);
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BaseResponse<T> {
+    private boolean isSuccess;
+    private String code;
+    private String message;
+    private T result;
+
+    public BaseResponse success(T result) {
+        isSuccess = true;
+        this.result = result;
+        return this;
+    }
 }
