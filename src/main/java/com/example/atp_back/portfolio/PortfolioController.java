@@ -1,8 +1,8 @@
 package com.example.atp_back.portfolio;
 
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
-import com.example.atp_back.portfolio.model.response.PortfolioInstanceRespDto;
-import com.example.atp_back.portfolio.model.response.PortfolioPageRespDto;
+import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
+import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +21,15 @@ public class PortfolioController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<PortfolioPageRespDto> list(int page, int size) {
-        PortfolioPageRespDto response = portfolioService.list(page, size);
+    public ResponseEntity<PortfolioPageResp> list(int page, int size) {
+        PortfolioPageResp response = portfolioService.list(page, size);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{portfolioIdx}")
-    public ResponseEntity<PortfolioInstanceRespDto> read(@PathVariable Long portfolioIdx) {
-        PortfolioInstanceRespDto response = portfolioService.read(portfolioIdx);
+    public ResponseEntity<PortfolioInstanceResp> read(@PathVariable Long portfolioIdx) {
+        PortfolioInstanceResp response = portfolioService.read(portfolioIdx);
 
         return ResponseEntity.ok(response);
     }

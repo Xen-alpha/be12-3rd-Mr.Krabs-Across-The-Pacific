@@ -2,8 +2,8 @@ package com.example.atp_back.portfolio;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
-import com.example.atp_back.portfolio.model.response.PortfolioInstanceRespDto;
-import com.example.atp_back.portfolio.model.response.PortfolioPageRespDto;
+import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
+import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,13 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.save(dto.toEntity(user));
     }
 
-    public PortfolioPageRespDto list(int page, int size) {
+    public PortfolioPageResp list(int page, int size) {
         Page<Portfolio> result = portfolioRepository.findAll(PageRequest.of(page, size));
-        return PortfolioPageRespDto.from(result);
+        return PortfolioPageResp.from(result);
     }
 
-    public PortfolioInstanceRespDto read(Long portfolioIdx) {
+    public PortfolioInstanceResp read(Long portfolioIdx) {
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-        return PortfolioInstanceRespDto.from(portfolio);
+        return PortfolioInstanceResp.from(portfolio);
     }
 }
