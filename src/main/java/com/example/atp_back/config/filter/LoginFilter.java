@@ -18,9 +18,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -47,7 +49,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         User user = (User) auth.getPrincipal();
         String jwt = JwtUtil.generateToken(user.getIdx(), user.getEmail(), user.getRole());
         // logger.info("{}({})님에게 {} JWT 토큰 부여",user.getIdx(), user.getEmail(), jwt);
-        ResponseCookie cookie = ResponseCookie.from("token", jwt)
+        ResponseCookie cookie = ResponseCookie.from("ATOKEN", jwt)
                 .path("/")
                 .httpOnly(true)
                 .secure(true)

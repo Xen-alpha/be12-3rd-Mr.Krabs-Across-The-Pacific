@@ -53,6 +53,25 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public UserInfoResp getUserInfo(String email) {
+        Optional<User> userResult = userRepository.findByEmail(email);
+        if (userResult.isPresent()) {
+            User userinfo = userResult.get();
+            int portfolioCount = 0;
+            if (userinfo.getPortfolios() != null) {
+                portfolioCount = userinfo.getPortfolios().size();
+            }
+            return UserInfoResp.builder()
+                    .email(userinfo.getEmail())
+                    .name(userinfo.getName())
+                    .tier(userinfo.getTierGrade().getGrade())
+                    .image(userinfo.getProfileImage())
+                    .portfolio_count(portfolioCount)
+                    .build();
+        }
+        return null;
+    }
+
     /*
     @Transactional
     public void UpdateUser(UserUpdateReq req, String originalMail) {

@@ -37,7 +37,7 @@ public class SecurityConfig {
                     .anyRequest().permitAll();
         });
         http.logout(logout -> {
-            logout.logoutUrl("/logout").permitAll().deleteCookies("token");
+            logout.logoutUrl("/logout").permitAll().deleteCookies("ATOKEN");
         });
         // 세션은 그냥 쓰지 않음
         http.sessionManagement(AbstractHttpConfigurer::disable);

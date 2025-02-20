@@ -2,6 +2,7 @@ package com.example.atp_back.user;
 
 import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.user.model.SignupReq;
+import com.example.atp_back.user.model.UserInfoResp;
 import com.example.atp_back.user.model.UserUpdateReq;
 import com.example.atp_back.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,8 @@ public class UserController {
 
     @Operation(summary="회원가입", description = "회원 가입을 합니다")
     @ApiResponse(responseCode="200", description="정상가입, 성공 문자열을 반환합니다.")
+    @ApiResponse(responseCode="400", description="가입 실패")
+    @ApiResponse(responseCode="500", description="서버 내 오류")
     @PostMapping("/signup")
     public ResponseEntity<BaseResponse<String>> signup(
             @Parameter(description="SignupReq 데이터 전송 객체를 사용합니다")
@@ -32,10 +35,15 @@ public class UserController {
     }
 
     @Operation(summary="유저 정보 조회", description = "자신의 유저 정보를 가져옵니다")
-    @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다.", )
+    @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
+    @ApiResponse(responseCode="403", description="허가되지 않은 유저 정보 조회 행위입니다")
     @GetMapping("/mypage")
-    public Response
-
+    public ResponseEntity<BaseResponse<UserInfoResp>> getUserInformation(@CookieValue(name="ATOKEN", required = true) String token) {
+        String userEmail = JwtUtil.getUserEmailFromToken(token);
+        UserInfoResp result = userService.getUserInfo(userEmail);
+        BaseResponse<UserInfoResp> resp = BaseResponse.<UserInfoResp>builder().isSuccess(true).result(result).build();
+        return ResponseEntity.ok(resp);
+    }
 
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")

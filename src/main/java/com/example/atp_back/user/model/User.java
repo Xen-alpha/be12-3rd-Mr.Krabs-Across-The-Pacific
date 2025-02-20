@@ -1,5 +1,6 @@
 package com.example.atp_back.user.model;
 
+import com.example.atp_back.portfolio.model.entity.Portfolio;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,9 +44,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String role;
 
+    @Schema(description="사용자 티어 관계")
     @ManyToOne
     @JoinColumn(name = "usertier_idx")
     private UserTier tierGrade;
+
+    @Schema(description="소유 포트폴리오 외래키")
+    @OneToMany(mappedBy = "user")
+    private List<Portfolio> portfolios;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

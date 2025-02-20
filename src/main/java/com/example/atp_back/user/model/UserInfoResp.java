@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class UserInfo {
+public class UserInfoResp {
     private String name;
     private String email;
     private Integer portfolio_count;
