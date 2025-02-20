@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-
+    /*
     @Transactional
     public void UpdateUser(UserUpdateReq req, String originalMail) {
         LocalDate thistime = LocalDate.now();
@@ -68,7 +68,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
     }
-
+    */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);

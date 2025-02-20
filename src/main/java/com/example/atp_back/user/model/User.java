@@ -1,5 +1,6 @@
 package com.example.atp_back.user.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,20 +22,27 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Schema(description="실명, 필수(문자열)")
     @Column(nullable = false)
     private String name;
+    @Schema(description="이메일, 가입에 필수(문자열)")
     @Column(unique = true, nullable = false)
     private String email;
+    @Schema(description="암호화된 비밀번호, 가입에 필수(문자열)")
     @Column(nullable = false)
     private String password;
+    @Schema(description="가입일(LocalDate)")
     @Column(nullable = false)
     private LocalDate createdAt;
+    @Schema(description="최신 정보 갱신일(LocalDate)")
     @Column(nullable = false)
     private LocalDate updatedAt;
+    @Schema(description="프로파일 이미지 값(문자열): 유저가 업로드 or 서버 내 파일 옵션으로 선택")
     private String profileImage;
+    @Schema(description="권한(문자열): role은 따로 부여하지 않고 가입시 전체 ROLE_USER로 설정, 관리자는 따로 두지 않는다.")
     @Column(nullable = false)
     private String role;
-    //role은 따로 부여하지 않고 가입시 전체 ROLE_USER로 설정, 관리자는 따로 두지 않는다.
+
     @ManyToOne
     @JoinColumn(name = "usertier_idx")
     private UserTier tierGrade;
