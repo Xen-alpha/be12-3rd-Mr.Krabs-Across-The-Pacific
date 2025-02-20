@@ -30,6 +30,13 @@ public class UserController {
         resp.success("성공");
         return ResponseEntity.ok(resp);
     }
+
+    @Operation(summary="유저 정보 조회", description = "자신의 유저 정보를 가져옵니다")
+    @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다.", )
+    @GetMapping("/mypage")
+    public Response
+
+
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
     @PutMapping("/update")

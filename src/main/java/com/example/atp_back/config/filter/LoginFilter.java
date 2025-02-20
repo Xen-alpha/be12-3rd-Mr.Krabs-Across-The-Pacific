@@ -29,12 +29,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        logger.info("누군가 로그인을 시도함");
+        // logger.info("누군가 로그인을 시도함");
         UsernamePasswordAuthenticationToken token;
         try {
             LoginReq user = new ObjectMapper().readValue(request.getInputStream(), LoginReq.class);
-            logger.info("로그인 유저: {}", user.getId());
-            logger.info("로그인 유저의 IP: {}", request.getRemoteAddr());
+            // logger.info("로그인 유저: {}", user.getId());
+            // logger.info("로그인 유저의 IP: {}", request.getRemoteAddr());
             token = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword(), null);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,7 +46,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         User user = (User) auth.getPrincipal();
         String jwt = JwtUtil.generateToken(user.getIdx(), user.getEmail(), user.getRole());
-        logger.info("{}({})님에게 {} JWT 토큰 부여",user.getIdx(), user.getEmail(), jwt);
+        // logger.info("{}({})님에게 {} JWT 토큰 부여",user.getIdx(), user.getEmail(), jwt);
         ResponseCookie cookie = ResponseCookie.from("token", jwt)
                 .path("/")
                 .httpOnly(true)
