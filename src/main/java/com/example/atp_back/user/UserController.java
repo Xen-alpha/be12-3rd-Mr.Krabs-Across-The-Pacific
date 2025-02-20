@@ -1,12 +1,10 @@
 package com.example.atp_back.user;
 
+import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.user.model.SignupReq;
-import com.example.atp_back.common.SuccessResp;
-import com.example.atp_back.user.model.UserUpdateReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,11 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
     @PostMapping("/signup")
-    public ResponseEntity<SuccessResp<String>> signup(@RequestBody SignupReq request) {
-        SuccessResp<String> resp = new SuccessResp<String>();
+    public ResponseEntity<BaseResponse<String>> signup(@RequestBody SignupReq request) {
+        BaseResponse<String> resp = new BaseResponse<String>();
         userService.RegisterUser(request);
-        resp.setSuccess(true);
-        resp.setResult("Signup Successful");
+        resp.success("True");
         return ResponseEntity.ok(resp);
     }
     /*
