@@ -39,6 +39,9 @@ dependencies {
     //Swagger-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
+    //로그 관련
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     implementation 'org.projectlombok:lombok'
     annotationProcessor('org.projectlombok:lombok')
 
