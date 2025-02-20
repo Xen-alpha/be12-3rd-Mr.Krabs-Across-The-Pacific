@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AcquisitionInstanceRespDto {
+public class AcquisitionInstanceResp {
     private Long idx;
     private Long price;
     private BigDecimal quantity;
     private LocalDateTime orderAt;
     private String stockName;
 
-    public static AcquisitionInstanceRespDto from(Acquisition acquisition) {
-        return AcquisitionInstanceRespDto.builder()
+    public static AcquisitionInstanceResp from(Acquisition acquisition) {
+        return AcquisitionInstanceResp.builder()
                 .idx(acquisition.getIdx())
                 .price(acquisition.getPrice())
                 .quantity(acquisition.getQuantity())
