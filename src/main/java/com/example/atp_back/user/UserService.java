@@ -24,25 +24,27 @@ public class UserService implements UserDetailsService {
 
     @Value("${filepath.default}")
     private String defaultFilePath;
-
+    /*
     public String uploadUserImage(MultipartFile file) {
         // TODO: defaultFilePath + "/images/avatar/" + randomPath + "_" + file.getOriginalFilename() 에 파일 저장
         String randomPath = UUID.randomUUID().toString();
         return "/images/avatar/" + randomPath + "_" + file.getOriginalFilename();
     }
-
+    */
     @Transactional
-    public void RegisterUser(SignupReq signupReq, MultipartFile file) {
+    public void RegisterUser(SignupReq signupReq) {
         LocalDate thistime = LocalDate.now();
         UserTier initialTier = userTierRepository.findByGrade("Bronze").orElse(null);
         // TODO: File upload 위치 결정하고 업로드 함수 삽입
+        /*
         String path = null;
         if (!file.isEmpty()){
             path = uploadUserImage(file);
         }
+        */
         User user = User.builder().name(signupReq.getName()).email(signupReq.getEmail())
                 .password(passwordEncoder.encode(signupReq.getPassword()))
-                .profileImage(path) // TODO
+                .profileImage(signupReq.getImage()) // TODO
                 .createdAt(thistime)
                 .updatedAt(thistime)
                 .role("ROLE_USER")
@@ -51,6 +53,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    /*
     @Transactional
     public void UpdateUser(UserUpdateReq req, MultipartFile file) {
         LocalDate thistime = LocalDate.now();
@@ -64,7 +67,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
     }
-
+    */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);

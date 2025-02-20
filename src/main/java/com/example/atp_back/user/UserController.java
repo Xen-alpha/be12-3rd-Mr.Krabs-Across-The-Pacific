@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
     private final UserService userService;
     @PostMapping("/signup")
-    public ResponseEntity<SuccessResp<String>> signup(@RequestPart SignupReq request, @RequestPart MultipartFile file) {
+    public ResponseEntity<SuccessResp<String>> signup(@RequestBody SignupReq request) {
         SuccessResp<String> resp = new SuccessResp<String>();
-        userService.RegisterUser(request, file);
+        userService.RegisterUser(request);
         resp.setSuccess(true);
         resp.setResult("Signup Successful");
         return ResponseEntity.ok(resp);
