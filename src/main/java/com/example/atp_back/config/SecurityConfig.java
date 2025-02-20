@@ -31,9 +31,10 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> {
-            authorizeRequests.requestMatchers( "/stock/**", "/portfolio/**", "/user/signup", "/login", "/logout" ).permitAll()
+            authorizeRequests
+                    .requestMatchers("/user/signup").permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
-                    .anyRequest().authenticated();
+                    .anyRequest().permitAll();
         });
         http.logout(logout -> {
             logout.logoutUrl("/logout").permitAll().deleteCookies("token");

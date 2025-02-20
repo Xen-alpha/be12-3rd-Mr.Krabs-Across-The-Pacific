@@ -23,7 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("TOKEN")) {
+            if (cookie.getName().equals("ATOKEN")) {
                 token = cookie.getValue();
                 break;
             }
