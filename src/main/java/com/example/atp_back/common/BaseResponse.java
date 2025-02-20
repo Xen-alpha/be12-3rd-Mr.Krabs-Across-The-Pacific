@@ -20,4 +20,11 @@ public class BaseResponse<T> {
         this.result = result;
         return this;
     }
+
+    public BaseResponse error(String code, String message) {
+        isSuccess = false;
+        this.code = code;
+        this.message = message;
+        return this;
+    }
 }
