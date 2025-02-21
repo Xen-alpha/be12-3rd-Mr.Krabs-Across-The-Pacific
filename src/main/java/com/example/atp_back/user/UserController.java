@@ -12,8 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +35,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<BaseResponse<String>> signup(
             @Parameter(description="SignupReq 데이터 전송 객체를 사용합니다")
+            @Valid
             @RequestBody SignupReq request) {
         BaseResponse<String> resp = new BaseResponse<String>();
         userService.RegisterUser(request);
@@ -53,6 +57,7 @@ public class UserController {
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
+            @Valid
             @RequestBody UserFollowReq reqBody,
             @CookieValue(name="ATOKEN", required = true) String token) {
         String requestUserMail = JwtUtil.getUserEmailFromToken(token);
@@ -99,4 +104,25 @@ public class UserController {
     }
     */
 
+
+    @ExceptionHandler({RuntimeException.class})
+    public ResponseEntity<BaseResponse<String>> customHandler(Exception e) {
+        BaseResponse<String> response = new BaseResponse<String>();
+        if (e.getMessage().equals("Failed to Follow")) {
+            response.error("10304", "사용자 팔로우에 실패했습니다.");
+            return ResponseEntity.badRequest().body(response);
+        } else if (e.getMessage().equals("Failed to Unfollow")) {
+            response.error("10305", "사용자 언팔로우에 실패했습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+        response.error("10101", "유저 정보를 불러올 수 없습니다");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<BaseResponse<String>> badRequestHandler(Exception e) {
+        BaseResponse<String> response = new BaseResponse<String>();
+        response.error("10101", "유저 정보를 불러올 수 없습니다");
+        return ResponseEntity.badRequest().body(response);
+    }
 }

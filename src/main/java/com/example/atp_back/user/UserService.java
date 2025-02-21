@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.RuntimeErrorException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class UserService implements UserDetailsService {
             UserFollow follow = UserFollow.builder().follower(follower).followee(followee).date(LocalDateTime.now()).build();
             userFollowRepository.save(follow);
         } else {
-            throw new UsernameNotFoundException("User mail not found");
+            throw new RuntimeException("Failed to Follow");
         }
     }
 
