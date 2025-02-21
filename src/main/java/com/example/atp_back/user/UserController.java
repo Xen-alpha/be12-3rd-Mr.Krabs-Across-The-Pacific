@@ -2,6 +2,7 @@ package com.example.atp_back.user;
 
 import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.user.model.SignupReq;
+import com.example.atp_back.user.model.UserFollowReq;
 import com.example.atp_back.user.model.UserInfoResp;
 import com.example.atp_back.user.model.UserUpdateReq;
 import com.example.atp_back.utils.JwtUtil;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +47,15 @@ public class UserController {
         return ResponseEntity.ok(resp);
     }
 
+    @PostMapping("/follow")
+    public ResponseEntity<BaseResponse<String>> follow(@RequestBody UserFollowReq reqBody, @CookieValue(name="ATOKEN", required = true) String token) {
+        String requestUserMail = JwtUtil.getUserEmailFromToken(token);
+        UserService.follow(reqBody.getEmail(), requestUserMail);
+        BaseResponse<String> result = new BaseResponse<>();
+        result.success("팔로우 성공");
+        return ResponseEntity.ok(result);
+    }
+
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
     @PutMapping("/update")
@@ -61,4 +72,5 @@ public class UserController {
         return ResponseEntity.ok(resp);
     }
     */
+
 }

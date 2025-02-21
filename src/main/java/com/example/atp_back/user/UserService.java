@@ -2,6 +2,7 @@ package com.example.atp_back.user;
 
 import com.example.atp_back.user.model.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserTierRepository userTierRepository;
+    private final UserFollowRepository userFollowRepository;
 
     @Value("${filepath.default}")
     private String defaultFilePath;
@@ -70,6 +73,17 @@ public class UserService implements UserDetailsService {
                     .build();
         }
         return null;
+    }
+
+    public void follow(@NotNull String followeeMail, @NotNull String followerMail) {
+        User follower = userRepository.findByEmail(followerMail).orElse(null);
+        User followee = userRepository.findByEmail(followeeMail).orElse(null);
+        if (follower != null && followee != null) {
+            UserFollow follow = UserFollow.builder().follower(follower).followee(followee).date(LocalDateTime.now()).build();
+            userFollowRepository.save(follow);
+        } else {
+            throw new UsernameNotFoundException("User mail not found");
+        }
     }
 
     /*

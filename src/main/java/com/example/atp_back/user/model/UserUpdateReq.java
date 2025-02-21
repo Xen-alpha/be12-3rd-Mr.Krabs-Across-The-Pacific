@@ -1,5 +1,6 @@
 package com.example.atp_back.user.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +11,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class UserUpdateReq {
+    @NotBlank
     private String name;
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
     private String image;
 }

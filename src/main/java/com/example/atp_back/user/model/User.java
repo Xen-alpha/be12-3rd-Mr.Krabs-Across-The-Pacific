@@ -53,6 +53,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios;
 
+    @Schema(description="내가 팔로우하고 있는 사람")
+    @OneToMany(mappedBy = "follower")
+    private List<UserFollow> followers;
+
+    @Schema(description="나를 팔로우 중인 사람들")
+    @OneToMany(mappedBy = "followee")
+    private List<UserFollow> followees;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
