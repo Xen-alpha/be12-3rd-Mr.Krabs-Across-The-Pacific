@@ -1,6 +1,8 @@
 package com.example.atp_back.user;
 
 import com.example.atp_back.user.model.*;
+import com.example.atp_back.user.model.follow.FollowResp;
+import com.example.atp_back.user.model.follow.UserFollow;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +12,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -84,6 +86,36 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("User mail not found");
         }
+    }
+
+    public List<FollowResp> getFollowers(@NotNull String followeeEmail) {
+        User followee = userRepository.findByEmail(followeeEmail).orElse(null);
+        List<FollowResp> result = new ArrayList<>();
+        if (followee != null) {
+            List<UserFollow> followers = userFollowRepository.findAllByFolloweeOrderByDate(followee);
+            for (UserFollow follower : followers) {
+                User user = userRepository.findById(follower.getIdx()).orElse(null);
+                if (user != null) {
+                    result.add(user.toFollowResp());
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<FollowResp> getFollowees(@NotNull String followerEmail) {
+        User follower = userRepository.findByEmail(followerEmail).orElse(null);
+        List<FollowResp> result = new ArrayList<>();
+        if (follower != null) {
+            List<UserFollow> followees = userFollowRepository.findAllByFollowerOrderByDate(follower);
+            for (UserFollow followee : followees) {
+                User user = userRepository.findById(follower.getIdx()).orElse(null);
+                if (user != null) {
+                    result.add(user.toFollowResp());
+                }
+            }
+        }
+        return result;
     }
 
     /*

@@ -1,6 +1,8 @@
 package com.example.atp_back.user.model;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.user.model.follow.FollowResp;
+import com.example.atp_back.user.model.follow.UserFollow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -96,5 +98,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public FollowResp toFollowResp() {
+        return FollowResp.builder().name(name).image(profileImage).tier(tierGrade.getGrade()).build();
     }
 }

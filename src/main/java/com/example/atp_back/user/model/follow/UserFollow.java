@@ -1,12 +1,12 @@
-package com.example.atp_back.user.model;
+package com.example.atp_back.user.model.follow;
 
+import com.example.atp_back.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -26,4 +26,5 @@ public class UserFollow {
     @ManyToOne
     @JoinColumn(name="followee")
     public User followee;
+
 }

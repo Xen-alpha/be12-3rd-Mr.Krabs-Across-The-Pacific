@@ -2,18 +2,21 @@ package com.example.atp_back.user;
 
 import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.user.model.SignupReq;
-import com.example.atp_back.user.model.UserFollowReq;
+import com.example.atp_back.user.model.follow.FollowResp;
+import com.example.atp_back.user.model.follow.FolloweeResp;
+import com.example.atp_back.user.model.follow.FollowerResp;
+import com.example.atp_back.user.model.follow.UserFollowReq;
 import com.example.atp_back.user.model.UserInfoResp;
-import com.example.atp_back.user.model.UserUpdateReq;
 import com.example.atp_back.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -50,10 +53,30 @@ public class UserController {
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(@RequestBody UserFollowReq reqBody, @CookieValue(name="ATOKEN", required = true) String token) {
         String requestUserMail = JwtUtil.getUserEmailFromToken(token);
-        UserService.follow(reqBody.getEmail(), requestUserMail);
+        userService.follow(reqBody.getEmail(), requestUserMail);
         BaseResponse<String> result = new BaseResponse<>();
         result.success("팔로우 성공");
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/follower")
+    public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@CookieValue(name="ATOKEN", required = true) String token) {
+        String userEmail = JwtUtil.getUserEmailFromToken(token);
+        List<FollowResp> followers = userService.getFollowers(userEmail);
+        FollowerResp result = new FollowerResp(followers.size(), followers);
+        BaseResponse<FollowerResp> response = new BaseResponse<>();
+        response.success(result);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/followee")
+    public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@CookieValue(name="ATOKEN", required = true) String token) {
+        String userEmail = JwtUtil.getUserEmailFromToken(token);
+        List<FollowResp> followees = userService.getFollowees(userEmail);
+        FolloweeResp result = new FolloweeResp(followees.size(), followees);
+        BaseResponse<FolloweeResp> response = new BaseResponse<>();
+        response.success(result);
+        return ResponseEntity.ok(response);
     }
 
     /*
