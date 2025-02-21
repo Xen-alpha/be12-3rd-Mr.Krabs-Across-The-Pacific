@@ -51,7 +51,10 @@ public class UserController {
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<BaseResponse<String>> follow(@RequestBody UserFollowReq reqBody, @CookieValue(name="ATOKEN", required = true) String token) {
+    public ResponseEntity<BaseResponse<String>> follow(
+            @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
+            @RequestBody UserFollowReq reqBody,
+            @CookieValue(name="ATOKEN", required = true) String token) {
         String requestUserMail = JwtUtil.getUserEmailFromToken(token);
         userService.follow(reqBody.getEmail(), requestUserMail);
         BaseResponse<String> result = new BaseResponse<>();

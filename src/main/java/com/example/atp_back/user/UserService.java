@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public UserInfoResp getUserInfo(String email) {
+    public UserInfoResp getUserInfo(@NotNull String email) {
         Optional<User> userResult = userRepository.findByEmail(email);
         if (userResult.isPresent()) {
             User userinfo = userResult.get();

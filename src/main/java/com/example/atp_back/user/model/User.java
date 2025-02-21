@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-    @Schema(description="실명, 필수(문자열)")
+    @Schema(description="닉네임, 필수(문자열)")
     @Column(nullable = false)
     private String name;
     @Schema(description="이메일, 가입에 필수(문자열)")

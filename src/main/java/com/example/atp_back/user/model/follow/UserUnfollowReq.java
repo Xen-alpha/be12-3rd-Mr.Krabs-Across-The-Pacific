@@ -1,5 +1,6 @@
 package com.example.atp_back.user.model.follow;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class UserUnfollowReq {
+    @Schema(description="팔로우 해제할 사람의 이메일")
     private String email;
 }
