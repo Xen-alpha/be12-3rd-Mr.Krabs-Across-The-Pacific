@@ -130,7 +130,14 @@ public class UserController {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<BaseResponse<String>> badRequestHandler(Exception e) {
         BaseResponse<String> response = new BaseResponse<String>();
-        response.error("10101", "유저 정보를 불러올 수 없습니다");
+        String message = e.getMessage();
+        if (message.substring(0,6).equals("signup") || message.substring(0,9).equals("duplicate")) {
+            response.error("10301", "회원 가입에 실패했습니다.");
+        } else if (message.substring(0,5).equals("login")) {
+            response.error("10302", "로그인에 실패했습니다.");
+        } else {
+            response.error("10101", "유저 정보를 불러올 수 없습니다");
+        }
         return ResponseEntity.badRequest().body(response);
     }
 }
