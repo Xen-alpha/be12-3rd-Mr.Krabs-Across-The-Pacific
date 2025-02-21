@@ -54,6 +54,7 @@ public class UserController {
         return ResponseEntity.ok(resp);
     }
 
+    // TODO: 자기 자신을 팔로우하는 건 예외 처리
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -66,7 +67,7 @@ public class UserController {
         result.success("팔로우 성공");
         return ResponseEntity.ok(result);
     }
-
+    @Operation(description="나를 팔로우 중인 사람 조회")
     @GetMapping("/follower")
     public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@CookieValue(name="ATOKEN", required = true) String token) {
         String userEmail = JwtUtil.getUserEmailFromToken(token);
@@ -76,7 +77,7 @@ public class UserController {
         response.success(result);
         return ResponseEntity.ok(response);
     }
-
+    @Operation(description="내가 팔로우 중인 사람 조회")
     @GetMapping("/followee")
     public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@CookieValue(name="ATOKEN", required = true) String token) {
         String userEmail = JwtUtil.getUserEmailFromToken(token);
@@ -104,6 +105,13 @@ public class UserController {
     }
     */
 
+    @Operation(description="로그아웃 리다이렉션용")
+    @PostMapping("/logout")
+    public ResponseEntity<BaseResponse<String>> successfulLogout() {
+        BaseResponse<String> resp = new BaseResponse<>();
+        resp.success("로그아웃에 성공했습니다");
+        return ResponseEntity.ok(resp);
+    }
 
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<BaseResponse<String>> customHandler(Exception e) {

@@ -32,12 +32,12 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> {
             authorizeRequests
-                    .requestMatchers("/user/signup").permitAll()
+                    .requestMatchers("/user/logout", "/user/signup", "/login", "/logout").permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
                     .anyRequest().permitAll();
         });
         http.logout(logout -> {
-            logout.logoutUrl("/logout").permitAll().deleteCookies("ATOKEN", "JSESSIONID").invalidateHttpSession(true);
+            logout.logoutUrl("/logout").permitAll().clearAuthentication(true).logoutSuccessUrl("/user/logout").deleteCookies("ATOKEN", "JSESSIONID").invalidateHttpSession(true);
         });
         // 세션은 그냥 쓰지 않음
         http.sessionManagement(AbstractHttpConfigurer::disable);

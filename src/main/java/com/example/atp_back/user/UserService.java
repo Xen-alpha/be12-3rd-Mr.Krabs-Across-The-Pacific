@@ -3,6 +3,7 @@ package com.example.atp_back.user;
 import com.example.atp_back.user.model.*;
 import com.example.atp_back.user.model.follow.FollowResp;
 import com.example.atp_back.user.model.follow.UserFollow;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +78,7 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
-
+    @Operation(description="follower가 followee를 팔로우함")
     public void follow(@NotNull String followeeMail, @NotNull String followerMail) {
         User follower = userRepository.findByEmail(followerMail).orElse(null);
         User followee = userRepository.findByEmail(followeeMail).orElse(null);
@@ -93,9 +94,9 @@ public class UserService implements UserDetailsService {
         User followee = userRepository.findByEmail(followeeEmail).orElse(null);
         List<FollowResp> result = new ArrayList<>();
         if (followee != null) {
-            List<UserFollow> followers = userFollowRepository.findAllByFolloweeOrderByDate(followee);
-            for (UserFollow follower : followers) {
-                User user = userRepository.findById(follower.getIdx()).orElse(null);
+            List<UserFollow> follows = userFollowRepository.findAllByFolloweeOrderByDate(followee);
+            for (UserFollow follow : follows) {
+                User user = follow.getFollower();
                 if (user != null) {
                     result.add(user.toFollowResp());
                 }
@@ -108,9 +109,9 @@ public class UserService implements UserDetailsService {
         User follower = userRepository.findByEmail(followerEmail).orElse(null);
         List<FollowResp> result = new ArrayList<>();
         if (follower != null) {
-            List<UserFollow> followees = userFollowRepository.findAllByFollowerOrderByDate(follower);
-            for (UserFollow followee : followees) {
-                User user = userRepository.findById(follower.getIdx()).orElse(null);
+            List<UserFollow> follows = userFollowRepository.findAllByFollowerOrderByDate(follower);
+            for (UserFollow follow : follows) {
+                User user = follow.getFollowee();
                 if (user != null) {
                     result.add(user.toFollowResp());
                 }
