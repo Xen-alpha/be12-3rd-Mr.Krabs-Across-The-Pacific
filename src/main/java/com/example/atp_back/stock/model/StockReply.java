@@ -5,6 +5,8 @@ import com.example.atp_back.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +25,7 @@ public class StockReply extends BaseReply {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+
+    @OneToMany(mappedBy = "reply")
+    private List<StockReplyLikes> likes;
 }

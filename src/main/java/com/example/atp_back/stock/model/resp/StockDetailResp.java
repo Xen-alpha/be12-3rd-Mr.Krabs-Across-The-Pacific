@@ -18,12 +18,14 @@ public class StockDetailResp {
     private String name;
     private String code;
     private String market;
+    private List<StockReplyResp> replies;
     public static StockDetailResp from(Stock stock) {
         return StockDetailResp.builder()
                 .id(stock.getIdx())
                 .name(stock.getName())
                 .code(stock.getCode())
                 .market(stock.getMarket())
+                .replies(stock.getReplies().stream().map(StockReplyResp::from).collect(Collectors.toList()))
                 .build();
     }
 

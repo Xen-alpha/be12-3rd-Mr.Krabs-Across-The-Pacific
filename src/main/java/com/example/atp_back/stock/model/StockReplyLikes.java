@@ -13,4 +13,7 @@ public class StockReplyLikes {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name="reply_id")
+    private StockReply reply;
 }
