@@ -9,15 +9,12 @@ import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.sound.sampled.Port;
-import java.util.Arrays;
+import javax.annotation.Nullable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,16 +23,12 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final RedisDao redisDao;
 
-    public void register(User user, PortfolioCreateReqDto dto) {
+    public Long register(User user, PortfolioCreateReqDto dto) {
         Portfolio portfolio = portfolioRepository.save(dto.toEntity(user));
+        return portfolio.getIdx();
     }
 
-//    public PortfolioPageResp list(int page, int size) {
-//        Page<Portfolio> result = portfolioRepository.findAll(PageRequest.of(page, size));
-//        return PortfolioPageResp.from(result);
-//    }
-
-    public PortfolioPageResp list(Pageable pageable) {
+    public PortfolioPageResp list(@Nullable User user, Pageable pageable) {
         String sortBy = pageable.getSort().stream()
                 .findFirst()
                 .map(Sort.Order::getProperty)
@@ -50,28 +43,28 @@ public class PortfolioService {
             result = portfolioRepository.findAllByOrderByViewCntDesc(pageable);
         }
 
-        return PortfolioPageResp.from(result);
+        return PortfolioPageResp.from(user, result);
     }
 
-    public PortfolioInstanceResp read(Long portfolioIdx) {
+    public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-        return PortfolioInstanceResp.from(portfolio);
+        return PortfolioInstanceResp.from(user, portfolio);
     }
 
     /*포트폴리오 검색 관련*/
   public PortfolioListResp searchByPName(String name) {
       List<Portfolio> portfolioList = portfolioRepository.findAllByNameContaining(name);
-      return PortfolioListResp.from(portfolioList);
+      return PortfolioListResp.from(null, portfolioList);
   }
 
   public PortfolioListResp searchByUName(String name) {
       List<Portfolio> portfolioList = portfolioRepository.findAllByUserNameContaining(name);
-      return PortfolioListResp.from(portfolioList);
+      return PortfolioListResp.from(null, portfolioList);
   }
 
   public PortfolioListResp searchBySName(String name) {
       List<Portfolio> portfolioList = portfolioRepository.findAllByStockNameContaining(name);
-      return PortfolioListResp.from(portfolioList);
+      return PortfolioListResp.from(null, portfolioList);
     }
 
 

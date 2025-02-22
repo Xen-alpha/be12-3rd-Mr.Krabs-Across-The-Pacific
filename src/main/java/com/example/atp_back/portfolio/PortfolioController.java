@@ -13,9 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
+import javax.annotation.Nullable;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,31 +23,31 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 등록", description = "포트폴리오를 등록하는 기능")
   @PostMapping("/register")
-  public ResponseEntity<BaseResponse<Void>> register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
-    portfolioService.register(user, dto);
-
-    BaseResponse<Void> resp = new BaseResponse<>();
-    resp.success(null);
+  //로그인하지 않았을 경우 로그인페이지로 가도록 추후 수정
+  public ResponseEntity<BaseResponse<Long>> register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
+    BaseResponse<Long> resp = new BaseResponse<>();
+    resp.success(portfolioService.register(user, dto));
 
     return ResponseEntity.ok(resp);
   }
 
   @Operation(summary = "포트폴리오 목록 조회", description = "페이지별 포트폴리오 목록을 조회하고, 조회수, 북마크 수, 생성 날짜를 기준으로 정렬")
   @GetMapping("/list")
-  public ResponseEntity<BaseResponse<PortfolioPageResp>> list(
+  public ResponseEntity<BaseResponse<PortfolioPageResp>> list(@AuthenticationPrincipal @Nullable User user,
           @PageableDefault(page = 0, size = 15, sort = "viewCnt") Pageable pageable) {
+
     BaseResponse<PortfolioPageResp> resp = new BaseResponse<>();
-    resp.success(portfolioService.list(pageable));
+    resp.success(portfolioService.list(user, pageable));
 
     return ResponseEntity.ok(resp);
   }
 
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
-  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
+  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@Nullable @AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
     portfolioService.viewCnt(user, portfolioIdx);
     BaseResponse<PortfolioInstanceResp> resp = new BaseResponse<>();
-    resp.success(portfolioService.read(portfolioIdx));
+    resp.success(portfolioService.read(user, portfolioIdx));
     return ResponseEntity.ok(resp);
   }
 

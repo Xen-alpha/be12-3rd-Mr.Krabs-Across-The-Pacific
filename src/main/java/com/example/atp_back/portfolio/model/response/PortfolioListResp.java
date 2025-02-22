@@ -1,6 +1,8 @@
 package com.example.atp_back.portfolio.model.response;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.user.model.User;
+import io.micrometer.common.lang.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,13 +19,13 @@ import java.util.stream.Collectors;
 public class PortfolioListResp {
   private List<PortfolioInstanceResp> portfolioList = new ArrayList<>();
 
-  public static PortfolioListResp from(List<Portfolio> portfolios) {
+  public static PortfolioListResp from(@Nullable User user, List<Portfolio> portfolios) {
     List<PortfolioInstanceResp> instanceResp = portfolios.stream()
-        .map(PortfolioInstanceResp::from)
-        .collect(Collectors.toList());
+            .map(portfolio -> PortfolioInstanceResp.from(user, portfolio))
+            .collect(Collectors.toList());
 
     return PortfolioListResp.builder()
-        .portfolioList(instanceResp)
-        .build();
+            .portfolioList(instanceResp)
+            .build();
   }
 }
