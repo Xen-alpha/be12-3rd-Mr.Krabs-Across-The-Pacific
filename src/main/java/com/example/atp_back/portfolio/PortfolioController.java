@@ -8,9 +8,12 @@ import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -31,18 +34,20 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
-  @Operation(summary = "포트폴리오 목록 조회", description = "포트폴리오의 목록을 조회하는 기능")
+  @Operation(summary = "포트폴리오 목록 조회", description = "페이지별 포트폴리오 목록을 조회하고, 조회수, 북마크 수, 생성 날짜를 기준으로 정렬")
   @GetMapping("/list")
-  public ResponseEntity<BaseResponse<PortfolioPageResp>> list(int page, int size) {
+  public ResponseEntity<BaseResponse<PortfolioPageResp>> list(
+          @PageableDefault(page = 0, size = 15, sort = "viewCnt") Pageable pageable) {
     BaseResponse<PortfolioPageResp> resp = new BaseResponse<>();
-    resp.success(portfolioService.list(page, size));
+    resp.success(portfolioService.list(pageable));
 
     return ResponseEntity.ok(resp);
   }
 
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
-  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
+  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
+    portfolioService.viewCnt(user, portfolioIdx);
     BaseResponse<PortfolioInstanceResp> resp = new BaseResponse<>();
     resp.success(portfolioService.read(portfolioIdx));
     return ResponseEntity.ok(resp);
@@ -71,4 +76,5 @@ public class PortfolioController {
     resp.success(portfolioService.searchBySName(name));
     return ResponseEntity.ok(resp);
   }
+
 }

@@ -18,12 +18,14 @@ public class PortfolioInstanceResp {
     private Long idx;
     private String name;
     private String imageUrl;
+    private int viewCnt;
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
     public static PortfolioInstanceResp from(Portfolio portfolio) {
         return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())
                 .imageUrl(portfolio.getImageUrl())
+                .viewCnt(portfolio.getViewCnt())
                 .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
