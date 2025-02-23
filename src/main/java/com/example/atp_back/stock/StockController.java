@@ -34,11 +34,14 @@ public class StockController {
         return ResponseEntity.ok(resp);
     }
 
-    @PostMapping("/reply/{idx}")
+
+
+    @PostMapping("/reply/{stockId}")
     public ResponseEntity<BaseResponse<String>> getStockReply(@RequestBody StockReplyRegisterReq dto,
-                                                              @PathVariable long idx,
-                                                              @AuthenticationPrincipal User user) {
+                                                              @AuthenticationPrincipal User user,
+                                                              @PathVariable long stockId) {
         //login기능 구현하면 그때 입력하는걸로 일단은 1L
-        return ResponseEntity.ok(stockReplyService.addReply(dto, 1L, idx));
+        return ResponseEntity.ok(stockReplyService.addReply(dto, user.getIdx(), stockId));
     }
+
 }
