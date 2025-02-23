@@ -1,5 +1,6 @@
-package com.example.atp_back.stock;
+package com.example.atp_back.stock.service;
 
+import com.example.atp_back.stock.repository.StockRepository;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

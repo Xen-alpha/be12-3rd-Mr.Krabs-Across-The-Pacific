@@ -1,10 +1,10 @@
 package com.example.atp_back.stock;
 
 import com.example.atp_back.common.BaseResponse;
-import com.example.atp_back.stock.model.Stock;
-import com.example.atp_back.stock.model.StockReply;
 import com.example.atp_back.stock.model.req.StockReplyRegisterReq;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
+import com.example.atp_back.stock.service.StockReplyService;
+import com.example.atp_back.stock.service.StockService;
 import com.example.atp_back.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +37,22 @@ public class StockController {
 
 
     @PostMapping("/reply/{stockId}")
-    public ResponseEntity<BaseResponse<String>> getStockReply(@RequestBody StockReplyRegisterReq dto,
+    public ResponseEntity<BaseResponse<String>> PostStockReply(@RequestBody StockReplyRegisterReq dto,
                                                               @AuthenticationPrincipal User user,
                                                               @PathVariable long stockId) {
-        //login기능 구현하면 그때 입력하는걸로 일단은 1L
-        return ResponseEntity.ok(stockReplyService.addReply(dto, user.getIdx(), stockId));
+        stockReplyService.addReply(dto, user.getIdx(), stockId);
+        BaseResponse<String> resp = new BaseResponse<>();
+        resp.success("success");
+        return ResponseEntity.ok(resp);
+    }
+
+    @PostMapping("/reply/likes/{replyId}")
+    public ResponseEntity<BaseResponse<String>> LikesReply(@AuthenticationPrincipal User user,
+                                                           @PathVariable Long replyId) {
+        stockReplyLikesService(user.getIdx(), replyId);
+        BaseResponse<String> resp = new BaseResponse<>();
+        resp.success("success");
+        return ResponseEntity.ok(resp);
     }
 
 }

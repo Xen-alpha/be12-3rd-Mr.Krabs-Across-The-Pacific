@@ -1,6 +1,7 @@
-package com.example.atp_back.stock;
+package com.example.atp_back.stock.service;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.stock.repository.StockReplyRepository;
 import com.example.atp_back.stock.model.Stock;
 import com.example.atp_back.stock.model.StockReply;
 import com.example.atp_back.stock.model.req.StockReplyRegisterReq;
