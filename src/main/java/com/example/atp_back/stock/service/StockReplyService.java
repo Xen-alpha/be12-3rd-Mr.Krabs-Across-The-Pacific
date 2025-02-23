@@ -16,16 +16,11 @@ public class StockReplyService {
     private final StockReplyRepository stockReplyRepository;
 
     @Transactional
-    public BaseResponse<String> addReply(StockReplyRegisterReq dto, Long userIdx, Long stockIdx) {
-        User user = new User();
-        user.setIdx(userIdx);
+    public void addReply(StockReplyRegisterReq dto,User user, Long stockIdx) {
         Stock stock = new Stock();
         stock.setIdx(stockIdx);
         StockReply stockReply = dto.toEntity(user, stock);
         stockReplyRepository.save(stockReply);
 
-        BaseResponse<String> response = new BaseResponse<>();
-        response.success("success");
-        return response;
     }
 }

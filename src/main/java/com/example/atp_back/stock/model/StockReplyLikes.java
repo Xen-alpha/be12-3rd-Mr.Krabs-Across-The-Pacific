@@ -3,8 +3,14 @@ package com.example.atp_back.stock.model;
 
 import com.example.atp_back.user.model.User;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class StockReplyLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
