@@ -19,9 +19,10 @@ public class BaseResponse<T> {
         return isSuccess;
     }
 
-    public BaseResponse success(T result) {
-        isSuccess = true;
-        this.result = result;
-        return this;
+    public static<T> BaseResponse<T> success(T result) {
+        BaseResponse<T> resp = new BaseResponse<>();
+        resp.isSuccess = true;
+        resp.result = result;
+        return resp;
     }
 }

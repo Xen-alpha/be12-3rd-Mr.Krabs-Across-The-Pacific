@@ -3,6 +3,7 @@ package com.example.atp_back.stock;
 import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.stock.model.req.StockReplyRegisterReq;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
+import com.example.atp_back.stock.model.resp.StockListResp;
 import com.example.atp_back.stock.service.StockReplyLikesService;
 import com.example.atp_back.stock.service.StockReplyService;
 import com.example.atp_back.stock.service.StockService;
@@ -15,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.atp_back.common.BaseResponse.success;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +36,7 @@ public class StockController {
             """)
     @GetMapping("/detail/{idx}")
     public ResponseEntity<BaseResponse<StockDetailResp>> getStock(@PathVariable long idx) {
-        BaseResponse<StockDetailResp> resp = new BaseResponse<>();
-        resp.success(stockService.getStock(idx));
+        BaseResponse<StockDetailResp> resp = BaseResponse.success(stockService.getStock(idx));
         return ResponseEntity.ok(resp);
     }
 
@@ -44,9 +46,8 @@ public class StockController {
             주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
             """)
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<StockDetailResp>>> getStocks() {
-        BaseResponse<List<StockDetailResp>> resp = new BaseResponse<>();
-        resp.success(stockService.getAllStocks());
+    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks() {
+        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks());
         return ResponseEntity.ok(resp);
     }
 
@@ -60,8 +61,7 @@ public class StockController {
                                                               @AuthenticationPrincipal User user,
                                                               @PathVariable long stockId) {
         stockReplyService.addReply(dto, user, stockId);
-        BaseResponse<String> resp = new BaseResponse<>();
-        resp.success("success");
+        BaseResponse<String> resp = BaseResponse.success("success");
         return ResponseEntity.ok(resp);
     }
 
@@ -73,8 +73,7 @@ public class StockController {
     public ResponseEntity<BaseResponse<String>> LikeReply(@AuthenticationPrincipal User user,
                                                            @PathVariable Long replyId) {
         stockReplyLikesService.likeReply(user, replyId);
-        BaseResponse<String> resp = new BaseResponse<>();
-        resp.success("success");
+        BaseResponse<String> resp = BaseResponse.success("success");
         return ResponseEntity.ok(resp);
     }
 
