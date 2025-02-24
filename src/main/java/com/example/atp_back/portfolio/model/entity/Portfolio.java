@@ -32,4 +32,7 @@ public class Portfolio {
 
     @OneToMany(mappedBy = "portfolio")
     private List<Acquisition> acquisitionList;
+
+  @OneToMany(mappedBy = "portfolio")
+  private List<Bookmark> bookmarkList;
 }
