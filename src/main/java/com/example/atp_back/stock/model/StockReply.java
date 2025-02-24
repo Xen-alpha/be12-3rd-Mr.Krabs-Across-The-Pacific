@@ -19,11 +19,11 @@ public class StockReply extends BaseReply {
     private Long idx;
 
     @ManyToOne
-    @JoinColumn(name="stock_id")
+    @JoinColumn(name="stock_id", nullable=false)
     private Stock stock;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable=false)
     private User user;
 
     @OneToMany(mappedBy = "reply")
