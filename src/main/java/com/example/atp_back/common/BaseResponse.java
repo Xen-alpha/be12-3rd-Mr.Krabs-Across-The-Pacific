@@ -15,6 +15,9 @@ public class BaseResponse<T> {
     private String message;
     private T result;
 
+    public boolean getIsSuccess() {
+        return isSuccess;
+    }
     public static<T> BaseResponse<T> success(T result) {
         return BaseResponse.<T>builder()
                 .isSuccess(true)
