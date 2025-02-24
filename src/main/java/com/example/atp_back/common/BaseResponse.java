@@ -24,4 +24,11 @@ public class BaseResponse<T> {
                 .result(result)
                 .build();
     }
+
+    public BaseResponse error(String code, String message) {
+        isSuccess = false;
+        this.code = code;
+        this.message = message;
+        return this;
+    }
 }
