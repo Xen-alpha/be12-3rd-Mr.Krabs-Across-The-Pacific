@@ -1,12 +1,14 @@
 package com.example.atp_back.portfolio.model.response;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +25,7 @@ public class PortfolioPageResp {
     private boolean hasPrevious;
     private List<PortfolioInstanceResp> portfolioList;
 
-    public static PortfolioPageResp from(Page<Portfolio> portfolioPage) {
+    public static PortfolioPageResp from(@Nullable User user, Page<Portfolio> portfolioPage) {
         return PortfolioPageResp.builder()
                 .page(portfolioPage.getNumber())
                 .size(portfolioPage.getSize())
@@ -31,7 +33,9 @@ public class PortfolioPageResp {
                 .totalPages(portfolioPage.getTotalPages())
                 .hasNext(portfolioPage.hasNext())
                 .hasPrevious(portfolioPage.hasPrevious())
-                .portfolioList(portfolioPage.stream().map(PortfolioInstanceResp::from).collect(Collectors.toList()))
+                .portfolioList(portfolioPage.stream()
+                        .map(portfolio -> PortfolioInstanceResp.from(user, portfolio))
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

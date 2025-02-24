@@ -4,9 +4,13 @@ import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.atp_back.portfolio.model.entity.QAcquisition.acquisition;
@@ -69,5 +73,30 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     return results.stream()
         .map(tuple -> tuple.get(portfolio))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<Portfolio> findAllByOrderByBookmarksDesc(Pageable pageable) {
+    List<Tuple> results = queryFactory
+            .select(portfolio, bookmark.count())
+            .from(portfolio)
+            .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
+            .groupBy(portfolio)
+            .orderBy(bookmark.count().desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+    List<Portfolio> portfolios = results.stream()
+            .map(tuple -> tuple.get(portfolio))
+            .collect(Collectors.toList());
+
+    // 전체 개수를 가져와서 Page 객체를 생성
+    long total = Optional.ofNullable(queryFactory
+                    .select(portfolio.count())
+                    .from(portfolio)
+                    .fetchOne()).orElse(0L);
+
+    return new PageImpl<>(portfolios, pageable, total);
   }
 }
