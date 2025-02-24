@@ -1,8 +1,7 @@
-package com.example.atp_back.user.model;
+package com.example.atp_back.user.model.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +19,10 @@ public class UserInfoResp {
     private String email;
     @Schema(description="제작한 포트폴리오 수")
     private Integer portfolio_count;
+    @Schema(description="나를 팔로우하는 사람 수")
+    private Integer followers_count;
+    @Schema(description="내가 팔로우하는 사람 수")
+    private Integer followings_count;
     @Schema(description="사용자 이미지")
     private String image;
     @Schema(description="사용자 등급")

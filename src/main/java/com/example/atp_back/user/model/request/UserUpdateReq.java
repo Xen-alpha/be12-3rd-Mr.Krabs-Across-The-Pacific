@@ -1,4 +1,4 @@
-package com.example.atp_back.user.model;
+package com.example.atp_back.user.model.request;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;

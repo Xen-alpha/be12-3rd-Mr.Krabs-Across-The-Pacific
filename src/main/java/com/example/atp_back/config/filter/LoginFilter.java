@@ -1,7 +1,6 @@
 package com.example.atp_back.config.filter;
 
-import com.example.atp_back.user.model.LoginReq;
-import com.example.atp_back.user.model.SignupReq;
+import com.example.atp_back.user.model.request.LoginReq;
 import com.example.atp_back.user.model.User;
 import com.example.atp_back.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,11 +17,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {

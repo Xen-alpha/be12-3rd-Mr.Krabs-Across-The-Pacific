@@ -1,7 +1,7 @@
 package com.example.atp_back.user.model;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
-import com.example.atp_back.user.model.follow.FollowResp;
+import com.example.atp_back.user.model.follow.response.FollowResp;
 import com.example.atp_back.user.model.follow.UserFollow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -45,6 +45,30 @@ public class User implements UserDetails {
     @Schema(description="권한(문자열): role은 따로 부여하지 않고 가입시 전체 ROLE_USER로 설정, 관리자는 따로 두지 않는다.")
     @Column(nullable = false)
     private String role;
+
+
+    @Schema(description="나를 팔로우한 사람 수")
+    @Column(nullable = false)
+    private Integer followCount;
+
+    @Schema(description="내가 팔로우하는 사람 수")
+    @Column(nullable = false)
+    private Integer followingCount;
+
+    public void addFollower(){
+        followCount++;
+    }
+    public void addFollowing(){
+        followingCount++;
+    }
+    public void removeFollower(){
+        followCount--;
+    }
+    public void removeFollowing(){
+        followingCount--;
+    }
+
+    // ------------Relation-------------
 
     @Schema(description="사용자 티어 관계")
     @ManyToOne

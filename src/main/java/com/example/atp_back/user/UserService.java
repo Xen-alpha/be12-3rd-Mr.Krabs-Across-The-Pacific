@@ -1,9 +1,14 @@
 package com.example.atp_back.user;
 
 import com.example.atp_back.user.model.*;
-import com.example.atp_back.user.model.follow.FollowResp;
+import com.example.atp_back.user.model.follow.response.FollowResp;
 import com.example.atp_back.user.model.follow.UserFollow;
+import com.example.atp_back.user.model.follow.response.FolloweeResp;
+import com.example.atp_back.user.model.follow.response.FollowerResp;
+import com.example.atp_back.user.model.request.SignupReq;
+import com.example.atp_back.user.model.response.UserInfoResp;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.RuntimeErrorException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserTierRepository userTierRepository;
     private final UserFollowRepository userFollowRepository;
+    private final EntityManager entityManager;
 
     @Value("${filepath.default}")
     private String defaultFilePath;
@@ -56,6 +61,8 @@ public class UserService implements UserDetailsService {
                 .updatedAt(thistime)
                 .role("ROLE_USER")
                 .tierGrade(initialTier)
+                .followCount(0)
+                .followingCount(0)
                 .build();
         userRepository.save(user);
     }
@@ -74,23 +81,58 @@ public class UserService implements UserDetailsService {
                     .tier(userinfo.getTierGrade().getGrade())
                     .image(userinfo.getProfileImage())
                     .portfolio_count(portfolioCount)
+                    .followers_count(userinfo.getFollowCount())
+                    .followings_count(userinfo.getFollowingCount())
                     .build();
         }
         return null;
     }
     @Operation(description="follower가 followee를 팔로우함")
     public void follow(@NotNull String followeeMail, @NotNull String followerMail) {
+        if (followeeMail.equals(followerMail)) {
+            throw new RuntimeException("bad follow");
+        }
         User follower = userRepository.findByEmail(followerMail).orElse(null);
         User followee = userRepository.findByEmail(followeeMail).orElse(null);
+        UserFollow prev = userFollowRepository.findByFolloweeAndFollower(followee, follower).orElse(null);
+        if (prev != null) {
+            throw new RuntimeException("bad follow");
+        }
         if (follower != null && followee != null) {
+            follower.addFollowing();
+            followee.addFollower();
             UserFollow follow = UserFollow.builder().follower(follower).followee(followee).date(LocalDateTime.now()).build();
             userFollowRepository.save(follow);
         } else {
-            throw new RuntimeException("Failed to Follow");
+            throw new RuntimeException("Failed to follow");
         }
     }
 
-    public List<FollowResp> getFollowers(@NotNull String followeeEmail) {
+    @Operation(description="follower가 followee를 언팔로우함")
+    public void unfollow(@NotNull String followeeMail, @NotNull String followerMail) {
+        if (followeeMail.equals(followerMail)) {
+            throw new RuntimeException("bad unfollow");
+        }
+        User follower = userRepository.findByEmail(followerMail).orElse(null);
+        User followee = userRepository.findByEmail(followeeMail).orElse(null);
+        if (follower != null && followee != null) {
+            UserFollow follow = userFollowRepository.findByFolloweeAndFollower(followee, follower).orElse(null);
+            if (follow != null) {
+                userFollowRepository.delete(follow);
+                follower.removeFollowing();
+                followee.removeFollower();
+                User follower2 = userRepository.save(follower);
+                User followee2 = userRepository.save(followee);
+            }
+        } else {
+            throw new RuntimeException("Failed to unfollow");
+        }
+    }
+
+
+
+    @Operation(description="follower 수 가져오기")
+    public FollowerResp getFollowers(@NotNull String followeeEmail) {
         User followee = userRepository.findByEmail(followeeEmail).orElse(null);
         List<FollowResp> result = new ArrayList<>();
         if (followee != null) {
@@ -102,10 +144,13 @@ public class UserService implements UserDetailsService {
                 }
             }
         }
-        return result;
+        FollowerResp follower = new FollowerResp();
+        follower.setFollower(result.size());
+        follower.setUsers(result);
+        return follower;
     }
-
-    public List<FollowResp> getFollowees(@NotNull String followerEmail) {
+    @Operation(description="following 수 가져오기")
+    public FolloweeResp getFollowees(@NotNull String followerEmail) {
         User follower = userRepository.findByEmail(followerEmail).orElse(null);
         List<FollowResp> result = new ArrayList<>();
         if (follower != null) {
@@ -117,7 +162,10 @@ public class UserService implements UserDetailsService {
                 }
             }
         }
-        return result;
+        FolloweeResp followee = new FolloweeResp();
+        followee.setUsers(result);
+        followee.setFollowing(result.size());
+        return followee;
     }
 
     /*

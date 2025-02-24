@@ -1,4 +1,4 @@
-package com.example.atp_back.user.model.follow;
+package com.example.atp_back.user.model.follow.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;

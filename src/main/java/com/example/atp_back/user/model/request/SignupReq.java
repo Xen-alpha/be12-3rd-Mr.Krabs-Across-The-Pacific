@@ -1,4 +1,4 @@
-package com.example.atp_back.user.model;
+package com.example.atp_back.user.model.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -1,12 +1,12 @@
 package com.example.atp_back.user;
 
 import com.example.atp_back.common.BaseResponse;
-import com.example.atp_back.user.model.SignupReq;
-import com.example.atp_back.user.model.follow.FollowResp;
-import com.example.atp_back.user.model.follow.FolloweeResp;
-import com.example.atp_back.user.model.follow.FollowerResp;
-import com.example.atp_back.user.model.follow.UserFollowReq;
-import com.example.atp_back.user.model.UserInfoResp;
+import com.example.atp_back.user.model.request.SignupReq;
+import com.example.atp_back.user.model.follow.response.FollowResp;
+import com.example.atp_back.user.model.follow.response.FolloweeResp;
+import com.example.atp_back.user.model.follow.response.FollowerResp;
+import com.example.atp_back.user.model.follow.request.UserFollowReq;
+import com.example.atp_back.user.model.response.UserInfoResp;
 import com.example.atp_back.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +53,8 @@ public class UserController {
         return ResponseEntity.ok(resp);
     }
 
-    // TODO: 자기 자신을 팔로우하는 건 예외 처리
+
+    @Operation(description="사용자 간 팔로우 기능")
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -71,8 +71,7 @@ public class UserController {
     @GetMapping("/follower")
     public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@CookieValue(name="ATOKEN", required = true) String token) {
         String userEmail = JwtUtil.getUserEmailFromToken(token);
-        List<FollowResp> followers = userService.getFollowers(userEmail);
-        FollowerResp result = new FollowerResp(followers.size(), followers);
+        FollowerResp result = userService.getFollowers(userEmail);
         BaseResponse<FollowerResp> response = new BaseResponse<>();
         response.success(result);
         return ResponseEntity.ok(response);
@@ -81,13 +80,26 @@ public class UserController {
     @GetMapping("/followee")
     public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@CookieValue(name="ATOKEN", required = true) String token) {
         String userEmail = JwtUtil.getUserEmailFromToken(token);
-        List<FollowResp> followees = userService.getFollowees(userEmail);
-        FolloweeResp result = new FolloweeResp(followees.size(), followees);
+        FolloweeResp result = userService.getFollowees(userEmail);
         BaseResponse<FolloweeResp> response = new BaseResponse<>();
         response.success(result);
         return ResponseEntity.ok(response);
     }
 
+
+    @Operation(description="사용자 간 팔로우 기능")
+    @PostMapping("/unfollow")
+    public ResponseEntity<BaseResponse<String>> unfollow(
+            @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
+            @Valid
+            @RequestBody UserFollowReq reqBody,
+            @CookieValue(name="ATOKEN", required = true) String token) {
+        String requestUserMail = JwtUtil.getUserEmailFromToken(token);
+        userService.unfollow(reqBody.getEmail(), requestUserMail);
+        BaseResponse<String> result = new BaseResponse<>();
+        result.success("언팔로우 성공");
+        return ResponseEntity.ok(result);
+    }
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
     @PutMapping("/update")
