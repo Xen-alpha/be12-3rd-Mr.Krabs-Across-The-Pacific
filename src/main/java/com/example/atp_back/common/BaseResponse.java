@@ -18,11 +18,10 @@ public class BaseResponse<T> {
     public boolean getIsSuccess() {
         return isSuccess;
     }
-
     public static<T> BaseResponse<T> success(T result) {
-        BaseResponse<T> resp = new BaseResponse<>();
-        resp.isSuccess = true;
-        resp.result = result;
-        return resp;
+        return BaseResponse.<T>builder()
+                .isSuccess(true)
+                .result(result)
+                .build();
     }
 }
