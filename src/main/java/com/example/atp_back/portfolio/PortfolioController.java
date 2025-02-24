@@ -6,6 +6,7 @@ import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import java.util.List;
 public class PortfolioController {
   private final PortfolioService portfolioService;
 
+  @Operation(summary = "포트폴리오 등록", description = "포트폴리오를 등록하는 기능")
   @PostMapping("/register")
   public ResponseEntity<BaseResponse<Void>> register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
     portfolioService.register(user, dto);
@@ -29,6 +31,7 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
+  @Operation(summary = "포트폴리오 목록 조회", description = "포트폴리오의 목록을 조회하는 기능")
   @GetMapping("/list")
   public ResponseEntity<BaseResponse<PortfolioPageResp>> list(int page, int size) {
     BaseResponse<PortfolioPageResp> resp = new BaseResponse<>();
@@ -37,6 +40,7 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
+  @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
   public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
     BaseResponse<PortfolioInstanceResp> resp = new BaseResponse<>();
@@ -44,17 +48,15 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
-  //포트폴리오 검색
-  //포트폴리오 이름을 기준으로 검색
+  @Operation(summary = "포트폴리오 검색", description = "사용자가 입력한 단어가 포트폴리오의 이름과 같거나 포함된 포트폴리오 목록을 조회")
   @GetMapping("/search/pname")
   public ResponseEntity<BaseResponse<PortfolioListResp>> searchByPName(String name) {
     BaseResponse<PortfolioListResp> resp = new BaseResponse<>();
     resp.success(portfolioService.searchByPName(name));
     return ResponseEntity.ok(resp);
   }
-
-  //포트폴리오 작성자 기준으로 검색
-
+  
+  @Operation(summary = "포트폴리오 검색", description = "사용자가 입력한 단어가 다른 사용자의 이름과 같거나 포함된 포트폴리오 목록을 조회.")
   @GetMapping("/search/uname")
   public ResponseEntity<BaseResponse<PortfolioListResp>> searchByUName(String name) {
     BaseResponse<PortfolioListResp> resp = new BaseResponse<>();
@@ -62,13 +64,11 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
-  //포트폴리오에 포함된 주식 기준으로 검색
+  @Operation(summary = "포트폴리오 검색", description = "사용자가 입력한 단어가 주식 이름과 같거나 포함된 포트폴리오 목록을 조회.")
   @GetMapping("/search/sname")
   public ResponseEntity<BaseResponse<PortfolioListResp>> searchBySName(String name) {
     BaseResponse<PortfolioListResp> resp = new BaseResponse<>();
     resp.success(portfolioService.searchBySName(name));
     return ResponseEntity.ok(resp);
   }
-
-
 }
