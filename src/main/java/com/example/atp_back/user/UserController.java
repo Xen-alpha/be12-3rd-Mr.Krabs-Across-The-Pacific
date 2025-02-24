@@ -1,8 +1,8 @@
 package com.example.atp_back.user;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.user.model.User;
 import com.example.atp_back.user.model.request.SignupReq;
-import com.example.atp_back.user.model.follow.response.FollowResp;
 import com.example.atp_back.user.model.follow.response.FolloweeResp;
 import com.example.atp_back.user.model.follow.response.FollowerResp;
 import com.example.atp_back.user.model.follow.request.UserFollowReq;
@@ -15,10 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,21 +35,17 @@ public class UserController {
             @Parameter(description="SignupReq 데이터 전송 객체를 사용합니다")
             @Valid
             @RequestBody SignupReq request) {
-        BaseResponse<String> resp = new BaseResponse<String>();
         userService.RegisterUser(request);
-        resp.success("성공");
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(BaseResponse.success("가입 성공"));
     }
 
     @Operation(summary="유저 정보 조회", description = "자신의 유저 정보를 가져옵니다")
     @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
     @ApiResponse(responseCode="403", description="허가되지 않은 유저 정보 조회 행위입니다")
     @GetMapping("/mypage")
-    public ResponseEntity<BaseResponse<UserInfoResp>> getUserInformation(@CookieValue(name="ATOKEN", required = true) String token) {
-        String userEmail = JwtUtil.getUserEmailFromToken(token);
-        UserInfoResp result = userService.getUserInfo(userEmail);
-        BaseResponse<UserInfoResp> resp = BaseResponse.<UserInfoResp>builder().isSuccess(true).result(result).build();
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<BaseResponse<UserInfoResp>> getUserInformation(@AuthenticationPrincipal User user) {
+        UserInfoResp result = userService.getUserInfo(user.getEmail());
+        return ResponseEntity.ok(BaseResponse.success(result));
     }
 
 
@@ -60,30 +55,21 @@ public class UserController {
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
             @Valid
             @RequestBody UserFollowReq reqBody,
-            @CookieValue(name="ATOKEN", required = true) String token) {
-        String requestUserMail = JwtUtil.getUserEmailFromToken(token);
-        userService.follow(reqBody.getEmail(), requestUserMail);
-        BaseResponse<String> result = new BaseResponse<>();
-        result.success("팔로우 성공");
-        return ResponseEntity.ok(result);
+            @AuthenticationPrincipal User user) {
+        userService.follow(reqBody.getEmail(), user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<String>success("팔로우 성공"));
     }
     @Operation(description="나를 팔로우 중인 사람 조회")
     @GetMapping("/follower")
-    public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@CookieValue(name="ATOKEN", required = true) String token) {
-        String userEmail = JwtUtil.getUserEmailFromToken(token);
-        FollowerResp result = userService.getFollowers(userEmail);
-        BaseResponse<FollowerResp> response = new BaseResponse<>();
-        response.success(result);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@AuthenticationPrincipal User user) {
+        FollowerResp result = userService.getFollowers(user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<FollowerResp>success(result));
     }
     @Operation(description="내가 팔로우 중인 사람 조회")
     @GetMapping("/followee")
-    public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@CookieValue(name="ATOKEN", required = true) String token) {
-        String userEmail = JwtUtil.getUserEmailFromToken(token);
-        FolloweeResp result = userService.getFollowees(userEmail);
-        BaseResponse<FolloweeResp> response = new BaseResponse<>();
-        response.success(result);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@AuthenticationPrincipal User user) {
+        FolloweeResp result = userService.getFollowees(user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<FolloweeResp>success(result));
     }
 
 
@@ -93,12 +79,9 @@ public class UserController {
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
             @Valid
             @RequestBody UserFollowReq reqBody,
-            @CookieValue(name="ATOKEN", required = true) String token) {
-        String requestUserMail = JwtUtil.getUserEmailFromToken(token);
-        userService.unfollow(reqBody.getEmail(), requestUserMail);
-        BaseResponse<String> result = new BaseResponse<>();
-        result.success("언팔로우 성공");
-        return ResponseEntity.ok(result);
+            @AuthenticationPrincipal User user) {
+        userService.unfollow(reqBody.getEmail(), user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<String>success("언팔로우 성공"));
     }
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
@@ -110,19 +93,15 @@ public class UserController {
             @CookieValue(name="ATOKEN", required=true) String token) {
         String originalMail = JwtUtil.getUserEmailFromToken(token);
         // TODO: originalMail == null일 때 예외처리 핸들러 추가할 것
-        BaseResponse<String>resp = new BaseResponse<>();
         userService.UpdateUser(request, originalMail);
-        resp.success("Update success");
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(BaseResponse.<String>success(resp));
     }
     */
 
     @Operation(description="로그아웃 리다이렉션용")
     @PostMapping("/logout")
     public ResponseEntity<BaseResponse<String>> successfulLogout() {
-        BaseResponse<String> resp = new BaseResponse<>();
-        resp.success("로그아웃에 성공했습니다");
-        return ResponseEntity.ok(resp);
+        return ResponseEntity.ok(BaseResponse.<String>success("로그아웃에 성공했습니다"));
     }
 
     @ExceptionHandler({RuntimeException.class})
