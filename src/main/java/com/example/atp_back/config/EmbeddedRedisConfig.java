@@ -9,7 +9,7 @@ import redis.embedded.RedisServer;
 
 import java.io.IOException;
 
-@Configuration
+//@Configuration
 @Profile("embedded-redis") // "embedded-redis" 프로파일에서만 활성화
 @EnableRedisRepositories
 public class EmbeddedRedisConfig {
