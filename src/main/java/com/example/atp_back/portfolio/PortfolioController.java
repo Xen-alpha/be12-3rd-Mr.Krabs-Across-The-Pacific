@@ -83,4 +83,16 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
+  @Operation(summary = "포트폴리오 댓글 좋아요 누르기", description = "포트폴리오 댓글 좋아요 누르는 기능")
+  @PostMapping("/reply/likes/{replyIdx}")
+  public ResponseEntity<BaseResponse<Long>> registerReplyLike(
+          @AuthenticationPrincipal User user,
+          @PathVariable Long replyIdx
+  ) {
+    Long idx = portfolioService.likesReply(user, replyIdx);
+    BaseResponse<Long> resp = BaseResponse.success(idx);
+    return ResponseEntity.ok(resp);
+
+  }
+
 }

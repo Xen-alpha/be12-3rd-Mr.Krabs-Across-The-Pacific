@@ -3,6 +3,7 @@ package com.example.atp_back.portfolio;
 import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.portfolio.model.entity.PortfolioReply;
+import com.example.atp_back.portfolio.model.entity.PortfolioReplyLikes;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
 import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
@@ -25,6 +26,7 @@ import java.util.List;
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final PortfolioReplyRepository portfolioReplyRepository;
+    private final PortfolioReplyLikesRepository portfolioReplyLikesRepository;
     private final RedisDao redisDao;
 
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -121,5 +123,16 @@ public class PortfolioService {
 
         PortfolioReply portfolioReply= portfolioReplyRepository.save(dto.toEntity(user, Portfolio.builder().idx(portfolioIdx).build()));
         return portfolioReply.getIdx();
+    }
+
+    /* 포트폴리오 댓글 좋아요 관련*/
+    public Long likesReply(User user, Long portfolioReplyIdx) {
+
+        PortfolioReplyLikes portfolioReplyLikes = portfolioReplyLikesRepository.save(
+                PortfolioReplyLikes.builder()
+                        .user(user)
+                        .reply(PortfolioReply.builder().idx(portfolioReplyIdx).build())
+                        .build());
+        return portfolioReplyLikes.getIdx();
     }
 }
