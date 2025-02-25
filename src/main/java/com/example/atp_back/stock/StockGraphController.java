@@ -5,6 +5,7 @@ import com.example.atp_back.stock.model.req.StockGraphReq;
 import com.example.atp_back.stock.model.resp.StockGraphResp;
 import com.example.atp_back.stock.service.StockGraphService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/stockgraph")
+@Tag(name="주가 변화 데이터 요청", description = "그래프 그리기에 필요한 주가 변화 데이터를 받는 API")
 public class StockGraphController {
     private final StockGraphService graphService;
 
