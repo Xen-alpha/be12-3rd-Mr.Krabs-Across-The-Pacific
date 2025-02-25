@@ -3,6 +3,7 @@ package com.example.atp_back.stock.service;
 import com.example.atp_back.stock.model.StockGraphDocument;
 import com.example.atp_back.stock.model.resp.StockGraphResp;
 import com.example.atp_back.stock.repository.StockGraphRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class StockGraphService {
     private final StockGraphRepository stockGraphRepository;
 
+    @Transactional
     public List<StockGraphResp> getGraphList(List<String> tickerCodes) {
         List<StockGraphResp> dtos = new ArrayList<>();
         for (String tickerCode : tickerCodes) {
