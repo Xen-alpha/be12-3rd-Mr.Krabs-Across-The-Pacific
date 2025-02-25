@@ -18,7 +18,7 @@ public class StockReplyResp {
     private Long stockId;
     private Long userId;
     private String userName;
-    private String content;
+    private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer likesCount;
@@ -29,7 +29,7 @@ public class StockReplyResp {
                 .stockId(stockReply.getStock().getIdx())
                 .userId(stockReply.getUser().getIdx())
                 .userName(stockReply.getUser().getName())
-                .content(stockReply.getContents())
+                .contents(stockReply.getContents())
                 .createdAt(stockReply.getCreatedAt())
                 .updatedAt(stockReply.getUpdatedAt())
                 .likesCount(stockReply.getLikes().size())

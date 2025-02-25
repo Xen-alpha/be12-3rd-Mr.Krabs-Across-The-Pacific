@@ -2,7 +2,11 @@ package com.example.atp_back.portfolio;
 
 import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.entity.PortfolioReply;
+import com.example.atp_back.portfolio.model.entity.PortfolioReplyLikes;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
+import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
+import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
@@ -21,6 +25,8 @@ import java.util.List;
 @Service
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
+    private final PortfolioReplyRepository portfolioReplyRepository;
+    private final PortfolioReplyLikesRepository portfolioReplyLikesRepository;
     private final RedisDao redisDao;
 
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -46,9 +52,9 @@ public class PortfolioService {
         return PortfolioPageResp.from(user, result);
     }
 
-    public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
+    public PortfolioDetailResp read(@Nullable User user, Long portfolioIdx) {
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-        return PortfolioInstanceResp.from(user, portfolio);
+        return PortfolioDetailResp.from(user, portfolio);
     }
 
     /*포트폴리오 검색 관련*/
@@ -110,5 +116,23 @@ public class PortfolioService {
                 redisDao.deleteValues(totalKey); // Redis 데이터 삭제
             }
         }
+    }
+
+    /* 포트폴리오 댓글 관련 */
+    public Long registerReply(PortfolioReplyReq dto, User user, Long portfolioIdx) {
+
+        PortfolioReply portfolioReply= portfolioReplyRepository.save(dto.toEntity(user, Portfolio.builder().idx(portfolioIdx).build()));
+        return portfolioReply.getIdx();
+    }
+
+    /* 포트폴리오 댓글 좋아요 관련*/
+    public Long likesReply(User user, Long portfolioReplyIdx) {
+
+        PortfolioReplyLikes portfolioReplyLikes = portfolioReplyLikesRepository.save(
+                PortfolioReplyLikes.builder()
+                        .user(user)
+                        .reply(PortfolioReply.builder().idx(portfolioReplyIdx).build())
+                        .build());
+        return portfolioReplyLikes.getIdx();
     }
 }

@@ -2,6 +2,8 @@ package com.example.atp_back.portfolio;
 
 import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
+import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
+import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
@@ -43,9 +45,9 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
-  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@Nullable @AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
+  public ResponseEntity<BaseResponse<PortfolioDetailResp>> read(@Nullable @AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
     portfolioService.viewCnt(user, portfolioIdx);
-    BaseResponse<PortfolioInstanceResp> resp =  BaseResponse.success(portfolioService.read(user, portfolioIdx));
+    BaseResponse<PortfolioDetailResp> resp =  BaseResponse.success(portfolioService.read(user, portfolioIdx));
     return ResponseEntity.ok(resp);
   }
 
@@ -68,6 +70,29 @@ public class PortfolioController {
   public ResponseEntity<BaseResponse<PortfolioListResp>> searchBySName(String name) {
     BaseResponse<PortfolioListResp> resp = BaseResponse.success(portfolioService.searchBySName(name));
     return ResponseEntity.ok(resp);
+  }
+
+  @Operation(summary = "포트폴리오 댓글 작성", description = "포트폴리오 댓글을 작성하는 기능")
+  @PostMapping("/reply/{portfolioIdx}")
+  public ResponseEntity<BaseResponse<Long>> registerReply(
+          @AuthenticationPrincipal User user,
+          @RequestBody PortfolioReplyReq dto,
+          @PathVariable Long portfolioIdx) {
+    Long idx = portfolioService.registerReply(dto, user, portfolioIdx);
+    BaseResponse<Long> resp = BaseResponse.success(idx);
+    return ResponseEntity.ok(resp);
+  }
+
+  @Operation(summary = "포트폴리오 댓글 좋아요 누르기", description = "포트폴리오 댓글 좋아요 누르는 기능")
+  @PostMapping("/reply/likes/{replyIdx}")
+  public ResponseEntity<BaseResponse<Long>> registerReplyLike(
+          @AuthenticationPrincipal User user,
+          @PathVariable Long replyIdx
+  ) {
+    Long idx = portfolioService.likesReply(user, replyIdx);
+    BaseResponse<Long> resp = BaseResponse.success(idx);
+    return ResponseEntity.ok(resp);
+
   }
 
 }
