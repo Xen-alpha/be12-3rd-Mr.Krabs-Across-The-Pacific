@@ -15,9 +15,20 @@ public class BaseResponse<T> {
     private String message;
     private T result;
 
-    public BaseResponse success(T result) {
-        isSuccess = true;
-        this.result = result;
+    public boolean getIsSuccess() {
+        return isSuccess;
+    }
+    public static<T> BaseResponse<T> success(T result) {
+        return BaseResponse.<T>builder()
+                .isSuccess(true)
+                .result(result)
+                .build();
+    }
+
+    public BaseResponse error(String code, String message) {
+        isSuccess = false;
+        this.code = code;
+        this.message = message;
         return this;
     }
 }

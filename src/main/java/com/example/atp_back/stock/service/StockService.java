@@ -1,5 +1,7 @@
-package com.example.atp_back.stock;
+package com.example.atp_back.stock.service;
 
+import com.example.atp_back.stock.model.resp.StockListResp;
+import com.example.atp_back.stock.repository.StockRepository;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ public class StockService {
         return StockDetailResp.from(stockRepository.findById(idx).orElseThrow());
     }
 
-    public List<StockDetailResp> getAllStocks() {
-        return StockDetailResp.from(stockRepository.findAll());
+    public List<StockListResp> getAllStocks() {
+        return StockListResp.from(stockRepository.findAll());
     }
 }

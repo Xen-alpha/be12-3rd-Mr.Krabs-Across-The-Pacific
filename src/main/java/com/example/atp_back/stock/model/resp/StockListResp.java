@@ -13,23 +13,22 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StockDetailResp {
+public class StockListResp {
     private Long id;
     private String name;
     private String code;
     private String market;
-    private List<StockReplyResp> replies;
-    public static StockDetailResp from(Stock stock) {
-        return StockDetailResp.builder()
+
+    public static StockListResp from(Stock stock) {
+        return StockListResp.builder()
                 .id(stock.getIdx())
                 .name(stock.getName())
                 .code(stock.getCode())
                 .market(stock.getMarket())
-                .replies(stock.getReplies().stream().map(StockReplyResp::from).collect(Collectors.toList()))
                 .build();
     }
 
-    public static List<StockDetailResp> from(List<Stock> stocks) {
-        return stocks.stream().map(StockDetailResp::from).collect(Collectors.toList());
+    public static List<StockListResp> from(List<Stock> stocks) {
+        return stocks.stream().map(StockListResp::from).collect(Collectors.toList());
     }
 }
