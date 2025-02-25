@@ -59,6 +59,7 @@ public class UserController {
         userService.follow(reqBody.getEmail(), user.getEmail());
         return ResponseEntity.ok(BaseResponse.<String>success("팔로우 성공"));
     }
+
     @Operation(description="나를 팔로우 중인 사람 조회")
     @GetMapping("/follower")
     public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@AuthenticationPrincipal User user) {
