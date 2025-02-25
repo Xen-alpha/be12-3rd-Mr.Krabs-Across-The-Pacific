@@ -88,6 +88,7 @@ public class UserService implements UserDetailsService {
         return null;
     }
     @Operation(description="follower가 followee를 팔로우함")
+    @Transactional
     public void follow(@NotNull String followeeMail, @NotNull String followerMail) {
         if (followeeMail.equals(followerMail)) {
             throw new RuntimeException("bad follow");
@@ -109,6 +110,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Operation(description="follower가 followee를 언팔로우함")
+    @Transactional
     public void unfollow(@NotNull String followeeMail, @NotNull String followerMail) {
         if (followeeMail.equals(followerMail)) {
             throw new RuntimeException("bad unfollow");
