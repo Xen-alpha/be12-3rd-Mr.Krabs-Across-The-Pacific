@@ -6,6 +6,7 @@ import com.example.atp_back.user.model.follow.UserFollow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,6 +67,11 @@ public class User implements UserDetails {
     public void removeFollowing(){
         followingCount--;
     }
+
+    // ------------Version--------------
+    @Version
+    @ColumnDefault(value="0")
+    private Long version;
 
     // ------------Relation-------------
 
