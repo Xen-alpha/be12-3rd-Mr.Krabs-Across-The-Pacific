@@ -31,7 +31,9 @@ public class PortfolioService {
     private final RedisDao redisDao;
     private final BadgeRepository badgeRepository;
     private final RewardRepository rewardRepository;
+    private final AcquisitionRepository acquisitionRepository;
 
+    @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
         Portfolio portfolio = portfolioRepository.save(dto.toEntity(user));
         return portfolio.getIdx();

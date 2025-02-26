@@ -25,11 +25,9 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 등록", description = "포트폴리오를 등록하는 기능")
   @PostMapping("/register")
-  //로그인하지 않았을 경우 로그인페이지로 가도록 추후 수정
+  //TODO : 로그인하지 않았을 경우 로그인페이지로 가도록 추후 수정
   public ResponseEntity<BaseResponse<Long>> register(@AuthenticationPrincipal User user, @RequestBody PortfolioCreateReqDto dto) {
-    BaseResponse<Long> resp = new BaseResponse<>();
-    resp.success(portfolioService.register(user, dto));
-
+    BaseResponse<Long> resp = BaseResponse.success(portfolioService.register(user, dto));
     return ResponseEntity.ok(resp);
   }
 
