@@ -28,7 +28,7 @@ public class StockGraphController {
             BaseResponse<List<StockGraphResp>> response = BaseResponse.<List<StockGraphResp>>builder().isSuccess(true).result(graphService.getGraphList(codes.getCodes())).build();
             return ResponseEntity.ok(response);
     }
-    @Operation(description="body로 요청한 종목 코드 리스트에 따라 2년치 주가 변화 데이터를 응답함")
+    @Operation(description="body로 요청한 단일 종목 코드에 따라 2년치 주가 변화 데이터를 응답함")
     @GetMapping("/one")
     public ResponseEntity<BaseResponse<StockGraphResp>> getSingleStockGraph(String code) {
             BaseResponse<StockGraphResp> response = BaseResponse.<StockGraphResp>builder()
