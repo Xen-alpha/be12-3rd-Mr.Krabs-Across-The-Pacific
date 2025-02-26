@@ -1,10 +1,7 @@
 package com.example.atp_back.stock.model.resp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class StockGraphResp {
     @Schema(description="종목 이름, 영문명을 그대로 반환")
     private String name;
