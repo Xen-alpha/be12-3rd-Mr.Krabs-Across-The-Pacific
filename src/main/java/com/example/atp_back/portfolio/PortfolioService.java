@@ -1,9 +1,7 @@
 package com.example.atp_back.portfolio;
 
 import com.example.atp_back.common.RedisDao;
-import com.example.atp_back.portfolio.model.entity.Portfolio;
-import com.example.atp_back.portfolio.model.entity.PortfolioReply;
-import com.example.atp_back.portfolio.model.entity.PortfolioReplyLikes;
+import com.example.atp_back.portfolio.model.entity.*;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
 import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
@@ -11,6 +9,7 @@ import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class PortfolioService {
     private final PortfolioReplyRepository portfolioReplyRepository;
     private final PortfolioReplyLikesRepository portfolioReplyLikesRepository;
     private final RedisDao redisDao;
+    private final BadgeRepository badgeRepository;
+    private final RewardRepository rewardRepository;
 
     public Long register(User user, PortfolioCreateReqDto dto) {
         Portfolio portfolio = portfolioRepository.save(dto.toEntity(user));
@@ -74,7 +77,7 @@ public class PortfolioService {
     }
 
 
-    /*포트폴리오 조회수 관련*/
+    /*TODO : 포트폴리오 조회수 관련*/
     // 포트폴리오 조회수 관리 (실시간, 전체 분리)
     public void viewCnt(User user, Long portfolioIdx) {
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx)
@@ -134,5 +137,44 @@ public class PortfolioService {
                         .reply(PortfolioReply.builder().idx(portfolioReplyIdx).build())
                         .build());
         return portfolioReplyLikes.getIdx();
+    }
+
+    /*포트폴리오 badge 부여*/
+    @Transactional
+    public void badgeToPortfolio(Portfolio portfolio){
+        int viewCnt = portfolio.getViewCnt();
+        int bookmarkCnt = portfolio.getBookmarkList().size();
+        //포트폴리오 생성 기간 계산
+        long portfolioSinceCreated = Duration.between(portfolio.getCreatedAt(), LocalDateTime.now()).toDays();
+
+        //조회수에 따른 뱃지 부여
+        if (viewCnt > 1000){
+            assignBadge(portfolio, 1);
+        }
+        // 북마크 수에 따른 뱃지 부여
+        if (bookmarkCnt > 100){
+            assignBadge(portfolio, 2);
+        }
+        //TODO : 추후 수익률 구현과 함께 복합적으로 적용하도록 설정
+        if(portfolioSinceCreated > 30) {
+            assignBadge(portfolio, 3);
+        }
+    }
+
+    public void assignBadge(Portfolio portfolio, long badgeIdx) {
+        Badge badge = badgeRepository.findById(badgeIdx).orElseThrow();
+
+        // 이미 같은 Badge가 있으면 중복 방지
+        boolean alreadyHasBadge = rewardRepository.existsByPortfolioAndBadge(portfolio, badge);
+        if (alreadyHasBadge) {
+            return;
+        }
+
+        Reward reward = Reward.builder()
+                .portfolio(portfolio)
+                .badge(badge)
+                .build();
+
+        rewardRepository.save(reward);
     }
 }

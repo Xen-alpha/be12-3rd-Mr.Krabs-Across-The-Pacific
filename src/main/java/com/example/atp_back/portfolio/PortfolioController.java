@@ -36,7 +36,7 @@ public class PortfolioController {
   @Operation(summary = "포트폴리오 목록 조회", description = "페이지별 포트폴리오 목록을 조회하고, 조회수, 북마크 수, 생성 날짜를 기준으로 정렬")
   @GetMapping("/list")
   public ResponseEntity<BaseResponse<PortfolioPageResp>> list(@AuthenticationPrincipal @Nullable User user,
-          @PageableDefault(page = 0, size = 15, sort = "viewCnt") Pageable pageable) {
+          @PageableDefault(page = 0, size = 30, sort = "viewCnt") Pageable pageable) {
 
     BaseResponse<PortfolioPageResp> resp =  BaseResponse.success(portfolioService.list(user, pageable));
 

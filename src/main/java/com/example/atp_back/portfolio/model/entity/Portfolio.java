@@ -38,4 +38,7 @@ public class Portfolio {
 
     @OneToMany(mappedBy = "portfolio")
     private List<PortfolioReply> portfolioReplyList;
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<Reward> Rewards;
 }
