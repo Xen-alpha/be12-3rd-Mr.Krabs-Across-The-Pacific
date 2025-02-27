@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class PortfolioListResp {
+  
   private List<PortfolioInstanceResp> portfolioList = new ArrayList<>();
 
   public static PortfolioListResp from(@Nullable User user, List<Portfolio> portfolios) {

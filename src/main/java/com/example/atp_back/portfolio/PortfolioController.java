@@ -1,6 +1,7 @@
 package com.example.atp_back.portfolio;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.portfolio.model.request.PortfolioBookmarkReq;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
 import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
@@ -97,6 +98,17 @@ public class PortfolioController {
     BaseResponse<Long> resp = BaseResponse.success(idx);
     return ResponseEntity.ok(resp);
 
+  }
+
+  @Operation(summary = "포트폴리오 북마크", description = "포트폴리오에 북마크 버튼을 눌러 북마크하거나 해제하는 기능")
+  @PostMapping("/bookmark")
+  public ResponseEntity<BaseResponse<Boolean>> registerBookmark(
+          @AuthenticationPrincipal User user,
+            @RequestBody PortfolioBookmarkReq portfolioBookmarkReq
+  ) {
+    Boolean result = portfolioService.registerBookmark(user, portfolioBookmarkReq.getPortfolioIdx(), portfolioBookmarkReq.isBookmark());
+      BaseResponse<Boolean> resp = BaseResponse.success(result);
+      return ResponseEntity.ok(resp);
   }
 
 }

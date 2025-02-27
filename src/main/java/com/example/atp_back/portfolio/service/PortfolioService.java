@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +29,7 @@ public class PortfolioService {
     private final RedisDao redisDao;
     private final BadgeRepository badgeRepository;
     private final RewardRepository rewardRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -59,32 +61,33 @@ public class PortfolioService {
     }
 
     /*포트폴리오 검색 관련*/
-  public PortfolioListResp searchByPName(String name) {
-      List<Portfolio> portfolioList = portfolioRepository.findAllByNameContaining(name);
-      return PortfolioListResp.from(null, portfolioList);
-  }
+    public PortfolioListResp searchByPName(String name) {
+        List<Portfolio> portfolioList = portfolioRepository.findAllByNameContaining(name);
+        return PortfolioListResp.from(null, portfolioList);
+    }
 
-  public PortfolioListResp searchByUName(String name) {
-      List<Portfolio> portfolioList = portfolioRepository.findAllByUserNameContaining(name);
-      return PortfolioListResp.from(null, portfolioList);
-  }
+    public PortfolioListResp searchByUName(String name) {
+        List<Portfolio> portfolioList = portfolioRepository.findAllByUserNameContaining(name);
+        return PortfolioListResp.from(null, portfolioList);
+    }
 
-  public PortfolioListResp searchBySName(String name) {
-      List<Portfolio> portfolioList = portfolioRepository.findAllByStockNameContaining(name);
-      return PortfolioListResp.from(null, portfolioList);
+    public PortfolioListResp searchBySName(String name) {
+        List<Portfolio> portfolioList = portfolioRepository.findAllByStockNameContaining(name);
+        return PortfolioListResp.from(null, portfolioList);
     }
 
 
     /*포트폴리오 조회수 관련*/
     public void viewCnt(Long portfolioIdx) {
-      portfolioRepository.incrementViewCnt(portfolioIdx);
-      //조회수 증가
-      Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-      int viewCnt = portfolio.getViewCnt();
-      //조회수가 1000회 이상이면 1번 뱃지 부여
-      if (viewCnt > 1000){
-        assignBadge(portfolio, 1);
-      }
+        //조회수 증가
+        portfolioRepository.incrementViewCnt(portfolioIdx);
+
+        Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
+        int viewCnt = portfolio.getViewCnt();
+        //조회수가 1000회 이상이면 1번 뱃지 부여
+        if (viewCnt > 1000){
+            assignBadge(portfolio, 1);
+        }
 //      String totalKey = "total:viewCount:" + portfolioIdx; // 전체 인기 포트폴리오 조회수 key
 //        String redisUserKey = "user:viewList:" + user.getUsername(); // 유저별 조회 이력 key
 //
@@ -122,6 +125,24 @@ public class PortfolioService {
 //            }
 //        }
 //    }
+
+    /*포트폴리오 북마크*/
+    public Boolean registerBookmark(User user, Long portfolioIdx, boolean bookmark) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
+        if (bookmark) {//북마크 추가
+            Bookmark newBookmark = Bookmark.builder()
+                    .user(user)
+                    .portfolio(portfolio)
+                    .build();
+            bookmarkRepository.save(newBookmark);
+            return true;
+        }
+        else { //북마크 취소
+            Optional<Bookmark> existingBookmark = bookmarkRepository.findByUserAndPortfolio(user, portfolio);
+            existingBookmark.ifPresent(bookmarkRepository::delete);
+            return false;
+        }
+    }
 
     /*포트폴리오 badge 부여*/
     @Transactional
