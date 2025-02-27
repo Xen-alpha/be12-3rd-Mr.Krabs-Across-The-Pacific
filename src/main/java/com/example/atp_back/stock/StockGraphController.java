@@ -5,13 +5,11 @@ import com.example.atp_back.stock.model.req.*;
 import com.example.atp_back.stock.model.resp.*;
 import com.example.atp_back.stock.service.StockGraphService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,12 +26,19 @@ public class StockGraphController {
             BaseResponse<List<StockGraphResp>> response = BaseResponse.<List<StockGraphResp>>builder().isSuccess(true).result(graphService.getGraphList(codes.getCodes())).build();
             return ResponseEntity.ok(response);
     }
-    @Operation(description="body로 요청한 단일 종목 코드에 따라 2년치 주가 변화 데이터를 응답함")
-    @GetMapping("/one")
-    public ResponseEntity<BaseResponse<StockGraphResp>> getSingleStockGraph(String code) {
+    @Operation(description="URL로 요청한 단일 종목 코드에 따라 2년치 주가 변화 데이터를 응답함")
+    @GetMapping("/{code}")
+    public ResponseEntity<BaseResponse<StockGraphResp>> getSingleStockGraph(
+            @Parameter(description="종목 코드 문자열")
+            @PathVariable String code) {
             BaseResponse<StockGraphResp> response = BaseResponse.<StockGraphResp>builder()
                     .isSuccess(true).result(graphService.getGraph(code))
                     .build();
             return ResponseEntity.ok(response);
+    }
+
+    @ExceptionHandler(value=IllegalArgumentException.class)
+    public ResponseEntity<BaseResponse<String>> handleException(IllegalArgumentException e) {
+        return ResponseEntity.status(400).body(BaseResponse.<String>builder().isSuccess(false).code("64101").message(e.getMessage()).build());
     }
 }

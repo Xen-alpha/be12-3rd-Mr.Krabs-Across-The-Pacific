@@ -4,6 +4,8 @@ import com.example.atp_back.stock.model.StockGraphDocument;
 import com.example.atp_back.stock.model.resp.*;
 import com.example.atp_back.stock.repository.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class StockGraphService {
 
     @Transactional
     public List<StockGraphResp> getGraphList(List<String> tickerCodes) {
+        if (tickerCodes == null || tickerCodes.isEmpty()) {
+            throw new IllegalArgumentException("tickerCodes is null or empty");
+        }
         List<StockGraphResp> dtos = new ArrayList<>();
         for (String tickerCode : tickerCodes) {
             List<StockGraphDocument> rows = (List<StockGraphDocument>) stockGraphRepository.findAllByCodeOrderByDateAsc(tickerCode);
