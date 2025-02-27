@@ -67,6 +67,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-api'
     implementation 'ch.qos.logback:logback-classic'
 
+    //로깅 aop 설정
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     // 불필요한 로깅 라이브러리 충돌 방지
     configurations {
         all {

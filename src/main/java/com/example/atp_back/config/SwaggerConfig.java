@@ -57,7 +57,7 @@ public class SwaggerConfig {
 
                     //로그인 입력값 스키마 설정
                     Schema<?> schema = new ObjectSchema()
-                            .addProperty("email", new StringSchema())
+                            .addProperty("id", new StringSchema())
                             .addProperty("password", new StringSchema());
                     RequestBody requestBody = new RequestBody().content(
                             new Content().addMediaType("application/json", new MediaType().schema(schema))
