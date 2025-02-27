@@ -1,4 +1,4 @@
-package com.example.atp_back.portfolio;
+package com.example.atp_back.portfolio.repository;
 
 import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import org.springframework.data.jpa.repository.JpaRepository;
