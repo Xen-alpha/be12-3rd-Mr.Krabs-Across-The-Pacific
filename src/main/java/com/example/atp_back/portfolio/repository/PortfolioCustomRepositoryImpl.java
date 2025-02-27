@@ -1,12 +1,15 @@
 package com.example.atp_back.portfolio.repository;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.entity.QPortfolio;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -98,5 +101,16 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
                     .fetchOne()).orElse(0L);
 
     return new PageImpl<>(portfolios, pageable, total);
+  }
+
+  @Override
+  @Transactional
+  public void incrementViewCnt(Long portfolioIdx) {
+    QPortfolio portfolio = QPortfolio.portfolio;
+
+    queryFactory.update(portfolio)
+        .set(portfolio.viewCnt, portfolio.viewCnt.add(1))
+        .where(portfolio.idx.eq(portfolioIdx))
+        .execute();
   }
 }

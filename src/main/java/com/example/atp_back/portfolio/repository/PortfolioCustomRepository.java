@@ -12,4 +12,6 @@ public interface PortfolioCustomRepository {
   List<Portfolio> findAllByStockNameContaining(String name);
 
   Page<Portfolio> findAllByOrderByBookmarksDesc(Pageable pageable);
+
+  void incrementViewCnt(Long portfolioIdx);
 }

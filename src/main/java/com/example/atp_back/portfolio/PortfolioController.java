@@ -4,9 +4,11 @@ import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
 import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
-import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
+import com.example.atp_back.portfolio.service.PortfolioReplyLikesService;
+import com.example.atp_back.portfolio.service.PortfolioReplyService;
+import com.example.atp_back.portfolio.service.PortfolioService;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import javax.annotation.Nullable;
 @RequestMapping("/portfolio")
 public class PortfolioController {
   private final PortfolioService portfolioService;
+  private final PortfolioReplyService portfolioReplyService;
+  private final PortfolioReplyLikesService portfolioReplyLikesService;
 
   @Operation(summary = "포트폴리오 등록", description = "포트폴리오를 등록하는 기능")
   @PostMapping("/register")
@@ -44,7 +48,9 @@ public class PortfolioController {
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
   public ResponseEntity<BaseResponse<PortfolioDetailResp>> read(@Nullable @AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
-    portfolioService.viewCnt(user, portfolioIdx);
+    //조회수 증가
+    portfolioService.viewCnt(portfolioIdx);
+    //idx를 이용한 포트폴리오 정보 불러오기
     BaseResponse<PortfolioDetailResp> resp =  BaseResponse.success(portfolioService.read(user, portfolioIdx));
     return ResponseEntity.ok(resp);
   }
@@ -76,7 +82,7 @@ public class PortfolioController {
           @AuthenticationPrincipal User user,
           @RequestBody PortfolioReplyReq dto,
           @PathVariable Long portfolioIdx) {
-    Long idx = portfolioService.registerReply(dto, user, portfolioIdx);
+    Long idx = portfolioReplyService.registerReply(dto, user, portfolioIdx);
     BaseResponse<Long> resp = BaseResponse.success(idx);
     return ResponseEntity.ok(resp);
   }
@@ -87,7 +93,7 @@ public class PortfolioController {
           @AuthenticationPrincipal User user,
           @PathVariable Long replyIdx
   ) {
-    Long idx = portfolioService.likesReply(user, replyIdx);
+    Long idx = portfolioReplyLikesService.likesReply(user, replyIdx);
     BaseResponse<Long> resp = BaseResponse.success(idx);
     return ResponseEntity.ok(resp);
 

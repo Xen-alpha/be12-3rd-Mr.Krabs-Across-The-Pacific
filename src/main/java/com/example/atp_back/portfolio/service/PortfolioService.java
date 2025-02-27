@@ -1,9 +1,8 @@
-package com.example.atp_back.portfolio;
+package com.example.atp_back.portfolio.service;
 
 import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.*;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
-import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
 import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
@@ -26,12 +25,9 @@ import java.util.List;
 @Service
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
-    private final PortfolioReplyRepository portfolioReplyRepository;
-    private final PortfolioReplyLikesRepository portfolioReplyLikesRepository;
     private final RedisDao redisDao;
     private final BadgeRepository badgeRepository;
     private final RewardRepository rewardRepository;
-    private final AcquisitionRepository acquisitionRepository;
 
     @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -80,66 +76,46 @@ public class PortfolioService {
 
 
     /*TODO : 포트폴리오 조회수 관련*/
-    // 포트폴리오 조회수 관리 (실시간, 전체 분리)
-    public void viewCnt(User user, Long portfolioIdx) {
-        Portfolio portfolio = portfolioRepository.findById(portfolioIdx)
-                .orElseThrow(() -> new IllegalArgumentException("포트폴리오를 찾을 수 없습니다."));
+    public void viewCnt(Long portfolioIdx) {
+      portfolioRepository.incrementViewCnt(portfolioIdx);
 
-        String totalKey = "total:viewCount:" + portfolioIdx; // 전체 인기 포트폴리오 조회수 key
-        String redisUserKey = "user:viewList:" + user.getUsername(); // 유저별 조회 이력 key
-
-        // 유저가 이미 해당 포트폴리오를 조회했는지 확인
-        List<String> viewedContentIds = redisDao.getValuesList(redisUserKey);
-        if (viewedContentIds == null || !viewedContentIds.contains(portfolioIdx.toString())) {
-            // 유저별 조회 이력에 포트폴리오 ID 저장
-            redisDao.setValuesList(redisUserKey, portfolioIdx.toString());
-            // 전체 조회수 증가
-            redisDao.increment(totalKey);
-            // 실시간 조회수 증가 (슬라이딩 윈도우 방식)
-            redisDao.incrementRealtimeViewCount(portfolioIdx);
-        }
+//      String totalKey = "total:viewCount:" + portfolioIdx; // 전체 인기 포트폴리오 조회수 key
+//        String redisUserKey = "user:viewList:" + user.getUsername(); // 유저별 조회 이력 key
+//
+//        // 유저가 이미 해당 포트폴리오를 조회했는지 확인
+//        List<String> viewedContentIds = redisDao.getValuesList(redisUserKey);
+//        if (viewedContentIds == null || !viewedContentIds.contains(portfolioIdx.toString())) {
+//            // 유저별 조회 이력에 포트폴리오 ID 저장
+//            redisDao.setValuesList(redisUserKey, portfolioIdx.toString());
+//            // Redis  조회수 증가
+//            redisDao.increment(totalKey);
+//            // 실시간 조회수 증가 (슬라이딩 윈도우 방식)
+//            redisDao.incrementRealtimeViewCount(portfolioIdx);
+//        }
     }
 
-    // 실시간 인기 포트폴리오 조회수 슬라이딩 윈도우 관리 (2시간 범위 유지)
-    @Scheduled(fixedRate = 60000) // 1분마다 슬라이딩 윈도우 적용
-    public void applySlidingWindowForRealtimeViews() {
-        redisDao.removeOldRealtimeData(2); // 2시간 이전의 데이터는 자동 삭제
-    }
-
-    // 전체 인기 포트폴리오 조회수 동기화 (1분마다 실행)
-    @Scheduled(fixedRate = 60000)
-    public void syncViewCountToDatabase() {
-        List<Portfolio> portfolioList = portfolioRepository.findAll();
-        for (Portfolio portfolio : portfolioList) {
-            String totalKey = "total:viewCount:" + portfolio.getIdx();
-            String viewCountStr = redisDao.getValues(totalKey);
-
-            if (viewCountStr != null) {
-                int viewCnt = Integer.parseInt(viewCountStr);
-                portfolio.setViewCnt(viewCnt);
-                portfolioRepository.save(portfolio);
-                redisDao.deleteValues(totalKey); // Redis 데이터 삭제
-            }
-        }
-    }
-
-    /* 포트폴리오 댓글 관련 */
-    public Long registerReply(PortfolioReplyReq dto, User user, Long portfolioIdx) {
-
-        PortfolioReply portfolioReply= portfolioReplyRepository.save(dto.toEntity(user, Portfolio.builder().idx(portfolioIdx).build()));
-        return portfolioReply.getIdx();
-    }
-
-    /* 포트폴리오 댓글 좋아요 관련*/
-    public Long likesReply(User user, Long portfolioReplyIdx) {
-
-        PortfolioReplyLikes portfolioReplyLikes = portfolioReplyLikesRepository.save(
-                PortfolioReplyLikes.builder()
-                        .user(user)
-                        .reply(PortfolioReply.builder().idx(portfolioReplyIdx).build())
-                        .build());
-        return portfolioReplyLikes.getIdx();
-    }
+//    // 실시간 인기 포트폴리오 조회수 슬라이딩 윈도우 관리 (2시간 범위 유지)
+//    @Scheduled(fixedRate = 60000) // 1분마다 슬라이딩 윈도우 적용
+//    public void applySlidingWindowForRealtimeViews() {
+//        redisDao.removeOldRealtimeData(2); // 2시간 이전의 데이터는 자동 삭제
+//    }
+//
+//    // 전체 인기 포트폴리오 조회수 동기화 (1분마다 실행)
+//    @Scheduled(fixedRate = 60000)
+//    public void syncViewCountToDatabase() {
+//        List<Portfolio> portfolioList = portfolioRepository.findAll();
+//        for (Portfolio portfolio : portfolioList) {
+//            String totalKey = "total:viewCount:" + portfolio.getIdx();
+//            String viewCountStr = redisDao.getValues(totalKey);
+//
+//            if (viewCountStr != null) {
+//                int viewCnt = Integer.parseInt(viewCountStr);
+//                portfolio.addViewCount(viewCnt);
+//                portfolioRepository.save(portfolio);
+//                redisDao.deleteValues(totalKey); // Redis 데이터 삭제
+//            }
+//        }
+//    }
 
     /*포트폴리오 badge 부여*/
     @Transactional
@@ -171,12 +147,10 @@ public class PortfolioService {
         if (alreadyHasBadge) {
             return;
         }
-
         Reward reward = Reward.builder()
                 .portfolio(portfolio)
                 .badge(badge)
                 .build();
-
         rewardRepository.save(reward);
     }
 }
