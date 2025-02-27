@@ -75,10 +75,16 @@ public class PortfolioService {
     }
 
 
-    /*TODO : 포트폴리오 조회수 관련*/
+    /*포트폴리오 조회수 관련*/
     public void viewCnt(Long portfolioIdx) {
       portfolioRepository.incrementViewCnt(portfolioIdx);
-
+      //조회수 증가
+      Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
+      int viewCnt = portfolio.getViewCnt();
+      //조회수가 1000회 이상이면 1번 뱃지 부여
+      if (viewCnt > 1000){
+        assignBadge(portfolio, 1);
+      }
 //      String totalKey = "total:viewCount:" + portfolioIdx; // 전체 인기 포트폴리오 조회수 key
 //        String redisUserKey = "user:viewList:" + user.getUsername(); // 유저별 조회 이력 key
 //
@@ -120,15 +126,15 @@ public class PortfolioService {
     /*포트폴리오 badge 부여*/
     @Transactional
     public void badgeToPortfolio(Portfolio portfolio){
-        int viewCnt = portfolio.getViewCnt();
+//        int viewCnt = portfolio.getViewCnt();
         int bookmarkCnt = portfolio.getBookmarkList().size();
         //포트폴리오 생성 기간 계산
         long portfolioSinceCreated = Duration.between(portfolio.getCreatedAt(), LocalDateTime.now()).toDays();
 
         //조회수에 따른 뱃지 부여
-        if (viewCnt > 1000){
-            assignBadge(portfolio, 1);
-        }
+//        if (viewCnt > 1000){
+//            assignBadge(portfolio, 1);
+//        }
         // 북마크 수에 따른 뱃지 부여
         if (bookmarkCnt > 100){
             assignBadge(portfolio, 2);

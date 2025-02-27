@@ -23,3 +23,5 @@ public class Badge {
     @OneToMany(mappedBy = "badge")
     private List<Reward> Rewards;
 }
+
+//INSERT INTO badge (name, description) VALUES ( 'badge1', '조회수가 1000회 이상인 포트폴리오'), ('bagde2', '북마크 수가 100개 이상인 포트폴리오'), ('bagde3', '생성된 지 1년 이상 된 포트폴리오 중 수익률 상위 10위');

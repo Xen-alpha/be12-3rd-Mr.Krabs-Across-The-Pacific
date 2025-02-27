@@ -1,6 +1,8 @@
 package com.example.atp_back.portfolio.repository;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
+import com.example.atp_back.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,4 +16,6 @@ public interface PortfolioCustomRepository {
   Page<Portfolio> findAllByOrderByBookmarksDesc(Pageable pageable);
 
   void incrementViewCnt(Long portfolioIdx);
+
+  List<PortfolioInstanceResp> findPortfolioWithBadges(User user);
 }

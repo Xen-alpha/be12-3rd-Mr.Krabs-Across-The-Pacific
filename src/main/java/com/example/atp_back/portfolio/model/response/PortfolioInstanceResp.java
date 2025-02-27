@@ -1,6 +1,8 @@
 package com.example.atp_back.portfolio.model.response;
 
+import com.example.atp_back.portfolio.model.entity.Badge;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.entity.Reward;
 import com.example.atp_back.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +31,6 @@ public class PortfolioInstanceResp {
             isBookmarked = portfolio.getBookmarkList().stream()
                     .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx()));
         }
-
         return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())

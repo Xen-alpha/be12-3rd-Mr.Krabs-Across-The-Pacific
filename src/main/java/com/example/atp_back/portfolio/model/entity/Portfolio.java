@@ -39,5 +39,5 @@ public class Portfolio {
     private List<PortfolioReply> portfolioReplyList;
 
     @OneToMany(mappedBy = "portfolio")
-    private List<Reward> Rewards;
+    private List<Reward> rewards;
 }
