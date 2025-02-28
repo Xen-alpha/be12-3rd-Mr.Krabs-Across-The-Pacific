@@ -128,6 +128,8 @@ public class PortfolioService {
 
     /*포트폴리오 북마크*/
     public Boolean registerBookmark(User user, Long portfolioIdx, boolean bookmark) {
+        int bookmarkCnt = bookmarkRepository.countByPortfolioIdx(portfolioIdx);
+
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
         if (!bookmark) {//북마크 추가
             Bookmark newBookmark = Bookmark.builder()
@@ -135,6 +137,9 @@ public class PortfolioService {
                     .portfolio(portfolio)
                     .build();
             bookmarkRepository.save(newBookmark);
+            if(bookmarkCnt > 100){
+                assignBadge(portfolio, 2);
+            }
             return true;
         }
         else { //북마크 취소
@@ -142,6 +147,7 @@ public class PortfolioService {
             existingBookmark.ifPresent(bookmarkRepository::delete);
             return false;
         }
+
     }
 
     /*포트폴리오 badge 부여*/

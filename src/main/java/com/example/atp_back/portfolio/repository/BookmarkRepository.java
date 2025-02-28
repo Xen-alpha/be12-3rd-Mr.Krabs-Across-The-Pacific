@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Optional<Bookmark> findByUserAndPortfolio(User user, Portfolio portfolio);
+    int countByPortfolioIdx(Long portfolioIdx);
 }
