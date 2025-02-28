@@ -65,4 +65,13 @@ public class StockGraphService {
         }
         return stockGraphDto;
     }
+
+    public Double getRecentPrice(String tickerCode) {
+        StockGraphDocument priceDoc = stockGraphRepository.findFirstByCodeOrderByDateDesc(tickerCode).orElse(null);
+        if (priceDoc == null) {
+            return 0.0;
+        } else {
+            return priceDoc.getPrice();
+        }
+    }
 }
