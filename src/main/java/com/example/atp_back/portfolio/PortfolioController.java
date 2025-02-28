@@ -103,12 +103,10 @@ public class PortfolioController {
   @Operation(summary = "포트폴리오 북마크", description = "포트폴리오에 북마크 버튼을 눌러 북마크하거나 해제하는 기능")
   @PostMapping("/bookmark")
   public ResponseEntity<BaseResponse<Boolean>> registerBookmark(
-          @AuthenticationPrincipal User user,
-            @RequestBody PortfolioBookmarkReq portfolioBookmarkReq
+          @AuthenticationPrincipal User user, @RequestBody PortfolioBookmarkReq portfolioBookmarkReq
   ) {
     Boolean result = portfolioService.registerBookmark(user, portfolioBookmarkReq.getPortfolioIdx(), portfolioBookmarkReq.isBookmark());
       BaseResponse<Boolean> resp = BaseResponse.success(result);
       return ResponseEntity.ok(resp);
   }
-
 }

@@ -129,7 +129,7 @@ public class PortfolioService {
     /*포트폴리오 북마크*/
     public Boolean registerBookmark(User user, Long portfolioIdx, boolean bookmark) {
         Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-        if (bookmark) {//북마크 추가
+        if (!bookmark) {//북마크 추가
             Bookmark newBookmark = Bookmark.builder()
                     .user(user)
                     .portfolio(portfolio)
