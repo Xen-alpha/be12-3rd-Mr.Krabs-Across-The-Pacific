@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @NoArgsConstructor
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 public class PortfolioReplyInstanceResp {
     private Long idx;
-    private Long portfolioId;
     private Long userId;
     private String userName;
     private String contents;
@@ -25,7 +26,6 @@ public class PortfolioReplyInstanceResp {
     public static PortfolioReplyInstanceResp from(PortfolioReply reply) {
         return PortfolioReplyInstanceResp.builder()
                 .idx(reply.getIdx())
-                .portfolioId(reply.getPortfolio().getIdx())
                 .userId(reply.getUser().getIdx())
                 .userName(reply.getUser().getUsername())
                 .contents(reply.getContents())
@@ -33,5 +33,11 @@ public class PortfolioReplyInstanceResp {
                 .updatedAt(reply.getUpdatedAt())
                 .likesCount(reply.getLikes().size())
                 .build();
+    }
+
+    public static List<PortfolioReplyInstanceResp> from(List<PortfolioReply> replyList) {
+        return replyList.stream()
+                .map(PortfolioReplyInstanceResp::from)
+                .collect(Collectors.toList());
     }
 }

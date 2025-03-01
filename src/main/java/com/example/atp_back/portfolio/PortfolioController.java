@@ -1,12 +1,14 @@
 package com.example.atp_back.portfolio;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import com.example.atp_back.portfolio.model.request.PortfolioBookmarkReq;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.request.PortfolioReplyReq;
-import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
+import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
+import com.example.atp_back.portfolio.model.response.PortfolioReplyInstanceResp;
 import com.example.atp_back.portfolio.service.PortfolioReplyLikesService;
 import com.example.atp_back.portfolio.service.PortfolioReplyService;
 import com.example.atp_back.portfolio.service.PortfolioService;
@@ -14,11 +16,13 @@ import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Nullable;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,11 +52,23 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
-  public ResponseEntity<BaseResponse<PortfolioDetailResp>> read(@Nullable @AuthenticationPrincipal User user, @PathVariable Long portfolioIdx) {
+  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
     //조회수 증가
     portfolioService.viewCnt(portfolioIdx);
     //idx를 이용한 포트폴리오 정보 불러오기
-    BaseResponse<PortfolioDetailResp> resp =  BaseResponse.success(portfolioService.read(user, portfolioIdx));
+    BaseResponse<PortfolioInstanceResp> resp =  BaseResponse.success(portfolioService.read(portfolioIdx));
+    return ResponseEntity.ok(resp);
+  }
+
+  @Operation(summary = "포트폴리오 댓글 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용 하단의 댓글 목록을 불러오는 기능")
+  @GetMapping("/reply/{portfolioIdx}")
+  public ResponseEntity<BaseResponse<Slice<PortfolioReplyInstanceResp>>> getReplies(
+          @PathVariable Long portfolioIdx,
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size) {
+
+    Slice<PortfolioReplyInstanceResp> replyList = portfolioReplyService.getReplies(portfolioIdx, page, size);
+    BaseResponse<Slice<PortfolioReplyInstanceResp>> resp = BaseResponse.success(replyList);
     return ResponseEntity.ok(resp);
   }
 

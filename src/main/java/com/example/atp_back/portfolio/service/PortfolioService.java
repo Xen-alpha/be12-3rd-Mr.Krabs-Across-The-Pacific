@@ -3,16 +3,15 @@ package com.example.atp_back.portfolio.service;
 import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.*;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
-import com.example.atp_back.portfolio.model.response.PortfolioDetailResp;
+import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
+import com.example.atp_back.portfolio.model.response.PortfolioReplyInstanceResp;
 import com.example.atp_back.portfolio.repository.*;
 import com.example.atp_back.user.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,7 @@ public class PortfolioService {
     private final BadgeRepository badgeRepository;
     private final RewardRepository rewardRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final PortfolioReplyService portfolioReplyService;
 
     @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -55,9 +55,14 @@ public class PortfolioService {
         return PortfolioPageResp.from(user, result);
     }
 
-    public PortfolioDetailResp read(@Nullable User user, Long portfolioIdx) {
-        Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
-        return PortfolioDetailResp.from(user, portfolio);
+    public PortfolioInstanceResp read(Long portfolioIdx) {
+//        Portfolio portfolio = portfolioRepository.findById(portfolioIdx).orElseThrow();
+        //포트폴리오 idx를 이용해서 acquisition 목록 반환
+        Portfolio portfolio = portfolioRepository.findWithAcquisitionsById(portfolioIdx);
+//        List<PortfolioReply> replyList = portfolioRepository.findRepliesByPortfolioId(portfolioIdx);
+//        List<PortfolioReplyInstanceResp> replys = PortfolioReplyInstanceResp.from(replyList);
+
+        return PortfolioInstanceResp.fromDetail(portfolio);
     }
 
     /*포트폴리오 검색 관련*/

@@ -2,8 +2,10 @@ package com.example.atp_back.portfolio.model.response;
 
 import com.example.atp_back.portfolio.model.entity.Badge;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import com.example.atp_back.portfolio.model.entity.Reward;
 import com.example.atp_back.user.model.User;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,18 +27,35 @@ public class PortfolioInstanceResp {
     private int viewCnt;
     private boolean bookmark;
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
-    public static PortfolioInstanceResp from(@Nullable User user, Portfolio portfolio) {
-        boolean isBookmarked =false;
-        if (user != null) {
-            isBookmarked = portfolio.getBookmarkList().stream()
-                    .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx()));
-        }
+    private List<PortfolioReplyInstanceResp> replyList = new ArrayList<>();
+
+    //포트폴리오 메인 페이지 응답
+    public static PortfolioInstanceResp fromMain(@Nullable User user, Portfolio portfolio) {
         return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())
                 .imageUrl(portfolio.getImageUrl())
                 .viewCnt(portfolio.getViewCnt())
-                .bookmark(isBookmarked)
+                .bookmark(user != null && portfolio.getBookmarkList().stream()
+                        .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx())))
+                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
+                .build();
+    }
+
+    //포트폴리오 수정 페이지 응답
+    public static PortfolioInstanceResp fromUpdate(User user, Portfolio portfolio) {
+        return PortfolioInstanceResp.builder()
+                .idx(portfolio.getIdx())
+                .name(portfolio.getName())
+                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
+                .build();
+    }
+
+    //포트폴리오 상세 페이지 응답
+    public static PortfolioInstanceResp fromDetail(Portfolio portfolio) {
+        return PortfolioInstanceResp.builder()
+                .idx(portfolio.getIdx())
+                .name(portfolio.getName())
                 .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }

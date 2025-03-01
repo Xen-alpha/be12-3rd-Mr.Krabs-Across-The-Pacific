@@ -4,6 +4,7 @@ package com.example.atp_back.portfolio.model.entity;
 import com.example.atp_back.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +36,7 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<Bookmark> bookmarkList;
 
+    @BatchSize(size = 10)
     @OneToMany(mappedBy = "portfolio")
     private List<PortfolioReply> portfolioReplyList;
 
