@@ -3,10 +3,7 @@ package com.example.atp_back.portfolio.service;
 import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.*;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
-import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
-import com.example.atp_back.portfolio.model.response.PortfolioListResp;
-import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
-import com.example.atp_back.portfolio.model.response.PortfolioReplyInstanceResp;
+import com.example.atp_back.portfolio.model.response.*;
 import com.example.atp_back.portfolio.repository.*;
 import com.example.atp_back.user.model.User;
 import jakarta.transaction.Transactional;
@@ -30,6 +27,7 @@ public class PortfolioService {
     private final RewardRepository rewardRepository;
     private final BookmarkRepository bookmarkRepository;
     private final PortfolioReplyService portfolioReplyService;
+    private final AcquisitionRepository acquisitionRepository;
 
     @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
@@ -38,6 +36,13 @@ public class PortfolioService {
     }
 
     public PortfolioPageResp list(@Nullable User user, Pageable pageable) {
+
+        //뱃지 목록 불러와서 붙이기
+        //구매한 주식 목록 불러와서 붙이기 (추후 프론트에서 계산용)
+        List<Acquisition> acquisitionList = acquisitionRepository.findAll();
+
+
+        //메인 페이지에 보여줄 정렬 조건
         String sortBy = pageable.getSort().stream()
                 .findFirst()
                 .map(Sort.Order::getProperty)
@@ -45,7 +50,9 @@ public class PortfolioService {
 
         Page<Portfolio> result = null;
         if ("bookmarks".equals(sortBy)) {
-            result = portfolioRepository.findAllByOrderByBookmarksDesc(pageable);
+//            result = portfolioRepository.findAllByOrderByBookmarksDesc(pageable);
+            Page<PortfolioInstanceResp> result2 = portfolioRepository.findAllByOrderByBookmarksDesc2(pageable);
+            return PortfolioPageResp.from2(user, result2);
         } else if("createdAt".equals(sortBy)) {
             result = portfolioRepository.findAllByOrderByCreatedAtDesc(pageable);
         }else{
@@ -80,7 +87,6 @@ public class PortfolioService {
         List<Portfolio> portfolioList = portfolioRepository.findAllByStockNameContaining(name);
         return PortfolioListResp.from(null, portfolioList);
     }
-
 
     /*포트폴리오 조회수 관련*/
     public void viewCnt(Long portfolioIdx) {

@@ -53,9 +53,6 @@ public class PortfolioController {
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
   public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
-    //조회수 증가
-    portfolioService.viewCnt(portfolioIdx);
-    //idx를 이용한 포트폴리오 정보 불러오기
     BaseResponse<PortfolioInstanceResp> resp =  BaseResponse.success(portfolioService.read(portfolioIdx));
     return ResponseEntity.ok(resp);
   }
@@ -70,6 +67,12 @@ public class PortfolioController {
     Slice<PortfolioReplyInstanceResp> replyList = portfolioReplyService.getReplies(portfolioIdx, page, size);
     BaseResponse<Slice<PortfolioReplyInstanceResp>> resp = BaseResponse.success(replyList);
     return ResponseEntity.ok(resp);
+  }
+
+  @Operation(summary = "포트폴리오 조회수 증가", description = "유저가 포트폴리오를 클릭하면 해당 포트폴리오의 Idx 값을 이용하여 포트폴리오의 조회수를 1 증가시")
+  @GetMapping("/view/{portfolioIdx}")
+  public void addViewCnt(@PathVariable Long portfolioIdx) {
+    portfolioService.viewCnt(portfolioIdx);
   }
 
   @Operation(summary = "포트폴리오 검색", description = "사용자가 입력한 단어가 포트폴리오의 이름과 같거나 포함된 포트폴리오 목록을 조회")

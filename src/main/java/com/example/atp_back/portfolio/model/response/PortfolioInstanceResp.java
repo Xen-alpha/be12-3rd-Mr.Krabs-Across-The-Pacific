@@ -22,10 +22,14 @@ import java.util.stream.Collectors;
 @Builder
 public class PortfolioInstanceResp {
     private Long idx;
+    private int userIdx;
     private String name;
     private String imageUrl;
     private int viewCnt;
     private boolean bookmark;
+    private int bookmarkCnt;
+    private List<Long> bookmarkUsers = new ArrayList<>();
+    private List<BadgeInstanceResp> badgeList = new ArrayList<>();
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
     private List<PortfolioReplyInstanceResp> replyList = new ArrayList<>();
 
@@ -38,7 +42,19 @@ public class PortfolioInstanceResp {
                 .viewCnt(portfolio.getViewCnt())
                 .bookmark(user != null && portfolio.getBookmarkList().stream()
                         .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx())))
-                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
+                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::fromMain).collect(Collectors.toList()))
+                .build();
+    }
+
+    public static PortfolioInstanceResp fromMain2(@Nullable User user, PortfolioInstanceResp portfolioResp) {
+        return PortfolioInstanceResp.builder()
+                .idx(portfolioResp.getIdx())
+                .name(portfolioResp.getName())
+                .imageUrl(portfolioResp.getImageUrl())
+                .viewCnt(portfolioResp.getViewCnt())
+                .bookmark(user != null && portfolioResp.getBookmarkUsers().contains(user.getIdx())) //북마크 여부 확인
+                .bookmarkCnt(portfolioResp.getBookmarkCnt()) // 북마크 개수
+                .acquisitionList(portfolioResp.getAcquisitionList())
                 .build();
     }
 

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class AcquisitionCreateReqDto {
+    private Long stockIdx;
     private String stockName;
     private Long price;
     private BigDecimal quantity;

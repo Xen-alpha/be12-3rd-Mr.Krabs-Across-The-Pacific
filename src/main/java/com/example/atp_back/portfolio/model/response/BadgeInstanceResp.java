@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BadgeInstanceResp {
     private Long idx;
+    private Long portfolioIdx;
 
     public static BadgeInstanceResp from(Badge badge) {
         return BadgeInstanceResp.builder()
                 .idx(badge.getIdx())
+                .portfolioIdx(badge.getIdx())
                 .build();
     }
 }
