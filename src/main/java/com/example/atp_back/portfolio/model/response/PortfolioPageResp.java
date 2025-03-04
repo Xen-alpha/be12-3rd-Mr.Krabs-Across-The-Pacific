@@ -34,7 +34,21 @@ public class PortfolioPageResp {
                 .hasNext(portfolioPage.hasNext())
                 .hasPrevious(portfolioPage.hasPrevious())
                 .portfolioList(portfolioPage.stream()
-                        .map(portfolio -> PortfolioInstanceResp.from(user, portfolio))
+                        .map(portfolio -> PortfolioInstanceResp.fromMain(user, portfolio))
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static PortfolioPageResp from2(@Nullable User user, Page<PortfolioInstanceResp> portfolioPage) {
+        return PortfolioPageResp.builder()
+                .page(portfolioPage.getNumber())
+                .size(portfolioPage.getSize())
+                .totalElements(portfolioPage.getTotalElements())
+                .totalPages(portfolioPage.getTotalPages())
+                .hasNext(portfolioPage.hasNext())
+                .hasPrevious(portfolioPage.hasPrevious())
+                .portfolioList(portfolioPage.stream()
+                        .map(portfolioResp -> PortfolioInstanceResp.fromMain2(user, portfolioResp))
                         .collect(Collectors.toList()))
                 .build();
     }

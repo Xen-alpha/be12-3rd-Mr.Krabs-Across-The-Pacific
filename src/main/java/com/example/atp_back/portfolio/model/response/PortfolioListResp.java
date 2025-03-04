@@ -1,5 +1,6 @@
 package com.example.atp_back.portfolio.model.response;
 
+import com.example.atp_back.portfolio.model.entity.Badge;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.user.model.User;
 import io.micrometer.common.lang.Nullable;
@@ -21,9 +22,8 @@ public class PortfolioListResp {
 
   public static PortfolioListResp from(@Nullable User user, List<Portfolio> portfolios) {
     List<PortfolioInstanceResp> instanceResp = portfolios.stream()
-            .map(portfolio -> PortfolioInstanceResp.from(user, portfolio))
+            .map(portfolio -> PortfolioInstanceResp.fromMain(user, portfolio))
             .collect(Collectors.toList());
-
     return PortfolioListResp.builder()
             .portfolioList(instanceResp)
             .build();
