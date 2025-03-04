@@ -20,9 +20,6 @@ public interface PortfolioCustomRepository {
   //포트폴리오 클릭시 조회수 증가
   void incrementViewCnt(Long portfolioIdx);
 
-  //포트폴리오의 뱃지 리스트를 함께 출력
-  List<PortfolioInstanceResp> findPortfolioWithBadges(User user);
-
   //포트폴리오 수정 페이지를 위한 구매목록 전체 출력
   Portfolio findWithAcquisitionsById(Long idx);
 

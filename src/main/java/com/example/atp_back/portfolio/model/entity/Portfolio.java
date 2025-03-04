@@ -24,6 +24,7 @@ public class Portfolio {
     private LocalDateTime updatedAt;
     private String imageUrl; //메인 페이지에서 포트폴리오 이미지를 띄우기 위해 추가(현재 ERD에는 없음)
     private int viewCnt;
+    private int badges; //메인 페이지에서 포트폴리오의 뱃지 목록을 가져오기 위한 반정규화
 
     public void addViewCount() { this.viewCnt ++; }
     @ManyToOne

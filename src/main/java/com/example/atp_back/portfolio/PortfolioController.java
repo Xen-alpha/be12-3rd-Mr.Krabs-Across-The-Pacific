@@ -43,9 +43,7 @@ public class PortfolioController {
   @GetMapping("/list")
   public ResponseEntity<BaseResponse<PortfolioPageResp>> list(@AuthenticationPrincipal @Nullable User user,
           @PageableDefault(page = 0, size = 30, sort = "viewCnt") Pageable pageable) {
-
     BaseResponse<PortfolioPageResp> resp =  BaseResponse.success(portfolioService.list(user, pageable));
-
     return ResponseEntity.ok(resp);
   }
 

@@ -1,15 +1,9 @@
 package com.example.atp_back.portfolio.repository;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
-import com.example.atp_back.portfolio.model.entity.PortfolioReply;
-import com.example.atp_back.portfolio.model.entity.QPortfolio;
 import com.example.atp_back.portfolio.model.response.AcquisitionInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
-import com.example.atp_back.portfolio.model.response.BadgeInstanceResp;
-import com.example.atp_back.user.model.User;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.atp_back.portfolio.model.entity.QAcquisition.acquisition;
-import static com.example.atp_back.portfolio.model.entity.QBadge.badge;
-import static com.example.atp_back.portfolio.model.entity.QPortfolioReply.portfolioReply;
-import static com.example.atp_back.portfolio.model.entity.QReward.reward;
 import static com.example.atp_back.portfolio.model.entity.QBookmark.bookmark;
 import static com.example.atp_back.portfolio.model.entity.QPortfolio.portfolio;
 import static com.example.atp_back.stock.model.QStock.stock;
@@ -124,14 +111,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
             .where(acquisition.portfolio.idx.in(portfolioIds))
             .fetch();
 
-    //뱃지 리스트 가져오기
-    List<Tuple> badgeList = queryFactory
-            .select(badge.idx, reward.portfolio.idx)
-            .from(badge)
-            .join(reward).on(reward.badge.eq(badge)).fetchJoin()
-            .where(reward.portfolio.idx.in(portfolioIds))
-            .fetch();
-
     List<Long> bookmarkList = queryFactory
             .select(bookmark.user.idx)
             .from(bookmark)
@@ -148,14 +127,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
                     .build()
             ).toList();
 
-    //Badge DTO 변환
-    List <BadgeInstanceResp> badgeDto = badgeList.stream()
-            .map(tuple->BadgeInstanceResp.builder()
-                    .idx(tuple.get(badge.idx))
-                    .portfolioIdx(tuple.get(reward.portfolio.idx))
-                    .build()
-            ).toList();
-
     List<PortfolioInstanceResp> result = portfolioList.stream()
             .map(tuple -> PortfolioInstanceResp.builder()
                     .idx(tuple.get(portfolio.idx))
@@ -165,7 +136,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
                     .bookmarkCnt(Math.toIntExact(tuple.get(bookmark.count())))
                     .bookmarkUsers(bookmarkList)
                     .acquisitionList(acquisitionListDto)
-                    .badgeList(badgeDto)
                     .build()
             ).toList();
 
@@ -184,38 +154,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
             .execute();
   }
 
-  //포트폴리오를 뱃지 목록과 함께 출력하기
-  @Override
-  public List<PortfolioInstanceResp> findPortfolioWithBadges(User user) {
-    return queryFactory
-            .selectFrom(portfolio)
-            .leftJoin(portfolio.rewards, reward).fetchJoin()
-            .leftJoin(reward.badge, badge).fetchJoin()
-            .leftJoin(portfolio.bookmarkList, bookmark).fetchJoin()
-            .leftJoin(portfolio.acquisitionList, acquisition).fetchJoin()
-            .leftJoin(acquisition.stock, stock).fetchJoin()
-            .transform(groupBy(portfolio.idx).list(
-                    Projections.constructor(PortfolioInstanceResp.class,
-                            portfolio.idx,
-                            portfolio.name,
-                            portfolio.imageUrl,
-                            portfolio.viewCnt,
-
-                            Expressions.asBoolean(user != null).and(bookmark.user.idx.eq(user.getIdx())),
-
-                            list(Projections.constructor(AcquisitionInstanceResp.class,
-                                    acquisition.price,
-                                    acquisition.quantity,
-                                    stock.name
-                            )),
-
-                            list(Projections.constructor(BadgeInstanceResp.class,
-                                    badge.idx
-                            ))
-                    )
-            ));
-  }
-
   //포트폴리오 상세페이지에서 해당 포트폴리의 Idx와 일치하는 acquisition 정보를 가져오는 부분
   @Override
   public Portfolio findWithAcquisitionsById(Long idx) {
@@ -226,13 +164,4 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
             .where(portfolio.idx.eq(idx))
             .fetchOne();
   }
-
-  //포트폴리오 상세페이지에서 해당 포트폴리의 Idx와 일치하는 댓글들을 가져오는 쿼리
-//  @Override
-//  public List<PortfolioReply> findRepliesByPortfolioId(Long portfolioIdx) {
-//    return queryFactory
-//            .selectFrom(portfolioReply)
-//            .where(portfolioReply.portfolio.idx.eq(portfolioIdx))
-//            .fetch();
-//  }
 }
