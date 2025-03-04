@@ -1,18 +1,16 @@
 package com.example.atp_back.portfolio.service;
 
-import com.example.atp_back.common.RedisDao;
 import com.example.atp_back.portfolio.model.entity.*;
 import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.response.*;
 import com.example.atp_back.portfolio.repository.*;
 import com.example.atp_back.user.model.User;
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,7 +20,6 @@ import java.util.Optional;
 @Service
 public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
-    private final RedisDao redisDao;
     private final BadgeRepository badgeRepository;
     private final RewardRepository rewardRepository;
     private final BookmarkRepository bookmarkRepository;
@@ -99,43 +96,7 @@ public class PortfolioService {
         if (viewCnt > 1000){
             assignBadge(portfolio, 1);
         }
-//      String totalKey = "total:viewCount:" + portfolioIdx; // 전체 인기 포트폴리오 조회수 key
-//        String redisUserKey = "user:viewList:" + user.getUsername(); // 유저별 조회 이력 key
-//
-//        // 유저가 이미 해당 포트폴리오를 조회했는지 확인
-//        List<String> viewedContentIds = redisDao.getValuesList(redisUserKey);
-//        if (viewedContentIds == null || !viewedContentIds.contains(portfolioIdx.toString())) {
-//            // 유저별 조회 이력에 포트폴리오 ID 저장
-//            redisDao.setValuesList(redisUserKey, portfolioIdx.toString());
-//            // Redis  조회수 증가
-//            redisDao.increment(totalKey);
-//            // 실시간 조회수 증가 (슬라이딩 윈도우 방식)
-//            redisDao.incrementRealtimeViewCount(portfolioIdx);
-//        }
     }
-
-//    // 실시간 인기 포트폴리오 조회수 슬라이딩 윈도우 관리 (2시간 범위 유지)
-//    @Scheduled(fixedRate = 60000) // 1분마다 슬라이딩 윈도우 적용
-//    public void applySlidingWindowForRealtimeViews() {
-//        redisDao.removeOldRealtimeData(2); // 2시간 이전의 데이터는 자동 삭제
-//    }
-//
-//    // 전체 인기 포트폴리오 조회수 동기화 (1분마다 실행)
-//    @Scheduled(fixedRate = 60000)
-//    public void syncViewCountToDatabase() {
-//        List<Portfolio> portfolioList = portfolioRepository.findAll();
-//        for (Portfolio portfolio : portfolioList) {
-//            String totalKey = "total:viewCount:" + portfolio.getIdx();
-//            String viewCountStr = redisDao.getValues(totalKey);
-//
-//            if (viewCountStr != null) {
-//                int viewCnt = Integer.parseInt(viewCountStr);
-//                portfolio.addViewCount(viewCnt);
-//                portfolioRepository.save(portfolio);
-//                redisDao.deleteValues(totalKey); // Redis 데이터 삭제
-//            }
-//        }
-//    }
 
     /*포트폴리오 북마크*/
     public Boolean registerBookmark(User user, Long portfolioIdx, boolean bookmark) {

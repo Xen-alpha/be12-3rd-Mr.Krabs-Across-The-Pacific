@@ -6,12 +6,12 @@ import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import com.example.atp_back.portfolio.model.entity.Reward;
 import com.example.atp_back.user.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
