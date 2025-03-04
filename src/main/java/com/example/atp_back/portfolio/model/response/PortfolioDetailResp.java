@@ -2,12 +2,12 @@ package com.example.atp_back.portfolio.model.response;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.user.model.User;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

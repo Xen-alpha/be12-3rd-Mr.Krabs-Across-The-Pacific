@@ -9,13 +9,13 @@ import com.example.atp_back.portfolio.model.response.PortfolioListResp;
 import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import javax.annotation.Nullable;
 
 @RequiredArgsConstructor
 @RestController
