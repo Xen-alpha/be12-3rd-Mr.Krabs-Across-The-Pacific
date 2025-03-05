@@ -474,15 +474,145 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 <br>
 
 ## 📊 성능 테스트
-Metric: N+1 문제 해결 전후 사용자 요청을 가정한 부하 테스트로 발생한 초당 요청 처리 수와 응답 시간
+메인 페이지에서 포트폴리오 목록을 조회할 때 발생하는 N+1 문제를 해결하기 위해, JPA 기반의 단순 조회 방식에서 QueryDSL을 활용한 최적화 쿼리로 개선
 
 ### 개선 이전
+#### 🔎기존 문제점 (N+1 문제 발생)
 
-![beforeNPlus1_1](https://github.com/user-attachments/assets/df70e0d2-70d9-4da5-a06e-d55319168922)
+기존에는 JpaRepository를 활용하여 포트폴리오 목록을 조회하는 방식이었으며, 조회수(view count) 기준으로 정렬하여 페이지네이션을 적용하는 방식이었다.
+
+```java
+public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, PortfolioCustomRepository{
+    Page<Portfolio> findAllByOrderByViewCntDesc(Pageable pageable);
+}
+```
+**포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
+
+![before_3](./images/before_nplus1%20(3).png)
+![before_2](./images/before_nplus1%20(2).png)
+![before_1](./images/before_nplus1%20(1).png)
+
+단순히 Portfolio 목록을 조회하는 구조로, 각 포트폴리오에 대한 추가적인 정보(북마크, 보유 주식 등)를 가져올 때 추가 쿼리 발생
+
+결과적으로 N개의 포트폴리오를 조회하면, 추가로 N개의 개별 쿼리 실행 (N+1 문제 발생)
+
+쿼리 실행 횟수가 많아져 성능 저하 및 불필요한 DB 부하 발생
+
+쿼리 수: N+1 문제로 인해 불필요한 다수의 개별 쿼리 실행
+
+조회 속도: 평균 26000(ms)
 
 ### 개선 이후
+```java
+//PortfolioCustomRepository.java
+public interface PortfolioCustomRepository {
+  //메인 페이지에서 포트폴리오 목록 조회
+  Page<PortfolioInstanceResp> findAllByOrderByKeyword(Pageable pageable, String keyword);
+}
+```
+```java
+//PortfolioCustomRepositoryImpl.java
+  @Override
+  public Page<PortfolioInstanceResp> findAllByOrderByKeyword(Pageable pageable, String keyword) {
+    // 정렬 조건
+    OrderSpecifier<?> orderSpecifier = getSortedColumn(keyword);
+    // QueryDSL을 이용한 최적화된 포트폴리오 조회 (N+1 문제 해결)
+    List<Tuple> portfolioList = queryFactory
+        .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
+        .from(portfolio)
+        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
+        .orderBy(orderSpecifier)
+        .groupBy(portfolio)
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
 
-![afterNPlus1_2](https://github.com/user-attachments/assets/a07c153a-4831-49f7-aeb8-df28ff30e446)
+    // 포트폴리오 ID 목록을 추출하여 관련 데이터 조회 (Acquisition & Stock)
+    List<AcquisitionInstanceResp> acquisitionList = acquisitionList(portfolioIds(portfolioList));
+
+    // 북마크 여부 확인 (로그인 유저가 특정 포트폴리오를 북마크했는지)
+    List<Long> bookmarkList = queryFactory
+        .select(bookmark.user.idx)
+        .from(bookmark)
+        .where(bookmark.portfolio.idx.in(portfolioIds(portfolioList)))
+        .fetch();
+
+    // 최종 결과 매핑 (데이터를 Response DTO 형태로 변환)
+    List<PortfolioInstanceResp> result = portfolioList.stream()
+        .map(tuple -> PortfolioInstanceResp.builder()
+            .idx(tuple.get(portfolio.idx))
+            .name(tuple.get(portfolio.name))
+            .imageUrl(tuple.get(portfolio.imageUrl))
+            .viewCnt(tuple.get(portfolio.viewCnt))
+            .badges(tuple.get(portfolio.badges))
+            .bookmarkCnt(Math.toIntExact(tuple.get(bookmark.count())))
+            .bookmarkUsers(bookmarkList)
+            .acquisitionList(acquisitionList)
+            .build()
+        ).toList();
+
+    return new PageImpl<>(result, pageable, result.size());
+  }
+
+```
+*필요한 Entity를 전부 Join하지 않고, Portfolio Idx를 추출하여 해당하는 데이터만 따로 목록을 불러와서 RepsonseDto에 매핑*
+
+![afterNplus1_3](./images/after_nplus1%20(3).png)
+![afterNplus1_2](./images/after_nplus1%20(2).png)
+![afterNplus1_1](./images/after_nplus1%20(1).png)
+
+#### 🔎성능 개선 내용
+
+1. QueryDSL을 사용하여 불필요한 개별 쿼리 실행 없이 포트폴리오 데이터 조회
+2. 포트폴리오 ID 목록을 추출하여 이에 해당하는 Acquisition을 Stock과 Join하여 따로 추출 (MultipleBagFetchException를 방지)
+3. 사용자가 로그인한 경우 포트폴리오 목록에서 북마크 여부를 반영하기 위해 2번과 마찬가지로 포트폴리오 ID 목록에 해당하는 북마크 리스트를 따로 추출
+4. 페이지네이션을 적용하여 쿼리 효율성 극대화
+
+### 결과 비교
+
+#### 🔍 1. 요청 수 증가
+
+|항목	|기존 결과	|개선 결과	|개선 효과|
+|---|----------|----------|-------|
+|Requests (요청 수)|	4,429	9,810|	✅ 2.2배 증가|
+
+- 동일 시간 내 처리 가능한 요청 수가 2배 이상 증가
+- 시스템의 처리량이 증가했음을 의미
+
+#### 🚀 2. 응답 속도 개선
+
+|항목	|기존 결과	|개선 결과	|개선 효과|
+|-----|--------|-----------|---------|
+|Median (ms)|	26,000|	10,000|	✅ 61.5% 감소|
+|95%ile (ms)|	39,000	|13,000|	✅ 66.6% 감소|
+|99%ile (ms)|	43,000	|13,000	|✅ 69.7% 감소|
+|Average (ms)|	27,899.14|	9,819.55	|✅ 64.8% 감소|
+|Min (ms)|	3,022|	337|	✅ 88.8% 감소|
+|Max (ms)|	44,770	|14,141|	✅ 68.4% 감소|
+
+- 평균 응답 속도(27.8초 → 9.8초) 및 최대 응답 속도(44.7초 → 14.1초)가 대폭 감소
+- 95~99% 구간에서도 응답 시간이 크게 줄어 일관된 성능 제공 가능
+- 최소 응답 시간(337ms)도 크게 감소, 빠른 응답이 가능해짐
+
+#### ⚡ 3. 처리량 및 성능 지표 향상
+
+|항목	|기존 결과	|개선 결과	|개선 효과|
+|-----|--------|-----------|---------|
+|RPS (Requests Per Second)|	32.1|	90.9|	✅ 2.8배 증가|
+|Average size (bytes)|	5,502	|31,245|	⬆ 6배 증가|
+
+- RPS(초당 요청 수)가 32.1 → 90.9로 약 2.8배 증가 → 서버가 더 많은 요청을 처리 가능
+- 응답 크기가 5,502 → 31,245로 증가 → 더 많은 데이터가 포함되었음을 의미 (추가 정보 포함 가능성)
+
+#### 🎯 4. 결론
+✅ N+1 문제를 해결하고 QueryDSL을 적용한 결과, 응답 속도와 처리량이 크게 향상되었음.
+
+✅ 요청 처리량이 2배 이상 증가했으며, 평균 응답 시간은 3배 가까이 단축됨.
+
+✅ 최소 및 최대 응답 시간이 모두 줄어들어 안정적인 성능 제공 가능.
+
+✅ 동일 시간 내 더 많은 요청을 처리할 수 있어 서버 성능이 개선됨.
+
 
 ## 📄 기타 문서
 [👉🏼 프로젝트 기획안](https://docs.google.com/document/d/10S8pPWJzgGtz6S1djeimFvKHkFpN2KdOCY7mrUeAtj4/edit?pli=1&tab=t.b3v4vsjloy9)
