@@ -488,10 +488,9 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, PortfolioCustomRepository{
     Page<Portfolio> findAllByOrderByViewCntDesc(Pageable pageable);
 }
+```
 
 **포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
-
-```
 
 </details>
 
