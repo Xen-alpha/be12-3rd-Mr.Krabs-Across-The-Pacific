@@ -399,8 +399,8 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 ```json
 ```
 
-
 </details>
+
 ## 🔧 프론트엔드 기능 테스트
 
 ![Mainpage](./images/Main.png)
