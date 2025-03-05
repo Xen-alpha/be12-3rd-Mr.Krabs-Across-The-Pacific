@@ -6,9 +6,11 @@ import com.example.atp_back.stock.model.Stock;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 public class AcquisitionCreateReqDto {
+    private Long stockIdx;
     private String stockName;
     private Long price;
     private BigDecimal quantity;

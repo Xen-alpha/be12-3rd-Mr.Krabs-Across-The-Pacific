@@ -34,6 +34,7 @@ public class SecurityConfig {
             authorizeRequests
                     .requestMatchers("/user/logout", "/user/signup", "/login", "/logout").permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
+                    .requestMatchers("/portfolio/bookmark").hasRole("USER")
                     .anyRequest().permitAll();
         });
         http.logout(logout -> {
