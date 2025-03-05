@@ -76,6 +76,9 @@
 
 * [크롤러 리포지토리](https://github.com/Xen-alpha/polygon.io-crawler)
 
+### 설치법
+[설치법 소개 위키 페이지](https://github.com/beyond-sw-camp/be12-3rd-Mr.Krabs-Across-The-Pacific/wiki/How-to-Install)
+
 ##  👩‍💻 팀원 소개
 <table>
   <tbody>
