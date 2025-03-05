@@ -255,7 +255,153 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 
 <br>
 
-## 🔧 기능 테스트
+## 🔧 JSON 요청/응답 테스트(Postman)
+<!-- TODO -->
+<details>
+<summary>포트폴리오 생성/수정</summary>
+* 생성 요청
+```json
+```
+   
+* 생성 응답
+```json
+```
+
+* 수정 요청
+```json
+```
+* 수정 응답
+```json
+```
+</details>
+
+<details>
+<summary>포트폴리오 상세 페이지 조회/수정/삭제/댓글달기</summary>
+* 조회 요청
+
+* 조회 응답
+```json
+```
+
+* 댓글 달기 요청
+```json
+```
+* 댓글 달기 응답
+```json
+```
+
+</details>
+
+<details>
+<summary>주식 종목 조회 및 상세 페이지</summary>
+* 요청
+
+* 응답
+```json
+```
+
+
+</details>
+
+<details>
+<summary>주식 상세 페이지 그래프 조작</summary>
+* 목록 요청
+
+* 목록 응답
+```json
+```
+* 그래프 요청
+
+* 그래프 응답
+```json
+```
+
+</details>
+
+<details>
+<summary>주식 상세 페이지 댓글 작성</summary>
+* 정보 요청
+
+* 정보 응답
+```json
+```
+   
+* 댓글 작성 요청
+```json
+```
+* 댓글 응답
+```json
+```
+
+</details>
+
+
+<details>
+<summary>주식 상세 페이지 댓글 좋아요, 수정/삭제</summary>
+* 좋아요 요청
+```json
+```
+* 좋아요 응답
+```json
+```
+
+* 댓글 수정 요청
+```json
+```
+* 댓글 수정 응답
+```json
+```
+
+* 댓글 삭제 요청
+```json
+```
+* 댓글 삭제 응답
+```json
+```
+
+</details>
+<details>
+<summary>로그인, 로그아웃</summary>
+* 로그인 요청
+```json
+```
+* 로그인 응답
+```json
+```
+
+* 로그아웃 요청
+```json
+```
+* 로그아웃 응답
+```json
+```
+
+</details>
+
+<details>
+<summary>404 Redirect</summary>
+* 요청
+```json
+```
+* 응답
+```json
+```
+
+
+</details>
+
+<details>
+<summary>프로필 및 설정</summary>
+* 요청
+```json
+```
+* 응답
+```json
+```
+
+
+</details>
+## 🔧 프론트엔드 기능 테스트
 
 ![Mainpage](./images/Main.png)
 
