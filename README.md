@@ -26,7 +26,8 @@
 
 ## 📰 시스템 아키텍쳐
 
-![image](https://github.com/user-attachments/assets/feffb63b-4360-46f7-9fef-c7c6c530dbca)
+![systemarchitecture1 drawio](https://github.com/user-attachments/assets/6a708bf8-a692-4d61-aa9b-3433841dda38)
+
 
 
 
