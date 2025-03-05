@@ -2,6 +2,7 @@ package com.example.atp_back.stock.model.resp;
 
 
 import com.example.atp_back.stock.model.StockReply;
+import com.example.atp_back.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,8 +26,13 @@ public class StockReplyResp {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer likesCount;
+    private Boolean isLiked;
 
-    public static StockReplyResp from (StockReply stockReply) {
+    public Boolean getIsLiked() {
+        return this.isLiked;
+    }
+
+    public static StockReplyResp from (StockReply stockReply, long isLiked) {
         return StockReplyResp.builder()
                 .idx(stockReply.getIdx())
                 .stockId(stockReply.getStock().getIdx())
@@ -36,10 +42,11 @@ public class StockReplyResp {
                 .createdAt(stockReply.getCreatedAt())
                 .updatedAt(stockReply.getUpdatedAt())
                 .likesCount(stockReply.getLikesCount())
+                .isLiked(isLiked==1)
                 .build();
     }
 
-    public static Slice<StockReplyResp> from (Slice<StockReply> stockReplies) {
-        return stockReplies.map(StockReplyResp::from);
+    public static Slice<StockReplyResp> from (Slice<Object[]> stockReplies) {
+        return stockReplies.map(stockReply -> StockReplyResp.from((StockReply)stockReply[0], (long)stockReply[1]));
     }
 }

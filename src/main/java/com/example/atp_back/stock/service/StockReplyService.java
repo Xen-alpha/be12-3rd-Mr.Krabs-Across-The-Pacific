@@ -27,8 +27,9 @@ public class StockReplyService {
     }
 
     @Transactional
-    public Slice<StockReplyResp> getStockReply(Long stockIdx, int size, int page) {
-        Slice<StockReply> result = stockReplyRepository.findAllByStockIdxOrderByCreatedAtDesc(stockIdx, PageRequest.of(size, page));
-        return StockReplyResp.from(result);
+    public Slice<StockReplyResp> getStockReply(Long stockIdx, int size, int page, User user) {
+        Long userIdx = user==null?null:user.getIdx();
+        Slice<StockReplyResp> result = stockReplyRepository.findAllByStockIdxOrderByCreatedAtDesc(stockIdx, userIdx, PageRequest.of(page,size));
+        return result;
     }
 }

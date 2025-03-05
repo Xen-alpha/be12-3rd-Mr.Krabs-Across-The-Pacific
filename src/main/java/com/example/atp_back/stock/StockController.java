@@ -66,10 +66,10 @@ public class StockController {
             """)
     @GetMapping("/reply/{stockId}")
     public ResponseEntity<BaseResponse<Slice<StockReplyResp>>> getReply(@PathVariable @Valid @PositiveOrZero Long stockId,
-                                                                    @RequestParam(defaultValue = "0") int size,
-                                                                    @RequestParam(defaultValue = "10") int page,
+                                                                    @RequestParam(defaultValue = "10") int size,
+                                                                    @RequestParam(defaultValue = "0") int page,
                                                                     @AuthenticationPrincipal @Nullable User user) {
-        Slice<StockReplyResp> result = stockReplyService.getStockReply(stockId, size, page);
+        Slice<StockReplyResp> result = stockReplyService.getStockReply(stockId, size, page, user);
         BaseResponse<Slice<StockReplyResp>> resp = BaseResponse.success(result);
         return ResponseEntity.ok(resp);
     }
@@ -98,5 +98,4 @@ public class StockController {
         BaseResponse<String> resp = BaseResponse.success("success");
         return ResponseEntity.ok(resp);
     }
-
 }
