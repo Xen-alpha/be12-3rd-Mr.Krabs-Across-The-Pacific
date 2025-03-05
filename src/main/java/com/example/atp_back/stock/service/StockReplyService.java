@@ -23,7 +23,7 @@ public class StockReplyService {
         stock.setIdx(stockIdx);
         user.setVersion(0L);
         StockReply stockReply = dto.toEntity(user, stock);
-        stockReplyRepository.saveAndFlush(stockReply);
+        stockReplyRepository.save(stockReply);
     }
 
     @Transactional

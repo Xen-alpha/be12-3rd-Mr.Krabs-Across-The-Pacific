@@ -35,7 +35,7 @@ public class StockReplyResp {
                 .contents(stockReply.getContents())
                 .createdAt(stockReply.getCreatedAt())
                 .updatedAt(stockReply.getUpdatedAt())
-                .likesCount(stockReply.getLikes().size())
+                .likesCount(stockReply.getLikesCount())
                 .build();
     }
 
