@@ -28,10 +28,9 @@ public class PortfolioInstanceResp {
     private int viewCnt;
     private boolean bookmark;
     private int bookmarkCnt;
+    private int badges;
     private List<Long> bookmarkUsers = new ArrayList<>();
-    private List<BadgeInstanceResp> badgeList = new ArrayList<>();
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
-    private List<PortfolioReplyInstanceResp> replyList = new ArrayList<>();
 
     //포트폴리오 메인 페이지 응답
     public static PortfolioInstanceResp fromMain(@Nullable User user, Portfolio portfolio) {
@@ -40,6 +39,7 @@ public class PortfolioInstanceResp {
                 .name(portfolio.getName())
                 .imageUrl(portfolio.getImageUrl())
                 .viewCnt(portfolio.getViewCnt())
+                .badges(portfolio.getBadges())
                 .bookmark(user != null && portfolio.getBookmarkList().stream()
                         .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx())))
                 .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::fromMain).collect(Collectors.toList()))
@@ -52,6 +52,7 @@ public class PortfolioInstanceResp {
                 .name(portfolioResp.getName())
                 .imageUrl(portfolioResp.getImageUrl())
                 .viewCnt(portfolioResp.getViewCnt())
+                .badges(portfolioResp.getBadges())
                 .bookmark(user != null && portfolioResp.getBookmarkUsers().contains(user.getIdx())) //북마크 여부 확인
                 .bookmarkCnt(portfolioResp.getBookmarkCnt()) // 북마크 개수
                 .acquisitionList(portfolioResp.getAcquisitionList())
