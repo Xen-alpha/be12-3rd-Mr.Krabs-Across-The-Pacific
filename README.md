@@ -43,10 +43,6 @@
 
 <br>
 
-### ☑️ FRONT END
-<img src="https://img.shields.io/badge/html5-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white" /><img src="https://img.shields.io/badge/css3-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white" /><img src="https://img.shields.io/badge/vue.js-%234FC08D.svg?&style=for-the-badge&logo=vue.js&logoColor=white" /><img src="https://img.shields.io/badge/nginx-%23269539.svg?&style=for-the-badge&logo=nginx&logoColor=white" /><img src="https://img.shields.io/badge/bootstrap-%237952B3.svg?&style=for-the-badge&logo=bootstrap&logoColor=white" /><img src="https://img.shields.io/badge/postman-%23FF6C37.svg?&style=for-the-badge&logo=postman&logoColor=white" />
-
-<br>
 
 ### ☑️ DB & Monitoring
 <img src="https://img.shields.io/badge/mariadb-%23003545.svg?&style=for-the-badge&logo=mariadb&logoColor=white" /><img src="https://img.shields.io/badge/mysql-%234479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/grafana-%23F46800.svg?&style=for-the-badge&logo=grafana&logoColor=white" /><img src="https://img.shields.io/badge/prometheus-%23E6522C.svg?&style=for-the-badge&logo=prometheus&logoColor=white" /><img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
@@ -252,11 +248,6 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 
 <br>
 
-## 🖥️ 화면 설계서
-
-🔗[Figma](https://www.figma.com/design/3Sd4e1wUNbijDcJtUTHPPG/Across-The-Pacific?node-id=150-1351&m=dev&t=AZ3xA7JFLWjHrHM0-1)
-
-<br>
 
 ## 🔧 JSON 요청/응답 테스트(Postman)
 <!-- TODO -->
@@ -404,30 +395,27 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 
 </details>
 
-## 🔧 프론트엔드 기능 테스트
+## 🔧 실제 테스트
 
-![Mainpage](./images/Main.png)
 
 <details>
 <summary>메인 페이지</summary>
 
-![Mainpage](./images/Main.gif)
+
 
 </details>
 
 <details>
 <summary>포트폴리오 생성/수정</summary>
 
-![CreatePortfolio](./images/portfolioCreate.gif)
 
-![Updatefolio](./images/portfolioUpdate.gif)
 
 </details>
 
 <details>
 <summary>포트폴리오 상세 페이지 조회/수정/삭제/댓글달기</summary>
 
-![PortfolioDetail](./images/portfoliodetail.gif)
+
 
 
 </details>
@@ -435,21 +423,21 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 <details>
 <summary>주식 종목 조회 및 상세 페이지</summary>
 
-![녹음-종목조회](https://github.com/user-attachments/assets/82d6f543-c807-40aa-98e5-502cb4104256)
+
 
 </details>
 
 <details>
 <summary>주식 상세 페이지 그래프 조작</summary>
 
-![StockDetail](/images/trading_view.gif)
+
 
 </details>
 
 <details>
 <summary>주식 상세 페이지 댓글 작성</summary>
 
-![StockReplyInsert](/images/stock_reply_insert.gif)
+
 
 </details>
 
@@ -457,27 +445,27 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 <details>
 <summary>주식 상세 페이지 댓글 좋아요, 수정/삭제</summary>
 
-![StockLikes](/images/stock_reply_like_update_delete.gif)
+
 
 </details>
 <details>
 <summary>로그인, 로그아웃</summary>
 
-![LoginLogout](/images/loginlogout.gif)
+
 
 </details>
 
 <details>
 <summary>404 Redirect</summary>
 
-![footer와-404-에러 (1)](https://github.com/user-attachments/assets/99eb7008-6965-498f-8eee-67dba042dbe3)
+
 
 </details>
 
 <details>
 <summary>프로필 및 설정</summary>
 
-![profile-layout](https://github.com/user-attachments/assets/a6672cc0-9dcb-447a-b2ae-91ca7c50e936)
+
 
 </details>
 
@@ -500,3 +488,6 @@ Metric: N+1 문제 해결 전후 사용자 요청을 가정한 부하 테스트�
 <br>
 
 [👉🏼 요구사항 정의서](https://docs.google.com/spreadsheets/d/1woSNDRkSPBwEEkWzr27yUoJJfmwXYKzcMOCcOs6mO3c/edit?usp=sharing)
+
+[프론트엔드](https://github.com/beyond-sw-camp/be12-2nd-Mr.Krabs-Across-The-Pacific)
+
