@@ -74,6 +74,7 @@
 ![Static Badge](https://img.shields.io/badge/node.js-%235FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)
 <img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 
+* [크롤러 리포지토리](https://github.com/Xen-alpha/polygon.io-crawler)
 
 ##  👩‍💻 팀원 소개
 <table>
