@@ -35,23 +35,8 @@ public class PortfolioService {
 
     public PortfolioPageResp list(@Nullable User user, Pageable pageable) {
         //메인 페이지에 보여줄 정렬 조건
-        String sortBy = pageable.getSort().stream()
-                .findFirst()
-                .map(Sort.Order::getProperty)
-                .orElse("viewCnt");
-
-        Page<Portfolio> result = null;
-        if ("bookmarks".equals(sortBy)) {
-//            result = portfolioRepository.findAllByOrderByBookmarksDesc(pageable);
-            Page<PortfolioInstanceResp> result2 = portfolioRepository.findAllByOrderByBookmarksDesc2(pageable);
-            return PortfolioPageResp.from2(user, result2);
-        } else if("createdAt".equals(sortBy)) {
-            result = portfolioRepository.findAllByOrderByCreatedAtDesc(pageable);
-        }else{
-            result = portfolioRepository.findAllByOrderByViewCntDesc(pageable);
-        }
-
-        return PortfolioPageResp.from(user, result);
+        String sortBy = pageable.getSort().stream().findFirst().map(Sort.Order::getProperty).orElse("View");
+        return PortfolioPageResp.from(user, portfolioRepository.findAllByOrderByKeyword(pageable, sortBy));
     }
 
     public PortfolioInstanceResp read(Long portfolioIdx) {

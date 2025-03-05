@@ -1,6 +1,8 @@
 package com.example.atp_back.portfolio.repository;
 
 import com.example.atp_back.portfolio.model.entity.Portfolio;
+import com.example.atp_back.portfolio.model.entity.QBookmark;
+import com.example.atp_back.portfolio.model.entity.QPortfolio;
 import com.example.atp_back.portfolio.model.response.AcquisitionInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.querydsl.core.Tuple;
@@ -11,10 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
 
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.atp_back.portfolio.model.entity.QAcquisition.acquisition;
@@ -22,8 +26,6 @@ import static com.example.atp_back.portfolio.model.entity.QBookmark.bookmark;
 import static com.example.atp_back.portfolio.model.entity.QPortfolio.portfolio;
 import static com.example.atp_back.stock.model.QStock.stock;
 import static com.example.atp_back.user.model.QUser.user;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 
 
 @Repository
@@ -54,32 +56,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
         .collect(Collectors.toList());
   }
 
-  //북마크 순서대로 정렬하여 포트폴리오 가져오기
-  @Override
-  public Page<Portfolio> findAllByOrderByBookmarksDesc(Pageable pageable) {
-    List<Tuple> results = queryFactory
-            .select(portfolio, bookmark.count())
-            .from(portfolio)
-            .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
-            .groupBy(portfolio)
-            .orderBy(bookmark.count().desc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
-
-    List<Portfolio> portfolios = results.stream()
-            .map(tuple -> tuple.get(portfolio))
-            .collect(Collectors.toList());
-
-    // 전체 개수를 가져와서 Page 객체를 생성
-    long total = Optional.ofNullable(queryFactory
-            .select(portfolio.count())
-            .from(portfolio)
-            .fetchOne()).orElse(0L);
-
-    return new PageImpl<>(portfolios, pageable, total);
-  }
-
   // 포트폴리오 ID 목록 추출
   public List<Long> portfolioIds(List<Tuple> portfolioList){
     return portfolioList.stream()
@@ -107,45 +83,50 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
         ).toList();
   }
 
-  //북마크 순서대로 정렬하여 포트폴리오 가져오기2
-  @Override
-  public Page<PortfolioInstanceResp> findAllByOrderByBookmarksDesc2(Pageable pageable) {
-    //북마크 수에 따라서 정렬한 포트폴리오 목록을 페이지 정보를 이용해 잘라서 가져오기
-    List<Tuple> portfolioList = queryFactory
-            .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
-            .from(portfolio)
-            .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
-            .orderBy(bookmark.count().desc())
-            .groupBy(portfolio)
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+  //메인 페이지 포트폴리오 정렬 조건
+  private OrderSpecifier<?> getSortedColumn(String sortBy) {
+    if(sortBy.equals("View")) { return new OrderSpecifier<>(Order.DESC, portfolio.viewCnt); }
+    else if(sortBy.equals("Bookmark")) { return new  OrderSpecifier<>(Order.DESC, bookmark.count() ); }
+    else{ return new OrderSpecifier<>(Order.DESC, portfolio.createdAt); }
+  }
 
-    // 포트폴리오 ID 목록 추출
-    List<Long> portfolioIds = portfolioIds(portfolioList);
+  @Override
+  public Page<PortfolioInstanceResp> findAllByOrderByKeyword(Pageable pageable, String keyword) {
+    // 동적 정렬 조건 생성
+    OrderSpecifier<?> orderSpecifier = getSortedColumn(keyword);
+
+    List<Tuple> portfolioList = queryFactory
+        .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
+        .from(portfolio)
+        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
+        .orderBy(orderSpecifier)
+        .groupBy(portfolio)
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
 
     // 포트폴리오 ID 목록에 속하는 Acquisition & Stock 조회
-    List<AcquisitionInstanceResp> acquisitionList = acquisitionList(portfolioIds);
+    List<AcquisitionInstanceResp> acquisitionList = acquisitionList(portfolioIds(portfolioList));
 
-    // 로그인한 유저가 포트폴리오 북마크했는지 여부를 확인하기 위한 bookmarkList
+    // 현재 로그인한 유저가 포트폴리오 북마크했는지 여부를 확인하기 위한 bookmarkList
     List<Long> bookmarkList = queryFactory
         .select(bookmark.user.idx)
         .from(bookmark)
-        .where(bookmark.portfolio.idx.in(portfolioIds))
+        .where(bookmark.portfolio.idx.in(portfolioIds(portfolioList)))
         .fetch();
 
     List<PortfolioInstanceResp> result = portfolioList.stream()
-            .map(tuple -> PortfolioInstanceResp.builder()
-                    .idx(tuple.get(portfolio.idx))
-                    .name(tuple.get(portfolio.name))
-                    .imageUrl(tuple.get(portfolio.imageUrl))
-                    .viewCnt(tuple.get(portfolio.viewCnt))
-                    .badges(tuple.get(portfolio.badges))
-                    .bookmarkCnt(Math.toIntExact(tuple.get(bookmark.count())))
-                    .bookmarkUsers(bookmarkList)
-                    .acquisitionList(acquisitionList)
-                    .build()
-            ).toList();
+        .map(tuple -> PortfolioInstanceResp.builder()
+            .idx(tuple.get(portfolio.idx))
+            .name(tuple.get(portfolio.name))
+            .imageUrl(tuple.get(portfolio.imageUrl))
+            .viewCnt(tuple.get(portfolio.viewCnt))
+            .badges(tuple.get(portfolio.badges))
+            .bookmarkCnt(Math.toIntExact(tuple.get(bookmark.count())))
+            .bookmarkUsers(bookmarkList)
+            .acquisitionList(acquisitionList)
+            .build()
+        ).toList();
 
     return new PageImpl<>(result, pageable, result.size());
   }
@@ -154,8 +135,6 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
   @Override
   @Transactional
   public void incrementViewCnt(Long portfolioIdx) {
-    //QPortfolio portfolio = QPortfolio.portfolio;
-
     queryFactory.update(portfolio)
             .set(portfolio.viewCnt, portfolio.viewCnt.add(1))
             .where(portfolio.idx.eq(portfolioIdx))

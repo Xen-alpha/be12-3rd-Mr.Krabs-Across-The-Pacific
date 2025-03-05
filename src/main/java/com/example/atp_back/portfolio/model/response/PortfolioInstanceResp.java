@@ -52,6 +52,7 @@ public class PortfolioInstanceResp {
                 .name(portfolioResp.getName())
                 .imageUrl(portfolioResp.getImageUrl())
                 .viewCnt(portfolioResp.getViewCnt())
+                .badges(portfolioResp.getBadges())
                 .bookmark(user != null && portfolioResp.getBookmarkUsers().contains(user.getIdx())) //북마크 여부 확인
                 .bookmarkCnt(portfolioResp.getBookmarkCnt()) // 북마크 개수
                 .acquisitionList(portfolioResp.getAcquisitionList())

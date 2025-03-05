@@ -13,9 +13,9 @@ import java.util.List;
 public interface PortfolioCustomRepository {
   //포트폴리오 검색
   List<Portfolio> searchAllByKeyword(String keyword);
- 
-  //메인 페이지에서 북마크순으로 정렬
-  Page<Portfolio> findAllByOrderByBookmarksDesc(Pageable pageable);
+
+  //메인 페이지에서 포트폴리오 목록 조회
+  Page<PortfolioInstanceResp> findAllByOrderByKeyword(Pageable pageable, String keyword);
 
   //포트폴리오 클릭시 조회수 증가
   void incrementViewCnt(Long portfolioIdx);
@@ -23,8 +23,4 @@ public interface PortfolioCustomRepository {
   //포트폴리오 수정 페이지를 위한 구매목록 전체 출력
   Portfolio findWithAcquisitionsById(Long idx);
 
-  //포트폴리오 idx를 이용해서 댓글 목록 불러오기
-//  List<PortfolioReply> findRepliesByPortfolioId(Long portfolioIdx);
-
-  public Page<PortfolioInstanceResp> findAllByOrderByBookmarksDesc2(Pageable pageable);
 }
