@@ -6,6 +6,7 @@ import com.example.atp_back.portfolio.model.entity.QPortfolio;
 import com.example.atp_back.portfolio.model.response.AcquisitionInstanceResp;
 import com.example.atp_back.portfolio.model.response.PortfolioInstanceResp;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import com.querydsl.core.types.dsl.PathBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.example.atp_back.portfolio.model.entity.QAcquisition.acquisition;
@@ -68,7 +70,7 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     List<Tuple> acquisitionList = queryFactory
         .select(acquisition.portfolio.idx, stock.idx, stock.name, acquisition.price, acquisition.quantity)
         .from(acquisition)
-        .join(stock).on(acquisition.stock.eq(stock)).fetchJoin()
+        .join(stock).on(acquisition.stock.eq(stock))
         .where(acquisition.portfolio.idx.in(portfolioIds))
         .fetch();
 
@@ -98,7 +100,7 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     List<Tuple> portfolioList = queryFactory
         .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
         .from(portfolio)
-        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
+        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio)).fetchJoin()
         .orderBy(orderSpecifier)
         .groupBy(portfolio)
         .offset(pageable.getOffset())
@@ -109,11 +111,12 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     List<AcquisitionInstanceResp> acquisitionList = acquisitionList(portfolioIds(portfolioList));
 
     // 현재 로그인한 유저가 포트폴리오 북마크했는지 여부를 확인하기 위한 bookmarkList
-    List<Long> bookmarkList = queryFactory
-        .select(bookmark.user.idx)
+    Map<Long, List<Long>> bookmarkMap = queryFactory
+        .select(bookmark.portfolio.idx, bookmark.user.idx)
         .from(bookmark)
         .where(bookmark.portfolio.idx.in(portfolioIds(portfolioList)))
-        .fetch();
+        .transform(GroupBy.groupBy(bookmark.portfolio.idx).as(GroupBy.list(bookmark.user.idx)));
+
 
     List<PortfolioInstanceResp> result = portfolioList.stream()
         .map(tuple -> PortfolioInstanceResp.builder()
