@@ -326,9 +326,11 @@ Metric: N+1 문제 해결 전후 사용자 요청을 가정한 부하 테스트�
 
 ### 개선 이전
 
+![beforeNPlus1_1](https://github.com/user-attachments/assets/df70e0d2-70d9-4da5-a06e-d55319168922)
+
 ### 개선 이후
 
-
+![afterNPlus1_2](https://github.com/user-attachments/assets/a07c153a-4831-49f7-aeb8-df28ff30e446)
 
 ## 📄 기타 문서
 [👉🏼 프로젝트 기획안](https://docs.google.com/document/d/10S8pPWJzgGtz6S1djeimFvKHkFpN2KdOCY7mrUeAtj4/edit?pli=1&tab=t.b3v4vsjloy9)
