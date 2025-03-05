@@ -34,12 +34,6 @@ public class PortfolioService {
     }
 
     public PortfolioPageResp list(@Nullable User user, Pageable pageable) {
-
-        //뱃지 목록 불러와서 붙이기
-        //구매한 주식 목록 불러와서 붙이기 (추후 프론트에서 계산용)
-        List<Acquisition> acquisitionList = acquisitionRepository.findAll();
-
-
         //메인 페이지에 보여줄 정렬 조건
         String sortBy = pageable.getSort().stream()
                 .findFirst()

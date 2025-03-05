@@ -87,15 +87,36 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
             .collect(Collectors.toList());
   }
 
+  // 포트폴리오 ID가 담긴 List가 주어질 때, 해당 포트폴리오에 해당하는 Acqusition의 정보를 Stock과 Join하여 AcquisitionInstanceResp 형태로 반영
+  public List<AcquisitionInstanceResp> acquisitionList(List<Long> portfolioIds){
+    List<Tuple> acquisitionList = queryFactory
+        .select(acquisition.portfolio.idx, stock.idx, stock.name, acquisition.price, acquisition.quantity)
+        .from(acquisition)
+        .join(stock).on(acquisition.stock.eq(stock)).fetchJoin()
+        .where(acquisition.portfolio.idx.in(portfolioIds))
+        .fetch();
+
+    return acquisitionList.stream()
+        .map(tuple -> AcquisitionInstanceResp.builder()
+            .portfolioIdx(tuple.get(acquisition.portfolio.idx))
+            .stockIdx(tuple.get(acquisition.stock.idx))
+            .stockName(tuple.get(stock.name))
+            .price(tuple.get(acquisition.price))
+            .quantity(tuple.get(acquisition.quantity))
+            .build()
+        ).toList();
+  }
+
   //북마크 순서대로 정렬하여 포트폴리오 가져오기2
   @Override
   public Page<PortfolioInstanceResp> findAllByOrderByBookmarksDesc2(Pageable pageable) {
     //북마크 수에 따라서 정렬한 포트폴리오 목록을 페이지 정보를 이용해 잘라서 가져오기
     List<Tuple> portfolioList = queryFactory
-            .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count())
+            .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
             .from(portfolio)
             .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio))
             .orderBy(bookmark.count().desc())
+            .groupBy(portfolio)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -103,29 +124,15 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     // 포트폴리오 ID 목록 추출
     List<Long> portfolioIds = portfolioIds(portfolioList);
 
-    // 해당 포트폴리오 ID 목록에 속하는 Acquisition & Stock 조회
-    List<Tuple> acquisitionList = queryFactory
-            .select(acquisition.portfolio.idx, stock.idx, stock.name, acquisition.price, acquisition.quantity)
-            .from(acquisition)
-            .join(stock).on(acquisition.stock.eq(stock)).fetchJoin()
-            .where(acquisition.portfolio.idx.in(portfolioIds))
-            .fetch();
+    // 포트폴리오 ID 목록에 속하는 Acquisition & Stock 조회
+    List<AcquisitionInstanceResp> acquisitionList = acquisitionList(portfolioIds);
 
+    // 로그인한 유저가 포트폴리오 북마크했는지 여부를 확인하기 위한 bookmarkList
     List<Long> bookmarkList = queryFactory
-            .select(bookmark.user.idx)
-            .from(bookmark)
-            .where(bookmark.portfolio.idx.in(portfolioIds))
-            .fetch();
-
-    List<AcquisitionInstanceResp> acquisitionListDto = acquisitionList.stream()
-            .map(tuple -> AcquisitionInstanceResp.builder()
-                    .portfolioIdx(tuple.get(acquisition.portfolio.idx))
-                    .stockIdx(tuple.get(acquisition.stock.idx))
-                    .stockName(tuple.get(stock.name))
-                    .price(tuple.get(acquisition.price))
-                    .quantity(tuple.get(acquisition.quantity))
-                    .build()
-            ).toList();
+        .select(bookmark.user.idx)
+        .from(bookmark)
+        .where(bookmark.portfolio.idx.in(portfolioIds))
+        .fetch();
 
     List<PortfolioInstanceResp> result = portfolioList.stream()
             .map(tuple -> PortfolioInstanceResp.builder()
@@ -133,9 +140,10 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
                     .name(tuple.get(portfolio.name))
                     .imageUrl(tuple.get(portfolio.imageUrl))
                     .viewCnt(tuple.get(portfolio.viewCnt))
+                    .badges(tuple.get(portfolio.badges))
                     .bookmarkCnt(Math.toIntExact(tuple.get(bookmark.count())))
                     .bookmarkUsers(bookmarkList)
-                    .acquisitionList(acquisitionListDto)
+                    .acquisitionList(acquisitionList)
                     .build()
             ).toList();
 
