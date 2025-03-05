@@ -478,15 +478,21 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 메인 페이지에서 포트폴리오 목록을 조회할 때 발생하는 N+1 문제를 해결하기 위해, JPA 기반의 단순 조회 방식에서 QueryDSL을 활용한 최적화 쿼리로 개선
 
 ### 개선 이전
-#### 🔎기존 문제점 (N+1 문제 발생)
-
-기존에는 JpaRepository를 활용하여 포트폴리오 목록을 조회하는 방식이었으며, 조회수(view count) 기준으로 정렬하여 페이지네이션을 적용하는 방식이었다.
-
-```java
+<details>
+   <summary>개선 전 코드</summary>
+   
+   ```java
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, PortfolioCustomRepository{
     Page<Portfolio> findAllByOrderByViewCntDesc(Pageable pageable);
 }
 ```
+
+</details>
+#### 🔎기존 문제점 (N+1 문제 발생)
+
+기존에는 JpaRepository를 활용하여 포트폴리오 목록을 조회하는 방식이었으며, 조회수(view count) 기준으로 정렬하여 페이지네이션을 적용하는 방식이었다.
+
+
 **포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
 
 ![before_3](./images/before_nplus1%20(3).png)
@@ -504,6 +510,9 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Por
 조회 속도: 평균 26000(ms)
 
 ### 개선 이후
+<details>
+   <summary>개선된 코드</summary>
+   
 ```java
 //PortfolioCustomRepository.java
 public interface PortfolioCustomRepository {
@@ -556,7 +565,10 @@ public interface PortfolioCustomRepository {
   }
 
 ```
+
 *필요한 Entity를 전부 Join하지 않고, Portfolio Idx를 추출하여 해당하는 데이터만 따로 목록을 불러와서 RepsonseDto에 매핑*
+
+</details>
 
 ![afterNplus1_3](./images/after_nplus1%20(3).png)
 ![afterNplus1_2](./images/after_nplus1%20(2).png)
