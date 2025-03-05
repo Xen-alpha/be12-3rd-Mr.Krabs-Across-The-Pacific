@@ -233,6 +233,19 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 
 사용하는 DBMS가 두 종류이기 때문에 헥사고날 아키텍처를 사용할 수도 있으나, 사용 중인 DBMS 중 MongoDB 내 데이터들은 순수하게 주가 그래프를 그리거나 최신 주가를 가져오는 용도로만 사용하며, 해당 데이터들은 프론트엔드에서 가공하여 사용자에게 표시하기로 정했다. 따라서 인터페이스를 여러 개 만들기보다 두 DBMS에 대해 서비스하는 계층이 완전히 분리된 레이어드 아키텍처로 구현하는 것이 코드를 작성하기 위해 필요한 시간이 더 적고 유지보수가 간편하다고 판단되어 백엔드 구조로 레이어드 아키텍처를 채택했다.
 
+**Layered 패턴**
+Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층으로 분리하여 적용한다.  
+3계층 Layered Architecture를 선택한 이유는 다음과 같다.
+1. Backend와 연결된 곳이 Frontend와 database 뿐이다.
+2. 주요 기능이 계층을 나누어 관리할 만큼 복잡하지 않다.
+3. 주요 기능과 외부 연결(frontend, database)에 필요한 계층을 분리하여 단일 책임 원칙을 지킬 수 있도록 한다.
+
+각 계층의 역할은 다음과 같다.
+- Web Layer는 frontend와 통신하며 http 요청을 dto로 전환하여 Service Layer에 전달한다.
+- Service Layer는 dto를 전달 받아 주요 기능을 수행하여 이를 Entity로 전환하여  Repository Layer에 전달한다.
+- Repository Layer는 해당 Entity를 database에 전달한다.
+
+![이미지](https://github.com/beyond-sw-camp/be12-3rd-Mr.Krabs-Across-The-Pacific/blob/develop/images/software%20architecture.png)
 
 <br>
 
