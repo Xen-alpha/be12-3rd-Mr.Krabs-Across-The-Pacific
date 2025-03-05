@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @NoArgsConstructor
@@ -34,5 +37,9 @@ public class StockReplyResp {
                 .updatedAt(stockReply.getUpdatedAt())
                 .likesCount(stockReply.getLikes().size())
                 .build();
+    }
+
+    public static Slice<StockReplyResp> from (Slice<StockReply> stockReplies) {
+        return stockReplies.map(StockReplyResp::from);
     }
 }
