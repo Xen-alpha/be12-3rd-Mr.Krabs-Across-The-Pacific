@@ -504,8 +504,6 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Por
 
 이는 각 포트폴리오에 대한 추가적인 정보(북마크, 보유 주식 등)를 가져올 때 추가 쿼리가 발생하여, 결과적으로 N개의 포트폴리오를 조회하면 추가로 N개의 개별 쿼리가 실행되었다. (N+1 문제, 성능 저하 및 불필요한 DB 부하 발생)
 
-조회 속도: 평균 26000(ms)
-
 ### 개선 이후
 <details>
    <summary>개선된 코드</summary>
