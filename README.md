@@ -488,6 +488,9 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, PortfolioCustomRepository{
     Page<Portfolio> findAllByOrderByViewCntDesc(Pageable pageable);
 }
+
+**포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
+
 ```
 
 </details>
@@ -495,9 +498,6 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Por
 #### 🔎기존 문제점 (N+1 문제 발생)
 
 기존에는 JpaRepository를 활용하여 포트폴리오 목록을 조회하는 방식이었으며, 조회수(view count) 기준으로 정렬하여 페이지네이션을 적용하는 방식이었다.
-
-
-**포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
 
 ![before_3](./images/before_nplus1%20(3).png)
 ![before_2](./images/before_nplus1%20(2).png)
