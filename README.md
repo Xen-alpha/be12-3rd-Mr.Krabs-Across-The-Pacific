@@ -25,7 +25,8 @@
 
 ## 시스템 아키텍쳐
 
-![systemarchitecture drawio](https://github.com/user-attachments/assets/fe2be81f-5d87-43e0-bd18-b42754700627)
+![image](https://github.com/user-attachments/assets/feffb63b-4360-46f7-9fef-c7c6c530dbca)
+
 
 
 <br>
