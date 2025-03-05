@@ -595,6 +595,7 @@ public interface PortfolioCustomRepository {
 #### ⚡ 3. 처리량 및 성능 지표 향상
 
 |항목	|기존 결과	|개선 결과	|개선 효과|
+|-----|--------|-----------|---------|
 |RPS (Requests Per Second)|	32.1|	90.9|	✅ 2.8배 증가|
 |Average size (bytes)|	5,502	|31,245|	⬆ 6배 증가|
 
