@@ -39,7 +39,7 @@
 <br>
 
 ### ☑️ 배포
-<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/ubuntu-%23E95420.svg?&style=for-the-badge&logo=ubuntu&logoColor=white" />
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img alt="Static Badge" src="https://img.shields.io/badge/Oracle%20Cloud-%23f80000?style=for-the-badge&logoColor=white"><img src="https://img.shields.io/badge/ubuntu-%23E95420.svg?&style=for-the-badge&logo=ubuntu&logoColor=white" />
 
 <br>
 
@@ -225,19 +225,20 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 
 </details>
 
-**DBMS: 하나의 Master DB Server와 여러 대의 Slave DB Server에서 구동되는 MariaDB + MongoDB atlas를 사용하는 MongoDB **
+**DBMS 변경점: 하나의 Master DB Server와 여러 대의 Slave DB Server에서 구동되는 MariaDB + MongoDB atlas를 사용하는 MongoDB**
 
 주식 가격 정보를 제외한 모든 정보는 MariaDB에 저장하며 MariaDB의 경우 포트폴리오 생성보다는 조회에 초점을 맞춰, 데이터 조회 요청을 집중적으로 처리하는 Query-off Loading 방식 채택하기로 하였다.
 
-만일 마스터 DB 서버가 멈출 경우 복제 DB 서버의 동기화가 끊어지는 상황이 있을 수 있다. 이에 대비해 DB Server들은 HAProxy와 같은 로드 밸런서를 통해 가상의 IP를 통해 백엔드와 통신하게 하여, 마스터가 멈추더라도 남은 슬레이브 DB들을 통해 단순한 포트폴리오 조회 작업 정도는 가능하게 만드는 등의 논의를 진행하였으나, 클라우드 내 가용 자원 부족으로 보류하여 도커 컨테이너를 도입하기 전까지 Query-off Loading을 사용하지 않고 단일 DB를 사용하기로 결정했다.
+만일 마스터 DB 서버가 멈출 경우 복제 DB 서버의 동기화가 끊어지는 상황이 있을 수 있다. 이에 대비해 DB Server들은 HAProxy와 같은 로드 밸런서를 통해 가상의 IP를 통해 백엔드와 통신하게 하여, 마스터가 멈추더라도 남은 슬레이브 DB들을 통해 단순한 포트폴리오 조회 작업 정도는 가능하게 만드는 등의 논의를 진행하였으나, 클라우드 내 가용 인스턴스 자원 부족으로 보류하여 도커 컨테이너를 도입하기 전까지 Query-off Loading을 사용하지 않고 단일 DB를 사용하기로 결정했다.
 
 한편 주식 가격 관련 서비스를 사용하기 위한 외부 서비스의 API 호출 횟수 제한이 높아 단순히 프론트엔드 또는 백엔드에서 외부 API를 직접 호출하기에는 원하는 만큼 데이터를 모을 수 없었다. 따라서 Node.js에 기반해 제작한 간단한 크롤러를 만들어 BSON 구조로 데이터를 저장하는 MongoDB에 데이터를 저장한 다음 프론트엔드가 백엔드에 주가 정보를 요청하면 MongoDB에서 즉시 다량의 정보를 꺼내오도록 구성하였다. 또한 저장해야 할 주식 가격의 정보가 100만개 이상으로 매우 많으며 한번 저장한 특정 시점의 특정 종목 가격 데이터를 갱신할 일이 없다는 점, MongoDB 프로젝트에서 제공하는 클라우드 클러스터링 서비스인 MongoDB atlas를 무료로 사용하여 지정된 URL로 DBMS에 대한 접근을 간편하게 할 수 있는 점도 MongoDB를 주식 가격 저장소로 채택한 이유다.
 
 **레이어드 아키텍처**
 
-서비스의 복잡성을 고려했을 때 소규모 서비스에 적절한 단순한 MVC 패턴은 이 프로젝트에 3종 이상의 기능 분류가 필요하여 적합하지 않다고 판단되며, 반면 멀티모듈 프로젝트나 MSA를 구성하기에는 기능 구현을 위한 노력 대비 프로젝트의 규모가 작았기 때문에 이 또한 적절하지 않았다. Query-off Loading으로 여러 대의 DB 서버를 구성하기로 하였음에도 CQRS 구조를 채택하지 않은 것은 주식 관련 정보, 포트폴리오 관련 정보, 사용자 정보 및 다른 사용자의 댓글 정보가 담긴 테이블 간의 연관 관계가 복잡하게 얽혀 있어 프로젝트 기간 내에 메세지를 전달하고 동시성 제어를 구현하기 매우 어려울 것으로 판단하였기 때문이다.
+서비스의 복잡성을 고려했을 때 이 프로젝트에 3종 이상의 기능 분류가 필요하기에 단일한 서비스에 적절한 단순한 MVC 패턴은 적합하지 않다고 판단되며, 반면 멀티모듈 프로젝트나 MSA를 구성하기에는 아키텍처 구현을 위한 시간과 노력에 비해 프로젝트의 규모가 작았기 때문에 과도하게 프로젝트가 복잡해질 우려가 있어 이 또한 적절하지 않았다. CQRS 구조를 채택하지 않은 것은 주식 관련 정보, 포트폴리오 관련 정보, 사용자 정보 및 다른 사용자의 댓글 정보가 담긴 테이블 간의 연관 관계가 복잡하게 얽혀 있어 프로젝트 기간 내에 메세지를 전달하고 동시성 제어를 구현하기 매우 어려울 것으로 판단하였기 때문이다. 따라서 Query-off Loading으로 여러 대의 DB 서버를 구성하기로 하였으므로 CQRS로 백엔드에서 동기화하는 방법도 제외하였다.
 
-사용하는 DBMS가 두 종류이기 때문에 헥사고날 아키텍처를 사용할 수도 있으나, 사용 중인 DBMS 중 MongoDB 내 데이터베이스는 순수하게 주가 그래프를 그리거나 최신 주가를 가져오는 용도로만 사용하며, 해당 데이터들은 프론트엔드에서 가공하여 사용자에게 표시하기로 정했기 때문에 두 DBMS에 대해 서비스하는 계층이 완전히 분리된 레이어드 아키텍처로 구현하는 것이 코드를 작성하기 위해 필요한 시간이 더 적고 유지보수가 간편하다고 판단되어 백엔드 구조로 레이어드 아키텍처를 채택했다.
+사용하는 DBMS가 두 종류이기 때문에 헥사고날 아키텍처를 사용할 수도 있으나, 사용 중인 DBMS 중 MongoDB 내 데이터베이스는 순수하게 주가 그래프를 그리거나 최신 주가를 가져오는 용도로만 사용하며, 해당 데이터들은 프론트엔드에서 가공하여 사용자에게 표시하기로 정했기 때문에 인터페이스를 여러 개 만들 필요가 없다. 따라서 두 DBMS에 대해 서비스하는 계층이 완전히 분리된 레이어드 아키텍처로 구현하는 것이 코드를 작성하기 위해 필요한 시간이 더 적고 유지보수가 간편하다고 판단되어 백엔드 구조로 레이어드 아키텍처를 채택했다.
+
 
 
 
@@ -327,6 +328,57 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 </details>
 
 <br>
+
+## 📊 성능 테스트
+Metric: 부하 테스트로 발생한 실패율과 응답 시간, 그리고 N+1 문제 해결 여부
+
+<details>
+<summary>공개된 포트폴리오 목록 조회</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>내 포트폴리오 목록 조회</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>주식 목록 조회</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>포트폴리오 검색</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>주식 종목 검색</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>포트폴리오 및 댓글 보기</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>주식 종목 및 댓글 보기</summary>
+* 개선 이전
+* 개선 이후
+</details>
+
+<details>
+<summary>사용자 정보 조회</summary>
+* 개선 이전
+* 개선 이후
+</details>
 
 ## 📄 기타 문서
 [👉🏼 프로젝트 기획안](https://docs.google.com/document/d/10S8pPWJzgGtz6S1djeimFvKHkFpN2KdOCY7mrUeAtj4/edit?pli=1&tab=t.b3v4vsjloy9)
