@@ -322,55 +322,13 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 <br>
 
 ## 📊 성능 테스트
-Metric: 부하 테스트로 발생한 실패율과 응답 시간, 그리고 N+1 문제 해결 여부
+Metric: N+1 문제 해결 전후 사용자 요청을 가정한 부하 테스트로 발생한 초당 요청 처리 수와 응답 시간
 
-<details>
-<summary>공개된 포트폴리오 목록 조회</summary>
-* 개선 이전
-* 개선 이후
-</details>
+### 개선 이전
 
-<details>
-<summary>내 포트폴리오 목록 조회</summary>
-* 개선 이전
-* 개선 이후
-</details>
+### 개선 이후
 
-<details>
-<summary>주식 목록 조회</summary>
-* 개선 이전
-* 개선 이후
-</details>
 
-<details>
-<summary>포트폴리오 검색</summary>
-* 개선 이전
-* 개선 이후
-</details>
-
-<details>
-<summary>주식 종목 검색</summary>
-* 개선 이전
-* 개선 이후
-</details>
-
-<details>
-<summary>포트폴리오 및 댓글 보기</summary>
-* 개선 이전
-* 개선 이후
-</details>
-
-<details>
-<summary>주식 종목 및 댓글 보기</summary>
-* 개선 이전
-* 개선 이후
-</details>
-
-<details>
-<summary>사용자 정보 조회</summary>
-* 개선 이전
-* 개선 이후
-</details>
 
 ## 📄 기타 문서
 [👉🏼 프로젝트 기획안](https://docs.google.com/document/d/10S8pPWJzgGtz6S1djeimFvKHkFpN2KdOCY7mrUeAtj4/edit?pli=1&tab=t.b3v4vsjloy9)
