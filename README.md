@@ -16,14 +16,14 @@
    
 <br>
 
-## 배포 링크
+## 🚀 배포 링크
 🔗[Across The Pacific](https://celarim.kro.kr)
 
 <br>
 
 <br>
 
-## 시스템 아키텍쳐
+## 📰 시스템 아키텍쳐
 
 ![image](https://github.com/user-attachments/assets/feffb63b-4360-46f7-9fef-c7c6c530dbca)
 
