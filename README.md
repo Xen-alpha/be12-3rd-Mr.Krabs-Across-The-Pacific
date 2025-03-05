@@ -216,14 +216,7 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 
 <br>
 
-## 📁 요구사항 명세서
-
-<details>
-<summary> 요구사항 정의서</summary>
-
-![요구사항 정의서](images/요구사항%20정의서.png)
-
-</details>
+## 📁 백엔드 및 DB 관련 요구사항
 
 **DBMS 변경점: 하나의 Master DB Server와 여러 대의 Slave DB Server에서 구동되는 MariaDB + MongoDB atlas를 사용하는 MongoDB**
 
