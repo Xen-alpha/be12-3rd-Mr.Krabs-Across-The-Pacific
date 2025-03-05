@@ -491,5 +491,7 @@ Metric: N+1 문제 해결 전후 사용자 요청을 가정한 부하 테스트�
 
 [👉🏼 요구사항 정의서](https://docs.google.com/spreadsheets/d/1woSNDRkSPBwEEkWzr27yUoJJfmwXYKzcMOCcOs6mO3c/edit?usp=sharing)
 
-[프론트엔드](https://github.com/beyond-sw-camp/be12-2nd-Mr.Krabs-Across-The-Pacific)
+<br>
+
+[🔗 프론트엔드](https://github.com/beyond-sw-camp/be12-2nd-Mr.Krabs-Across-The-Pacific)
 
