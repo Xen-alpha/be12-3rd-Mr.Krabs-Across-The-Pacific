@@ -7,6 +7,7 @@ import com.example.atp_back.stock.service.StockGraphService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,9 @@ public class StockGraphController {
     private final StockGraphService graphService;
 
     @Operation(description="body로 요청한 종목 코드 리스트에 따라 2년치 주가 변화 데이터를 응답함")
-    @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<StockGraphResp>>> getStockGraphList(@RequestBody StockGraphReq codes) {
+    @PostMapping("/list")
+    public ResponseEntity<BaseResponse<List<StockGraphResp>>> getStockGraphList(
+            @Valid  @RequestBody StockGraphReq codes) {
             BaseResponse<List<StockGraphResp>> response = BaseResponse.<List<StockGraphResp>>builder().isSuccess(true).result(graphService.getGraphList(codes.getCodes())).build();
             return ResponseEntity.ok(response);
     }
@@ -37,8 +39,4 @@ public class StockGraphController {
             return ResponseEntity.ok(response);
     }
 
-    @ExceptionHandler(value=IllegalArgumentException.class)
-    public ResponseEntity<BaseResponse<String>> handleException(IllegalArgumentException e) {
-        return ResponseEntity.status(400).body(BaseResponse.<String>builder().isSuccess(false).code("64101").message(e.getMessage()).build());
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.atp_back.stock.service;
 
+import com.example.atp_back.common.exception.handler.UserHandler;
 import com.example.atp_back.stock.model.StockGraphDocument;
 import com.example.atp_back.stock.model.resp.*;
 import com.example.atp_back.stock.repository.*;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.example.atp_back.common.code.status.ErrorStatus.STOCK_GRAPH_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -67,7 +70,7 @@ public class StockGraphService {
     }
 
     public Double getRecentPrice(String tickerCode) {
-        StockGraphDocument priceDoc = stockGraphRepository.findFirstByCodeOrderByDateDesc(tickerCode).orElse(null);
+        StockGraphDocument priceDoc = stockGraphRepository.findFirstByCodeOrderByDateDesc(tickerCode).orElseThrow(() -> new UserHandler(STOCK_GRAPH_NOT_FOUND));
         if (priceDoc == null) {
             return 0.0;
         } else {
