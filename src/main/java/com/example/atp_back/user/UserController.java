@@ -50,6 +50,10 @@ public class UserController {
 
 
     @Operation(summary="사용자 팔로우", description="사용자 간 팔로우 기능")
+    @ApiResponse(responseCode="200", description="정상 응답")
+    @ApiResponse(responseCode = "400", description="스스로 팔로우할 수 없습니다.")
+    @ApiResponse(responseCode = "400", description="사용자 팔로우에 실패했습니다.")
+    @ApiResponse(responseCode = "400", description="이미 팔로우한 사용자입니다.")
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -61,12 +65,16 @@ public class UserController {
     }
 
     @Operation(summary="팔로우 중인 사람 조회",description="나를 팔로우 중인 사람 조회")
+    @ApiResponse(responseCode="200", description="정상 응답")
+    @ApiResponse(responseCode = "400", description="사용자가 없습니다.")
     @GetMapping("/follower")
     public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@AuthenticationPrincipal User user) {
         FollowerResp result = userService.getFollowers(user.getEmail());
         return ResponseEntity.ok(BaseResponse.<FollowerResp>success(result));
     }
     @Operation(summary="팔로우하는 사람 조회", description="내가 팔로우 중인 사람 조회")
+    @ApiResponse(responseCode="200", description="정상 응답")
+    @ApiResponse(responseCode = "400", description="사용자가 없습니다.")
     @GetMapping("/followee")
     public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@AuthenticationPrincipal User user) {
         FolloweeResp result = userService.getFollowees(user.getEmail());
@@ -75,6 +83,10 @@ public class UserController {
 
 
     @Operation(summary="사용자 언팔로우", description="사용자 간 언팔로우 기능")
+    @ApiResponse(responseCode="200", description="정상 응답")
+    @ApiResponse(responseCode = "400", description="스스로 언팔로우할 수 없습니다.")
+    @ApiResponse(responseCode = "400", description="사용자 언팔로우에 실패했습니다.")
+    @ApiResponse(responseCode = "400", description="이미 언팔로우한 사용자입니다.")
     @PostMapping("/unfollow")
     public ResponseEntity<BaseResponse<String>> unfollow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -86,6 +98,8 @@ public class UserController {
     }
     /*
     @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
+    @ApiResponse(responseCode = "400", description="성공했습니다.")
+    @ApiResponse(responseCode = "400", description="사용자 정보 갱신에 실패했습니다.")
     @PutMapping("/update")
     public ResponseEntity<BaseResponse<String>> update(
             @Parameter(description="UserUpdateReq 데이터 전송 객체를 사용합니다")
@@ -100,6 +114,7 @@ public class UserController {
     */
 
     @Operation(description="로그아웃 리다이렉션용")
+    @ApiResponse(responseCode = "200", description="로그아웃에 성공했습니다.")
     @PostMapping("/logout")
     public ResponseEntity<BaseResponse<String>> successfulLogout() {
         return ResponseEntity.ok(BaseResponse.<String>success("로그아웃에 성공했습니다"));
