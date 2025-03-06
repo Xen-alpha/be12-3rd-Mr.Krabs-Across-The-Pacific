@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Schema(description="회원가입 요청 body")
 public class SignupReq {
     @Schema(description="실명(문자열): 필수", example = "gildong")
     @NotBlank

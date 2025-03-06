@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Schema(description="로그인 요청 Body")
 public class LoginReq {
     @Schema(description="ID(문자열): 이메일임, 필수", example = "example@example.com")
     @NotBlank

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
+@Schema(description = "사용자 정보 반환 응답 양식")
 public class UserInfoResp {
     @Schema(description="닉네임", example = "gildong")
     private String name;

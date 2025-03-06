@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
+@Schema(description="유저 정보 갱신 요청 body")
 public class UserUpdateReq {
     @Schema(description="실명, 필수", example = "GilDongHong")
     @NotBlank
