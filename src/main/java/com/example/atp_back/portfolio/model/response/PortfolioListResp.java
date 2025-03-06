@@ -23,7 +23,7 @@ public class PortfolioListResp {
   @Schema(description = "리스트로 만들어질 포트폴리오의 목록")
   private List<PortfolioInstanceResp> portfolioList = new ArrayList<>();
 
-  public static PortfolioListResp from(@Nullable User user, List<Portfolio> portfolios) {
+  public static PortfolioListResp from(@Nullable User user, List<PortfolioInstanceResp> portfolios) {
     List<PortfolioInstanceResp> instanceResp = portfolios.stream()
             .map(portfolio -> PortfolioInstanceResp.fromMain(user, portfolio))
             .collect(Collectors.toList());
