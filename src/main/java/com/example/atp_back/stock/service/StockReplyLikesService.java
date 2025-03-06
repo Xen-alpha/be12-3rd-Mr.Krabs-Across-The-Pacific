@@ -1,5 +1,7 @@
 package com.example.atp_back.stock.service;
 
+import com.example.atp_back.common.code.status.ErrorStatus;
+import com.example.atp_back.common.exception.handler.StockHandler;
 import com.example.atp_back.stock.model.StockReply;
 import com.example.atp_back.stock.model.StockReplyLikes;
 import com.example.atp_back.stock.repository.StockReplyLikesRepository;
@@ -18,12 +20,24 @@ public class StockReplyLikesService {
     @Transactional
     public void likeReply(User user, Long replyId) {
 
-        StockReply reply = stockReplyRepository.findById(replyId).orElseThrow();
-        reply.addLikesCount();
-        stockReplyRepository.save(reply);
-        stockReplyLikesRepository.save(StockReplyLikes.builder()
-                .user(user)
-                .reply(reply)
-                .build());
+        StockReply reply = stockReplyRepository.findById(replyId).orElseThrow(() -> new StockHandler(ErrorStatus.REPLY_NOT_FOUND));
+
+        try {
+            stockReplyLikesRepository.save(StockReplyLikes.builder()
+                    .user(user)
+                    .reply(reply)
+                    .build());
+        }
+        catch (Exception e) {
+            throw new StockHandler(ErrorStatus.REPLY_LIKES_FAILED);
+        }
+
+        try {
+            stockReplyRepository.save(reply);
+            reply.addLikesCount();
+        }
+        catch (Exception e) {
+            throw new StockHandler(ErrorStatus.REPLY_OPTIMISTIC_LOCK_FAILED);
+        }
     }
 }

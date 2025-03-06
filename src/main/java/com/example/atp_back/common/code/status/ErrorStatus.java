@@ -31,11 +31,18 @@ public enum ErrorStatus implements BaseErrorCode {
     // 포트폴리오 관련 에러
     PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO4001", "게시글이 없습니다."),
 
+    // 댓글 관련 에러
+    REPLY_REGISTER_FAILED(HttpStatus.BAD_REQUEST, "REPLY4001", "댓글 등록에 실패했습니다."),
+    REPLY_LIKES_FAILED(HttpStatus.BAD_REQUEST, "REPLY4002", "댓글 좋아요에 실패했습니다."),
+    REPLY_LIKES_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "REPLY4003", "이미 좋아하는 댓글입니다."),
+    REPLY_NOT_FOUND(HttpStatus.NOT_FOUND, "REPLY4041", "댓글을 불러오는데 실패했습니다."),
+    REPLY_OPTIMISTIC_LOCK_FAILED(HttpStatus.CONFLICT, "REPLY4091", "이미 좋아하는 댓글입니다."),
     //주식 관련 에러
-    STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4001", "주식이 없습니다.");
+    STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4001", "주식 정보를 불러오는 데에 실패했습니다."),
 
     STOCK_GRAPH_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4041", "그래프 데이터를 불러올 수 없습니다."),
-    STOCK_RECENT_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4042", "최근 가격을 불러올 수 없습니다.");
+    STOCK_RECENT_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4042", "최근 가격을 불러올 수 없습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;
