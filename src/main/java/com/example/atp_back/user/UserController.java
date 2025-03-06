@@ -6,6 +6,7 @@ import com.example.atp_back.user.model.request.SignupReq;
 import com.example.atp_back.user.model.follow.response.FolloweeResp;
 import com.example.atp_back.user.model.follow.response.FollowerResp;
 import com.example.atp_back.user.model.follow.request.UserFollowReq;
+import com.example.atp_back.user.model.request.UserUpdateReq;
 import com.example.atp_back.user.model.response.UserInfoResp;
 import com.example.atp_back.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -93,23 +94,18 @@ public class UserController {
         userService.unfollow(reqBody.getEmail(), user.getEmail());
         return ResponseEntity.ok(BaseResponse.<String>success("언팔로우 성공"));
     }
-
-    /*
+    
     @Operation(summary="회원 정보 수정", description="회원 정보 일부를 업데이트합니다.")
     @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
-    @ApiResponse(responseCode="400", description="잘못된 요청 양식입니다")
+    @ApiResponse(responseCode="400", description="회원 정보 갱신에 실패했습니다")
     @PutMapping("/update")
     public ResponseEntity<BaseResponse<String>> update(
             @Parameter(description="UserUpdateReq 데이터 전송 객체를 사용합니다")
             @RequestBody UserUpdateReq request,
-            @Parameter(description="UserUpdateReq 데이터 전송 객체를 사용합니다")
-            @CookieValue(name="ATOKEN", required=true) String token) {
-        String originalMail = JwtUtil.getUserEmailFromToken(token);
-        // TODO: originalMail == null일 때 예외처리 핸들러 추가할 것
-        userService.UpdateUser(request, originalMail);
-        return ResponseEntity.ok(BaseResponse.<String>success(resp));
+            @AuthenticationPrincipal User user) {
+        userService.UpdateUser(request, user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<String>success("회원 정보 갱신 성공"));
     }
-    */
 
     @Operation(summary="로그아웃 리다이렉션", description="로그아웃 리다이렉션용 임시 URL")
     @ApiResponse(responseCode="200", description="정상적으로 반환합니다. 'result'의 메세지는 '로그아웃에 성공했습니다' 문자열로 고정됩니다")
