@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class PortfolioListResp {
   private List<PortfolioInstanceResp> portfolioList = new ArrayList<>();
 
-  public static PortfolioListResp from(@Nullable User user, List<Portfolio> portfolios) {
+  public static PortfolioListResp from(@Nullable User user, List<PortfolioInstanceResp> portfolios) {
     List<PortfolioInstanceResp> instanceResp = portfolios.stream()
             .map(portfolio -> PortfolioInstanceResp.fromMain(user, portfolio))
             .collect(Collectors.toList());

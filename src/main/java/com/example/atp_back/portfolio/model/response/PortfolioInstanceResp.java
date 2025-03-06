@@ -32,21 +32,7 @@ public class PortfolioInstanceResp {
     private List<Long> bookmarkUsers = new ArrayList<>();
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
 
-    //포트폴리오 메인 페이지 응답
-    public static PortfolioInstanceResp fromMain(@Nullable User user, Portfolio portfolio) {
-        return PortfolioInstanceResp.builder()
-                .idx(portfolio.getIdx())
-                .name(portfolio.getName())
-                .imageUrl(portfolio.getImageUrl())
-                .viewCnt(portfolio.getViewCnt())
-                .badges(portfolio.getBadges())
-                .bookmark(user != null && portfolio.getBookmarkList().stream()
-                        .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx())))
-                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::fromMain).collect(Collectors.toList()))
-                .build();
-    }
-
-    public static PortfolioInstanceResp fromMain2(@Nullable User user, PortfolioInstanceResp portfolioResp) {
+    public static PortfolioInstanceResp fromMain(@Nullable User user, PortfolioInstanceResp portfolioResp) {
         return PortfolioInstanceResp.builder()
                 .idx(portfolioResp.getIdx())
                 .name(portfolioResp.getName())

@@ -46,9 +46,8 @@ public class PortfolioService {
     }
 
     /*포트폴리오 검색*/
-    public PortfolioListResp searchByKeyword(String keyword) {
-        List<Portfolio> portfolioList = portfolioRepository.searchAllByKeyword(keyword);
-        return PortfolioListResp.from(null, portfolioList);
+    public PortfolioPageResp searchByKeyword(@Nullable User user, Pageable pageable, String keyword) {
+        return PortfolioPageResp.from(user, portfolioRepository.searchAllByKeyword(pageable, keyword));
     }
 
     /*포트폴리오 조회수 관련*/
