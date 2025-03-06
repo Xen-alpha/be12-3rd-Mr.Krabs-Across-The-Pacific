@@ -19,7 +19,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 멤버 관련 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
-    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "필수 정보가 누락되었습니다."),
     MEMBER_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4003", "사용자 정보 갱신에 실패했습니다"),
     MEMBER_FOLLOW_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4004", "사용자 팔로우에 실패했습니다"),
     MEMBER_UNFOLLOW_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4005", "사용자 언팔로우에 실패했습니다"),
