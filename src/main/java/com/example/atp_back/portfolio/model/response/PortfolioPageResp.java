@@ -43,7 +43,7 @@ public class PortfolioPageResp {
                 .hasNext(portfolioPage.hasNext())
                 .hasPrevious(portfolioPage.hasPrevious())
                 .portfolioList(portfolioPage.stream()
-                        .map(portfolioResp -> PortfolioInstanceResp.fromMain(user, portfolioResp))
+                        .map(portfolioResp -> PortfolioInstanceResp.fromMain2(user, portfolioResp))
                         .collect(Collectors.toList()))
                 .build();
     }
