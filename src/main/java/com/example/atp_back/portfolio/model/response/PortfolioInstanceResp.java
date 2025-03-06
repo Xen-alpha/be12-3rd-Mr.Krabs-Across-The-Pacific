@@ -54,7 +54,7 @@ public class PortfolioInstanceResp {
                 .badges(portfolio.getBadges())
                 .bookmark(user != null && portfolio.getBookmarkList().stream()
                         .anyMatch(bookmark -> bookmark.getUser().getIdx().equals(user.getIdx())))
-                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::fromMain).collect(Collectors.toList()))
+                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
 

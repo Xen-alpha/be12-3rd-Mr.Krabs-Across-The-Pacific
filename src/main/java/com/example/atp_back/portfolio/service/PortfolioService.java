@@ -52,7 +52,7 @@ public class PortfolioService {
     public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
         //포트폴리오 idx를 이용해서 acquisition 목록 반환
         Portfolio portfolio = portfolioRepository.findWithAcquisitionsById(portfolioIdx);
-        return PortfolioInstanceResp.fromDetail(user, portfolio);
+        return PortfolioInstanceResp.fromDetail(portfolio);
     }
 
     /*포트폴리오 검색*/
