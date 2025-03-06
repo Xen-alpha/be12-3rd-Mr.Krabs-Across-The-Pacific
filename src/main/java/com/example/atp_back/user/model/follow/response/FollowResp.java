@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
+@Schema(description = "팔로우 응답 내부 양식")
 public class FollowResp {
-    @Schema(description="팔로우한 사람의 닉네임")
+    @Schema(description="팔로우한 사람의 이름", example="gildongHong")
     private String name;
-    @Schema(description="팔로우한 사람의 이메일")
+    @Schema(description="팔로우한 사람의 이메일", example="example@example.com")
     private String image;
-    @Schema(description = "팔로우한 사람의 등급")
+    @Schema(description = "팔로우한 사람의 등급", example="Bronze")
     private String tier;
 }

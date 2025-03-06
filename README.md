@@ -3,14 +3,15 @@
 
 
 ## 🗂️ 목차
-0. [배포 링크](#-배포-링크)
+0. [배포 링크](#-배포-링크)  
+   0.1. [swagger 링크](#swagger-링크)
 1. [💻 기술 스택](#-기술-스택)  
 2. [👩‍💻 팀원 소개](#-팀원-소개)
 3. [📊 프로젝트 개요](#-프로젝트-개요)  
    3.1. [소개](#1️⃣-소개)  
    3.2. [배경](#2️⃣-배경) 
-4. [📁 백엔드 및 DB 관련 요구사항](#-백엔드-및-DB-관련-요구사항)   
-5. [🔧 JSON 요청/응답 테스트(Postman)](#-JSON-요청/응답-테스트(Postman))
+4. [📁 백엔드 및 DB 관련 요구사항](#📁-백엔드-및-DB-관련-요구사항)   
+5. [🔧 JSON 요청/응답 테스트(Postman)](#🔧-JSON-요청/응답-테스트(Postman))
 6. [🔧 실제 테스트](#-실제-테스트)
 7. [📊 성능 테스트](#-성능-테스트)   
    7.1. [개선 이전](#개선-이전)   
@@ -21,7 +22,10 @@
 <br>
 
 ## 🚀 배포 링크
-🔗[Across The Pacific](https://celarim.kro.kr)
+🔗[Across The Pacific](https://celarim.kro.kr)  
+
+### swagger 링크
+🔗[Swagger](http://www.atp-back.kro.kr:8080/swagger-ui/index.html)
 
 <br>
 

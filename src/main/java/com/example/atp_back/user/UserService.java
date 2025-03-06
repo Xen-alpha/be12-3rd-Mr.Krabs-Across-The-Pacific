@@ -1,11 +1,14 @@
 package com.example.atp_back.user;
 
+import com.example.atp_back.common.code.status.ErrorStatus;
+import com.example.atp_back.common.exception.handler.UserHandler;
 import com.example.atp_back.user.model.*;
 import com.example.atp_back.user.model.follow.response.FollowResp;
 import com.example.atp_back.user.model.follow.UserFollow;
 import com.example.atp_back.user.model.follow.response.FolloweeResp;
 import com.example.atp_back.user.model.follow.response.FollowerResp;
 import com.example.atp_back.user.model.request.SignupReq;
+import com.example.atp_back.user.model.request.UserUpdateReq;
 import com.example.atp_back.user.model.response.UserInfoResp;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
@@ -46,7 +49,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void RegisterUser(SignupReq signupReq) {
         LocalDate thistime = LocalDate.now();
-        UserTier initialTier = userTierRepository.findByGrade("Bronze").orElse(null);
+        UserTier initialTier = userTierRepository.findByGrade("Bronze").orElseThrow(()-> new UserHandler(ErrorStatus. _INTERNAL_SERVER_ERROR));
         // TODO: File upload 위치 결정하고 업로드 함수 삽입
         /*
         String path = null;
@@ -68,36 +71,32 @@ public class UserService implements UserDetailsService {
     }
 
     public UserInfoResp getUserInfo(@NotNull String email) {
-        Optional<User> userResult = userRepository.findByEmail(email);
-        if (userResult.isPresent()) {
-            User userinfo = userResult.get();
-            int portfolioCount = 0;
-            if (userinfo.getPortfolios() != null) {
-                portfolioCount = userinfo.getPortfolios().size();
-            }
-            return UserInfoResp.builder()
-                    .email(userinfo.getEmail())
-                    .name(userinfo.getName())
-                    .tier(userinfo.getTierGrade().getGrade())
-                    .image(userinfo.getProfileImage())
-                    .portfolio_count(portfolioCount)
-                    .followers_count(userinfo.getFollowCount())
-                    .followings_count(userinfo.getFollowingCount())
-                    .build();
+        User userinfo = userRepository.findByEmail(email).orElseThrow(()-> new UserHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        int portfolioCount = 0;
+        if (userinfo.getPortfolios() != null) {
+            portfolioCount = userinfo.getPortfolios().size();
         }
-        return null;
+        return UserInfoResp.builder()
+                .email(userinfo.getEmail())
+                .name(userinfo.getName())
+                .tier(userinfo.getTierGrade().getGrade())
+                .image(userinfo.getProfileImage())
+                .portfolio_count(portfolioCount)
+                .followers_count(userinfo.getFollowCount())
+                .followings_count(userinfo.getFollowingCount())
+                .build();
     }
     @Operation(description="follower가 followee를 팔로우함")
     @Transactional
     public void follow(@NotNull String followeeMail, @NotNull String followerMail) {
         if (followeeMail.equals(followerMail)) {
-            throw new RuntimeException("bad follow");
+            throw new UserHandler(ErrorStatus.MEMBER_FOLLOW_SAME_PERSON);
         }
         User follower = userRepository.findByEmail(followerMail).orElse(null);
         User followee = userRepository.findByEmail(followeeMail).orElse(null);
         UserFollow prev = userFollowRepository.findByFolloweeAndFollower(followee, follower).orElse(null);
         if (prev != null) {
-            throw new RuntimeException("bad follow");
+            throw new UserHandler(ErrorStatus.MEMBER_ALREADY_FOLLOWED);
         }
         if (follower != null && followee != null) {
             follower.addFollowing();
@@ -105,7 +104,7 @@ public class UserService implements UserDetailsService {
             UserFollow follow = UserFollow.builder().follower(follower).followee(followee).date(LocalDateTime.now()).build();
             userFollowRepository.save(follow);
         } else {
-            throw new RuntimeException("Failed to follow");
+            throw new UserHandler(ErrorStatus.MEMBER_FOLLOW_FAILED);
         }
     }
 
@@ -113,7 +112,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void unfollow(@NotNull String followeeMail, @NotNull String followerMail) {
         if (followeeMail.equals(followerMail)) {
-            throw new RuntimeException("bad unfollow");
+            throw new UserHandler(ErrorStatus.MEMBER_UNFOLLOW_SAME_PERSON);
         }
         User follower = userRepository.findByEmail(followerMail).orElse(null);
         User followee = userRepository.findByEmail(followeeMail).orElse(null);
@@ -125,9 +124,11 @@ public class UserService implements UserDetailsService {
                 followee.removeFollower();
                 User follower2 = userRepository.save(follower);
                 User followee2 = userRepository.save(followee);
+            } else {
+                throw new UserHandler(ErrorStatus.MEMBER_ALREADY_UNFOLLOWED);
             }
         } else {
-            throw new RuntimeException("Failed to unfollow");
+            throw new UserHandler(ErrorStatus.MEMBER_UNFOLLOW_FAILED);
         }
     }
 
@@ -135,7 +136,7 @@ public class UserService implements UserDetailsService {
 
     @Operation(description="follower 수 가져오기")
     public FollowerResp getFollowers(@NotNull String followeeEmail) {
-        User followee = userRepository.findByEmail(followeeEmail).orElse(null);
+        User followee = userRepository.findByEmail(followeeEmail).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_NOT_FOUND));
         List<FollowResp> result = new ArrayList<>();
         if (followee != null) {
             List<UserFollow> follows = userFollowRepository.findAllByFolloweeOrderByDate(followee);
@@ -153,7 +154,7 @@ public class UserService implements UserDetailsService {
     }
     @Operation(description="following 수 가져오기")
     public FolloweeResp getFollowees(@NotNull String followerEmail) {
-        User follower = userRepository.findByEmail(followerEmail).orElse(null);
+        User follower = userRepository.findByEmail(followerEmail).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_NOT_FOUND));
         List<FollowResp> result = new ArrayList<>();
         if (follower != null) {
             List<UserFollow> follows = userFollowRepository.findAllByFollowerOrderByDate(follower);
@@ -170,22 +171,26 @@ public class UserService implements UserDetailsService {
         return followee;
     }
 
-    /*
     @Transactional
     public void UpdateUser(UserUpdateReq req, String originalMail) {
         LocalDate thistime = LocalDate.now();
-        User user = userRepository.findByEmail(originalMail).orElse(null);
-        if (user != null) {
-            user.setName(req.getName());
-            user.setEmail(req.getEmail());
-            user.setPassword(passwordEncoder.encode(req.getPassword()));
-            user.setProfileImage(req.getImage());
-            user.setUpdatedAt(thistime);
-        } else {
-            throw new UsernameNotFoundException("User not found");
-        }
+        User user = userRepository.findByEmail(originalMail).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_UPDATE_FAILED));
+        user.setName(req.getName());
+        user.setEmail(req.getEmail());
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setProfileImage(req.getImage());
+        user.setUpdatedAt(thistime);
+        userRepository.save(user);
+    }
+    /*
+    @Transactional
+    public void DeleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_DELETE_FAILED));
+        // TODO: 유저의 포트폴리오와 거기 달린 댓글, 주식 종목에 달린 댓글에 대한 처리가 필요
+        userRepository.delete(user);
     }
     */
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);

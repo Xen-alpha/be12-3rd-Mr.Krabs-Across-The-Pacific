@@ -67,7 +67,7 @@ public class LoggingAop {
             // 예외 발생 시 로그 남기기
 
             log.error("Exception occurred while processing request: {} {}", requestLine, e.getMessage(), e);
-            return null; // 예외 발생 시 기본적으로 null 반환 (혹은 다른 처리 가능)
+            throw e; // 예외 발생 시 기본적으로 null 반환 (혹은 다른 처리 가능)
 
         } finally {
             stopWatch.stop(); // 실행 시간 측정 종료

@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Schema(description = "언팔로우 요청")
 public class UserUnfollowReq {
-    @Schema(description="팔로우 해제할 사람의 이메일")
+    @Schema(description="팔로우 해제할 사람의 이메일", required = true, example="example@example.com")
     private String email;
 }
