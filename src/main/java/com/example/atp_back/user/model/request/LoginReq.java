@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class LoginReq {
-    @Schema(description="ID(문자열): 이메일임, 필수")
+    @Schema(description="ID(문자열): 이메일임, 필수", example = "example@example.com")
     @NotBlank
     @Email(message = "signup")
     private String id;
-    @Schema(description="패스워드(문자열), 필수")
+    @Schema(description="패스워드(문자열), 필수", example = "7276sefds")
     @NotBlank
     private String password;
 }

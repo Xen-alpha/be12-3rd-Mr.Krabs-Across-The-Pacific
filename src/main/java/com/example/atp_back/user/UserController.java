@@ -49,7 +49,7 @@ public class UserController {
     }
 
 
-    @Operation(description="사용자 간 팔로우 기능")
+    @Operation(summary="사용자 팔로우", description="사용자 간 팔로우 기능")
     @PostMapping("/follow")
     public ResponseEntity<BaseResponse<String>> follow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -60,13 +60,13 @@ public class UserController {
         return ResponseEntity.ok(BaseResponse.<String>success("팔로우 성공"));
     }
 
-    @Operation(description="나를 팔로우 중인 사람 조회")
+    @Operation(summary="팔로워 조회", description="나를 팔로우 중인 사람 조회")
     @GetMapping("/follower")
     public ResponseEntity<BaseResponse<FollowerResp>> getFollowers(@AuthenticationPrincipal User user) {
         FollowerResp result = userService.getFollowers(user.getEmail());
         return ResponseEntity.ok(BaseResponse.<FollowerResp>success(result));
     }
-    @Operation(description="내가 팔로우 중인 사람 조회")
+    @Operation(summary="팔로우 중 조회", description="내가 팔로우 중인 사람 조회")
     @GetMapping("/followee")
     public ResponseEntity<BaseResponse<FolloweeResp>> getFollowees(@AuthenticationPrincipal User user) {
         FolloweeResp result = userService.getFollowees(user.getEmail());
@@ -74,7 +74,7 @@ public class UserController {
     }
 
 
-    @Operation(description="사용자 간 팔로우 기능")
+    @Operation(summary="언팔로우", description="사용자 간 언팔로우 기능")
     @PostMapping("/unfollow")
     public ResponseEntity<BaseResponse<String>> unfollow(
             @Parameter(description="UserFollowReq 데이터 전송 객체를 사용합니다")
@@ -86,7 +86,7 @@ public class UserController {
     }
 
     /*
-    @Tag(name="회원 정보 업데이트", description = "회원 정보 업데이트를 합니다")
+    @Operation(summary="회원 정보 수정", description="회원 정보 일부를 업데이트합니다.")
     @PutMapping("/update")
     public ResponseEntity<BaseResponse<String>> update(
             @Parameter(description="UserUpdateReq 데이터 전송 객체를 사용합니다")
@@ -100,7 +100,7 @@ public class UserController {
     }
     */
 
-    @Operation(description="로그아웃 리다이렉션용")
+    @Operation(summary="로그아웃 리다이렉션", description="로그아웃 리다이렉션용 임시 URL")
     @PostMapping("/logout")
     public ResponseEntity<BaseResponse<String>> successfulLogout() {
         return ResponseEntity.ok(BaseResponse.<String>success("로그아웃에 성공했습니다"));
