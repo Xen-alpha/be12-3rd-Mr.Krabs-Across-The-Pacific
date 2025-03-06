@@ -26,7 +26,7 @@ public class PortfolioInstanceResp {
   @Schema(description = "포트폴리오 ID", example = "1")
     private Long idx;
   @Schema(description = "포트폴리오를 생성한 유저의 Idx", example = "101")
-    private int userIdx;
+    private Long userIdx;
   @Schema(description = "포트폴리오 이름", example = "Crab's Portfolio")
     private String name;
   @Schema(description = "생성된 포트폴리오의 정보를 담은 이미지")
@@ -80,12 +80,18 @@ public class PortfolioInstanceResp {
                 .build();
     }
 
-    //포트폴리오 상세 페이지 응답
-    public static PortfolioInstanceResp fromDetail(Portfolio portfolio) {
-        return PortfolioInstanceResp.builder()
-                .idx(portfolio.getIdx())
-                .name(portfolio.getName())
-                .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
-                .build();
-    }
+  //포트폴리오 상세 페이지 응답
+  public static PortfolioInstanceResp fromDetail(Portfolio portfolio) {
+    List<AcquisitionInstanceResp> acquisitionList = portfolio.getAcquisitionList().stream()
+            .map(AcquisitionInstanceResp::from)
+            .toList();
+
+
+    return PortfolioInstanceResp.builder()
+            .idx(portfolio.getIdx())
+            .name(portfolio.getName())
+            .userIdx(portfolio.getUser().getIdx())
+            .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
+            .build();
+  }
 }
