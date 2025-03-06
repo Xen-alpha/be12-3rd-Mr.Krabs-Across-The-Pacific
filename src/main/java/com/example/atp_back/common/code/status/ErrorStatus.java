@@ -22,9 +22,10 @@ public enum ErrorStatus implements BaseErrorCode {
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
     // 포트폴리오 관련 에러
-    PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO4001", "게시글이 없습니다.");
+    PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO4001", "게시글이 없습니다."),
 
     //주식 관련 에러
+    STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4001", "주식이 없습니다.");
 
 
     private final HttpStatus httpStatus;
