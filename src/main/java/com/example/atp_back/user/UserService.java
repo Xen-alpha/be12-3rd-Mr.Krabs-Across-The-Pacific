@@ -182,6 +182,14 @@ public class UserService implements UserDetailsService {
         user.setUpdatedAt(thistime);
         userRepository.save(user);
     }
+    /*
+    @Transactional
+    public void DeleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_DELETE_FAILED));
+        // TODO: 유저의 포트폴리오와 거기 달린 댓글, 주식 종목에 달린 댓글에 대한 처리가 필요
+        userRepository.delete(user);
+    }
+    */
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

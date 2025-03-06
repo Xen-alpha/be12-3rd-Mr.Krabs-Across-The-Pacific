@@ -27,6 +27,7 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_UNFOLLOW_SAME_PERSON(HttpStatus.BAD_REQUEST, "MEMBER4007", "스스로 언팔로우할 수 없습니다"),
     MEMBER_ALREADY_FOLLOWED(HttpStatus.BAD_REQUEST, "MEMBER4008", "이미 팔로우한 사용자입니다"),
     MEMBER_ALREADY_UNFOLLOWED(HttpStatus.BAD_REQUEST, "MEMBER4009", "이미 언팔로우한 사용자입니다"),
+    MEMBER_DELETE_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4010", "탈퇴에 실패했습니다"),
 
     // 포트폴리오 관련 에러
     PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO4001", "게시글이 없습니다."),
