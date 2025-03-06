@@ -14,6 +14,7 @@ import com.example.atp_back.portfolio.service.PortfolioReplyService;
 import com.example.atp_back.portfolio.service.PortfolioService;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/portfolio")
+@Tag(name="포트폴리오 기능", description = "포트폴리오를 등록하거나 조회하고 북마크하는 등, 포트폴리오와 관련된 기능을 수행")
 public class PortfolioController {
   private final PortfolioService portfolioService;
   private final PortfolioReplyService portfolioReplyService;
@@ -39,7 +41,7 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
-  @Operation(summary = "포트폴리오 목록 조회", description = "페이지별 포트폴리오 목록을 조회하고, 조회수, 북마크 수, 생성 날짜를 기준으로 정렬")
+  @Operation(summary = "포트폴리오 리스트 조회", description = "페이지별 포트폴리오 목록을 조회하고, 조회수, 북마크 수, 생성 날짜를 기준으로 정렬")
   @GetMapping("/list")
   public ResponseEntity<BaseResponse<PortfolioPageResp>> list(@AuthenticationPrincipal @Nullable User user,
           @PageableDefault(page = 0, size = 30, sort = "viewCnt") Pageable pageable) {

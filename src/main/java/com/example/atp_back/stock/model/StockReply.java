@@ -4,6 +4,7 @@ import com.example.atp_back.common.BaseReply;
 import com.example.atp_back.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -26,6 +27,22 @@ public class StockReply extends BaseReply {
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    @ColumnDefault("0")
+    @Column(nullable=false)
+    @Builder.Default
+    private Integer likesCount=0;
+
+    @Version
+    private Integer version;
+
     @OneToMany(mappedBy = "reply")
     private List<StockReplyLikes> likes;
+
+    public void addLikesCount() {
+        this.likesCount++;
+    }
+
+    public void subLikesCount() {
+        this.likesCount--;
+    }
 }

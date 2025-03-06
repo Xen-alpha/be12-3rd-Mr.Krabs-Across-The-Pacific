@@ -6,6 +6,7 @@ import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import com.example.atp_back.portfolio.model.entity.Reward;
 import com.example.atp_back.user.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,20 +24,31 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Schema(description = "포트폴리오 상세 정보")
 public class PortfolioInstanceResp {
-  private Long idx;
-  private Long userIdx;
-  private String name;
-  private String imageUrl;
-  private int viewCnt;
-  private boolean bookmark;
-  private boolean isOwn;
-  private int bookmarkCnt;
-  private int badges;
-  private String profileImage;
-  private List<Long> bookmarkUsers = new ArrayList<>();
-  private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
-  private List<StockSummaryResp> topStocks;
+  @Schema(description = "포트폴리오 ID", example = "1")
+    private Long idx;
+  @Schema(description = "포트폴리오를 생성한 유저의 Idx", example = "101")
+    private int userIdx;
+  @Schema(description = "포트폴리오 이름", example = "Crab's Portfolio")
+    private String name;
+  @Schema(description = "생성된 포트폴리오의 정보를 담은 이미지")
+    private String imageUrl;
+  @Schema(description = "포트폴리오가 조회된 횟수", example = "100")
+    private int viewCnt;
+  @Schema(description = "포트폴리오가 북마크되었는지 여부", example = "false")
+    private boolean bookmark;
+  @Schema(description = "포트폴리오가 북마크된 횟수", example = "30")
+    private int bookmarkCnt;
+  @Schema(description = "포트폴리오에 부여된 뱃지 정보", example = "101")
+    private int badges;
+  @Schema(description = "포트폴리오를 북마크한 유저 목록")
+    private List<Long> bookmarkUsers = new ArrayList<>();
+  @Schema(description = "포트폴리오에 등록된 구매 주식 리스트")
+    private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
+    private boolean isOwn;
+    private String profileImage;
+    private List<StockSummaryResp> topStocks;
 
   public static PortfolioInstanceResp fromMain(@Nullable User user, PortfolioInstanceResp portfolioResp) {
     return PortfolioInstanceResp.builder()
