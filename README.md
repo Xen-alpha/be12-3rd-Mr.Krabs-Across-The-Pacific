@@ -37,28 +37,19 @@
 
 
 
-
-<br>
-
 ## 💻 기술 스택
-
-
-### ☑️ 기획
+<details>
+   <summary>기술 스택</summary>
+   
+   ### ☑️ 기획
 <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?&style=for-the-badge&logo=figma&logoColor=white" />
-
-<br>
 
 ### ☑️ 배포
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/ubuntu-%23E95420.svg?&style=for-the-badge&logo=ubuntu&logoColor=white" />
 
-<br>
-
-
 ### ☑️ DB & Monitoring
 <img src="https://img.shields.io/badge/mariadb-%23003545.svg?&style=for-the-badge&logo=mariadb&logoColor=white" /><img src="https://img.shields.io/badge/mysql-%234479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/grafana-%23F46800.svg?&style=for-the-badge&logo=grafana&logoColor=white" /><img src="https://img.shields.io/badge/prometheus-%23E6522C.svg?&style=for-the-badge&logo=prometheus&logoColor=white" /><img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 ![Static Badge](https://img.shields.io/badge/MongoDB-%2347A248?style=for-the-badge&logo=mongodb&logoColor=white)
-
-<br>
 
 ### ☑️ BACK END
 **메인 백엔드**
@@ -73,8 +64,6 @@
 ![Static Badge](https://img.shields.io/badge/gradle-%2302303A?style=for-the-badge&logo=gradle&logoColor=white)
 <img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 
-
-
 **크롤러**
 
 ![Static Badge](https://img.shields.io/badge/node.js-%235FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -85,8 +74,15 @@
 ### 설치법
 [설치법 소개 위키 페이지](https://github.com/beyond-sw-camp/be12-3rd-Mr.Krabs-Across-The-Pacific/wiki/How-to-Install)
 
+</details>
+
+
+
 ##  👩‍💻 팀원 소개
-<table>
+<details>
+   <summary>팀원 소개</summary>
+   
+   <table>
   <tbody>
     <tr>
       <td align="center"><a href=""><img src="images/tesla.png" width="100px;" alt=""/><br /><sub><b> 팀장: 김경준 </b></sub></a><br /></td>
@@ -96,11 +92,13 @@
       <td align="center"><a href=""><img src="images/amazon.png" width="100px;" alt=""/><br /><sub><b>팀원: 황경윤</b></sub></a><br /></td>
   </tbody>
 </table>
+   
+</details>
 
-
-<br>
 
 ## 📊 프로젝트 개요
+<details>
+   <summary>프로젝트 개요</summary>
 
 ### 1️⃣ 소개
 
@@ -223,8 +221,7 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 </details>
 
 </details>
-
-<br>
+</details>
 
 ## 📁 백엔드 및 DB 관련 요구사항
 
@@ -474,7 +471,6 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 
 <details>
 <summary>프로필 및 설정</summary>
-
 
 
 </details>
