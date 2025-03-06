@@ -22,13 +22,15 @@ import java.util.stream.Collectors;
 @Builder
 public class PortfolioInstanceResp {
     private Long idx;
-    private int userIdx;
+    private Long userIdx;
     private String name;
     private String imageUrl;
     private int viewCnt;
     private boolean bookmark;
+    private boolean isOwn;
     private int bookmarkCnt;
     private int badges;
+    private String profileImage;
     private List<Long> bookmarkUsers = new ArrayList<>();
     private List<AcquisitionInstanceResp> acquisitionList = new ArrayList<>();
 
@@ -50,6 +52,7 @@ public class PortfolioInstanceResp {
         return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())
+            .isOwn(user!=null && user.getIdx().equals(portfolio.getUser().getIdx()))// 포트폴리오 소유 여부 확인인
                 .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
@@ -59,6 +62,8 @@ public class PortfolioInstanceResp {
         return PortfolioInstanceResp.builder()
                 .idx(portfolio.getIdx())
                 .name(portfolio.getName())
+                .userIdx(portfolio.getUser().getIdx())
+                .profileImage(portfolio.getUser().getProfileImage())
                 .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
                 .build();
     }
