@@ -29,7 +29,7 @@ public class PortfolioInstanceResp {
   @Schema(description = "포트폴리오 ID", example = "1")
     private Long idx;
   @Schema(description = "포트폴리오를 생성한 유저의 Idx", example = "101")
-    private int userIdx;
+    private Long userIdx;
   @Schema(description = "포트폴리오 이름", example = "Crab's Portfolio")
     private String name;
   @Schema(description = "생성된 포트폴리오의 정보를 담은 이미지")
