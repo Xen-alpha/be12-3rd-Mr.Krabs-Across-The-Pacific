@@ -27,12 +27,6 @@ public class BaseResponse<T> {
                 .build();
     }
 
-    public BaseResponse error(String code, String message) {
-        isSuccess = false;
-        this.code = code;
-        this.message = message;
-        return this;
-    }
 
     // 실패한 경우 응답 생성
     public static <T> BaseResponse<T> onFailure(String code, String message, T data){

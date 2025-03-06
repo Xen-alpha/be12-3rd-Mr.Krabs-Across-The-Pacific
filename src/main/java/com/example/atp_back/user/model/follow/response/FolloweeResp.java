@@ -11,8 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Schema(description = "팔로우 중인 사람들 목록 응답 양식")
 public class FolloweeResp {
-    @Schema(description="내가 팔로우 하는 중인 사람 수")
+    @Schema(description="내가 팔로우 하는 중인 사람 수", example="0")
     private int following;
     @Schema(description="내가 팔로우 하는 중인 사람들 정보")
     private List<FollowResp> users;
