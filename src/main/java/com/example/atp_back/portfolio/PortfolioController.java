@@ -51,8 +51,8 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
-  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@PathVariable Long portfolioIdx) {
-    BaseResponse<PortfolioInstanceResp> resp =  BaseResponse.success(portfolioService.read(portfolioIdx));
+  public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@AuthenticationPrincipal @Nullable User user, @PathVariable Long portfolioIdx) {
+    BaseResponse<PortfolioInstanceResp> resp =  BaseResponse.success(portfolioService.read(user, portfolioIdx));
     return ResponseEntity.ok(resp);
   }
 
@@ -76,8 +76,8 @@ public class PortfolioController {
 
   @Operation(summary = "포트폴리오 검색", description = "사용자가 입력한 단어가 포트폴리오의 이름, 주식 이름, 사용자 이름 중 하나라도 일치하는 포트폴리오의 목록을 조회")
   @GetMapping("/search/{keyword}")
-  public ResponseEntity<BaseResponse<PortfolioListResp>> searchByKeyword(@PathVariable String keyword) {
-    BaseResponse<PortfolioListResp> resp = BaseResponse.success(portfolioService.searchByKeyword(keyword));
+  public ResponseEntity<BaseResponse<PortfolioPageResp>> searchByKeyword(@PathVariable String keyword, @AuthenticationPrincipal @Nullable User user, @PageableDefault(page = 0, size = 30) Pageable pageable) {
+    BaseResponse<PortfolioPageResp> resp = BaseResponse.success(portfolioService.searchByKeyword(user, pageable, keyword));
     return ResponseEntity.ok(resp);
   }
 
