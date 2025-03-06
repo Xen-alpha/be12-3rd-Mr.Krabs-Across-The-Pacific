@@ -1,5 +1,7 @@
 package com.example.atp_back.stock.service;
 
+import com.example.atp_back.common.code.status.ErrorStatus;
+import com.example.atp_back.common.exception.handler.StockHandler;
 import com.example.atp_back.stock.model.resp.StockReplyResp;
 import com.example.atp_back.stock.repository.StockReplyRepository;
 import com.example.atp_back.stock.model.Stock;
@@ -19,17 +21,21 @@ public class StockReplyService {
 
     @Transactional
     public void addReply(StockReplyRegisterReq dto,User user, Long stockIdx) {
-        Stock stock = new Stock();
-        stock.setIdx(stockIdx);
-        user.setVersion(0L);
-        StockReply stockReply = dto.toEntity(user, stock);
-        stockReplyRepository.save(stockReply);
+        try {
+            Stock stock = new Stock();
+            stock.setIdx(stockIdx);
+            user.setVersion(0L);
+            StockReply stockReply = dto.toEntity(user, stock);
+            stockReplyRepository.save(stockReply);
+        }
+        catch (Exception e) {
+            throw new StockHandler(ErrorStatus.REPLY_REGISTER_FAILED);
+        }
     }
 
     @Transactional
     public Slice<StockReplyResp> getStockReply(Long stockIdx, int size, int page, User user) {
         Long userIdx = user==null?null:user.getIdx();
-        Slice<StockReplyResp> result = stockReplyRepository.findAllByStockIdxOrderByCreatedAtDesc(stockIdx, userIdx, PageRequest.of(page,size));
-        return result;
+        return stockReplyRepository.findAllByStockIdxOrderByCreatedAtDesc(stockIdx, userIdx, PageRequest.of(page,size));
     }
 }
