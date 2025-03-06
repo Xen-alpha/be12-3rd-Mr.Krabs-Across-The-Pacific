@@ -35,7 +35,6 @@ public class AcquisitionInstanceResp {
   @Schema(description = "메인 페이지에서 수익률 계산을 위한 주식 구매 총합산 금액", example = "750000")
     private BigDecimal stockPrice;
 
-    //수정 페이지
     public static AcquisitionInstanceResp from(Acquisition acquisition) {
         return AcquisitionInstanceResp.builder()
                 .idx(acquisition.getIdx())
@@ -44,27 +43,6 @@ public class AcquisitionInstanceResp {
                 .orderAt(acquisition.getOrderAt())
                 .stockName(acquisition.getStock().getName())
                 .stockCode(acquisition.getStock().getCode())
-                .build();
-    }
-
-    //메인 페이지
-    public static AcquisitionInstanceResp fromMain(Acquisition acquisition) {
-        BigDecimal stockPrice = acquisition.getQuantity().multiply(BigDecimal.valueOf(acquisition.getPrice()));
-        return AcquisitionInstanceResp.builder()
-                .price(acquisition.getPrice())
-                .stockPrice(stockPrice)
-                .portfolioIdx(acquisition.getPortfolio().getIdx())
-                .build();
-    }
-
-    //메인 페이지
-    public static AcquisitionInstanceResp of(AcquisitionInstanceResp acquisition) {
-        BigDecimal stockPrice = acquisition.getQuantity().multiply(BigDecimal.valueOf(acquisition.getPrice()));
-        return AcquisitionInstanceResp.builder()
-                .stockPrice(stockPrice)
-                .portfolioIdx(acquisition.getPortfolioIdx())
-                .stockName(acquisition.getStockName())
-                .stockIdx(acquisition.getStockIdx())
                 .build();
     }
 }

@@ -49,16 +49,15 @@ public class PortfolioService {
         return PortfolioPageResp.from(user, portfolioRepository.findAllByOrderByKeyword(pageable, sortBy));
     }
 
-    public PortfolioInstanceResp read(Long portfolioIdx) {
+    public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
         //포트폴리오 idx를 이용해서 acquisition 목록 반환
         Portfolio portfolio = portfolioRepository.findWithAcquisitionsById(portfolioIdx);
-        return PortfolioInstanceResp.fromDetail(portfolio);
+        return PortfolioInstanceResp.fromDetail(user, portfolio);
     }
 
     /*포트폴리오 검색*/
-    public PortfolioListResp searchByKeyword(String keyword) {
-        List<Portfolio> portfolioList = portfolioRepository.searchAllByKeyword(keyword);
-        return PortfolioListResp.from(null, portfolioList);
+    public PortfolioPageResp searchByKeyword(@Nullable User user, Pageable pageable, String keyword) {
+        return PortfolioPageResp.from(user, portfolioRepository.searchAllByKeyword(pageable, keyword));
     }
 
     /*포트폴리오 조회수 관련*/

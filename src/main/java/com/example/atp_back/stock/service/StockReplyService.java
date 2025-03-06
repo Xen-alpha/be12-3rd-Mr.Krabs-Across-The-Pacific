@@ -21,7 +21,7 @@ public class StockReplyService {
     public void addReply(StockReplyRegisterReq dto,User user, Long stockIdx) {
         Stock stock = new Stock();
         stock.setIdx(stockIdx);
-        // user.setVersion(0L);
+        user.setVersion(0L);
         StockReply stockReply = dto.toEntity(user, stock);
         stockReplyRepository.save(stockReply);
     }
