@@ -1,7 +1,9 @@
 package com.example.atp_back.config.filter;
 
+import com.example.atp_back.common.BaseResponse;
 import com.example.atp_back.user.model.request.LoginReq;
 import com.example.atp_back.user.model.User;
+import com.example.atp_back.user.model.response.LoginResp;
 import com.example.atp_back.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -53,5 +55,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .maxAge(3600) // 1시간(3600초) 유효시간
                 .build();
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        response.setContentType("application/json");
+
+        BaseResponse<LoginResp> dto = BaseResponse.success(LoginResp.of(user));
+        response.getWriter().write(new ObjectMapper().writeValueAsString(dto));
     }
 }
