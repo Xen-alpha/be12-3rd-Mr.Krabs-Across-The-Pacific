@@ -29,7 +29,8 @@ public class SwaggerConfig {
                 .info(apiInfo());
     }
 
-    private Info apiInfo() {
+    @Bean
+    protected Info apiInfo() {
         return new Info()
                 .title("Acrosse The Pacific API")
                 .description("Acrosse The Pacific API")
