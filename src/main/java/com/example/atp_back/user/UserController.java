@@ -82,7 +82,7 @@ public class UserController {
     }
 
 
-    @Operation(summary="언팔로우", description="사용자 간 언팔로우 기능")
+    @Operation(summary="사용자 언팔로우", description="사용자 간 언팔로우 기능")
     @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
     @ApiResponse(responseCode="400", description="잘못된 언팔로우 양식입니다")
     @PostMapping("/unfollow")
