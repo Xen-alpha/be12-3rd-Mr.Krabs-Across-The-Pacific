@@ -17,9 +17,16 @@ public enum ErrorStatus implements BaseErrorCode {
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404", "요청하신 리소스를 찾을 수 없습니다."),
 
 
-    // 멤버 관려 에러
+    // 멤버 관련 에러
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
-    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "필수 정보가 누락되었습니다."),
+    MEMBER_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4003", "사용자 정보 갱신에 실패했습니다"),
+    MEMBER_FOLLOW_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4004", "사용자 팔로우에 실패했습니다"),
+    MEMBER_UNFOLLOW_FAILED(HttpStatus.BAD_REQUEST, "MEMBER4005", "사용자 언팔로우에 실패했습니다"),
+    MEMBER_FOLLOW_SAME_PERSON(HttpStatus.BAD_REQUEST, "MEMBER4006", "스스로 팔로우할 수 없습니다"),
+    MEMBER_UNFOLLOW_SAME_PERSON(HttpStatus.BAD_REQUEST, "MEMBER4007", "스스로 언팔로우할 수 없습니다"),
+    MEMBER_ALREADY_FOLLOWED(HttpStatus.BAD_REQUEST, "MEMBER4008", "이미 팔로우한 사용자입니다"),
+    MEMBER_ALREADY_UNFOLLOWED(HttpStatus.BAD_REQUEST, "MEMBER4009", "이미 언팔로우한 사용자입니다"),
 
     // 포트폴리오 관련 에러
     PORTFOLIO_NOT_FOUND(HttpStatus.NOT_FOUND, "PORTFOLIO4001", "게시글이 없습니다."),
@@ -27,6 +34,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //주식 관련 에러
     STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4001", "주식이 없습니다.");
 
+    STOCK_GRAPH_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4041", "그래프 데이터를 불러올 수 없습니다."),
+    STOCK_RECENT_NOT_FOUND(HttpStatus.NOT_FOUND, "STOCK4042", "최근 가격을 불러올 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
