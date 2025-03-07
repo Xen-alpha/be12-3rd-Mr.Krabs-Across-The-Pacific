@@ -49,6 +49,15 @@ public class PortfolioController {
     return ResponseEntity.ok(resp);
   }
 
+  @Operation(summary = "특정 유저의 포트폴리오 리스트 조회", description = "유저의 Idx 값을 이용해 해당 유저의 포트폴리오 목록 조회")
+  @GetMapping("/list/{userIdx}")
+  public ResponseEntity<BaseResponse<PortfolioPageResp>> listByIdx (@AuthenticationPrincipal @Nullable User user, @PageableDefault(page = 0, size = 30, sort = "viewCnt") Pageable pageable, @PathVariable Long userIdx) {
+    BaseResponse<PortfolioPageResp> resp =  BaseResponse.success(portfolioService.listByIdx(user, pageable, userIdx));
+    return ResponseEntity.ok(resp);
+  }
+
+  //유저가 로그인했을 때 해당 유저가 북마크한 포트폴리오 목록 조회
+
   @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오의 Idx 값을 이용해 포트폴리오의 상세 내용을 확인하는 기능")
   @GetMapping("/{portfolioIdx}")
   public ResponseEntity<BaseResponse<PortfolioInstanceResp>> read(@AuthenticationPrincipal @Nullable User user, @PathVariable Long portfolioIdx) {
