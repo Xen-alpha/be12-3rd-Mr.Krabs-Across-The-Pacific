@@ -114,4 +114,14 @@ public class UserController {
         return ResponseEntity.ok(BaseResponse.<String>success( "로그아웃에 성공했습니다"));
     }
 
+    @Operation(summary="내 포트폴리오 조회", description="내가 작성한 포트폴리오 조회")
+    @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
+    @ApiResponse(responseCode="400", description="잘못된 요청 양식입니다")
+    @ApiResponse(responseCode="404", description="요청하신 리소스를 찾을 수 없습니다.")
+    @GetMapping("/followee")
+    public ResponseEntity<BaseResponse<FolloweeResp>> getMyPortfolio(@AuthenticationPrincipal User user) {
+        FolloweeResp result = userService.getFollowees(user.getEmail());
+        return ResponseEntity.ok(BaseResponse.<FolloweeResp>success(result));
+    }
+
 }

@@ -50,7 +50,7 @@ public class PortfolioInstanceResp {
     private String profileImage;
     private List<StockSummaryResp> topStocks;
 
-  public static PortfolioInstanceResp fromMain(@Nullable User user, PortfolioInstanceResp portfolioResp) {
+  public static PortfolioInstanceResp fromMain2(@Nullable User user, PortfolioInstanceResp portfolioResp) {
     return PortfolioInstanceResp.builder()
         .idx(portfolioResp.getIdx())
         .name(portfolioResp.getName())
