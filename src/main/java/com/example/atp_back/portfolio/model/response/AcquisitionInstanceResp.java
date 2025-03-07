@@ -28,6 +28,8 @@ public class AcquisitionInstanceResp {
     private Long portfolioIdx;
   @Schema(description = "주식 ID", example = "9")
     private Long stockIdx;
+  @Schema(description = "주식 코드", example = "AAPL")
+  private String stockCode;
   @Schema(description = "주식 이름", example = "Apple Inc. Common Stock")
     private String stockName;
 
@@ -41,6 +43,7 @@ public class AcquisitionInstanceResp {
                 .price(acquisition.getPrice())
                 .quantity(acquisition.getQuantity())
                 .orderAt(acquisition.getOrderAt())
+                .stockCode(acquisition.getStock().getCode())
                 .stockName(acquisition.getStock().getName())
                 .stockCode(acquisition.getStock().getCode())
                 .build();

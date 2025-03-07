@@ -49,6 +49,11 @@ public class PortfolioService {
         return PortfolioPageResp.from(user, portfolioRepository.findAllByOrderByKeyword(pageable, sortBy));
     }
 
+    public PortfolioPageResp listByIdx(@Nullable User user, Pageable pageable, Long userIdx) {
+      String sortBy = pageable.getSort().stream().findFirst().map(Sort.Order::getProperty).orElse("View");
+      return PortfolioPageResp.from(user, portfolioRepository.findAllByOrderByUserId(pageable, sortBy, userIdx));
+    }
+
     public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
         //포트폴리오 idx를 이용해서 acquisition 목록 반환
         Portfolio portfolio = portfolioRepository.findWithAcquisitionsById(portfolioIdx);

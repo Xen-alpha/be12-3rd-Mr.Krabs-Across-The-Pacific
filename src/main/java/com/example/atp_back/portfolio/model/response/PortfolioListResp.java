@@ -25,7 +25,7 @@ public class PortfolioListResp {
 
   public static PortfolioListResp from(@Nullable User user, List<PortfolioInstanceResp> portfolios) {
     List<PortfolioInstanceResp> instanceResp = portfolios.stream()
-            .map(portfolio -> PortfolioInstanceResp.fromMain2(user, portfolio))
+            .map(portfolio -> PortfolioInstanceResp.fromMain(user, portfolio))
             .collect(Collectors.toList());
     return PortfolioListResp.builder()
             .portfolioList(instanceResp)
