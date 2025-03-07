@@ -37,28 +37,19 @@
 
 
 
-
-<br>
-
 ## 💻 기술 스택
-
-
-### ☑️ 기획
+<details>
+   <summary>기술 스택</summary>
+   
+   ### ☑️ 기획
 <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?&style=for-the-badge&logo=figma&logoColor=white" />
-
-<br>
 
 ### ☑️ 배포
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/ubuntu-%23E95420.svg?&style=for-the-badge&logo=ubuntu&logoColor=white" />
 
-<br>
-
-
 ### ☑️ DB & Monitoring
 <img src="https://img.shields.io/badge/mariadb-%23003545.svg?&style=for-the-badge&logo=mariadb&logoColor=white" /><img src="https://img.shields.io/badge/mysql-%234479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/grafana-%23F46800.svg?&style=for-the-badge&logo=grafana&logoColor=white" /><img src="https://img.shields.io/badge/prometheus-%23E6522C.svg?&style=for-the-badge&logo=prometheus&logoColor=white" /><img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 ![Static Badge](https://img.shields.io/badge/MongoDB-%2347A248?style=for-the-badge&logo=mongodb&logoColor=white)
-
-<br>
 
 ### ☑️ BACK END
 **메인 백엔드**
@@ -73,8 +64,6 @@
 ![Static Badge](https://img.shields.io/badge/gradle-%2302303A?style=for-the-badge&logo=gradle&logoColor=white)
 <img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 
-
-
 **크롤러**
 
 ![Static Badge](https://img.shields.io/badge/node.js-%235FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -85,8 +74,15 @@
 ### 설치법
 [설치법 소개 위키 페이지](https://github.com/beyond-sw-camp/be12-3rd-Mr.Krabs-Across-The-Pacific/wiki/How-to-Install)
 
+</details>
+
+
+
 ##  👩‍💻 팀원 소개
-<table>
+<details>
+   <summary>팀원 소개</summary>
+   
+   <table>
   <tbody>
     <tr>
       <td align="center"><a href=""><img src="images/tesla.png" width="100px;" alt=""/><br /><sub><b> 팀장: 김경준 </b></sub></a><br /></td>
@@ -96,11 +92,13 @@
       <td align="center"><a href=""><img src="images/amazon.png" width="100px;" alt=""/><br /><sub><b>팀원: 황경윤</b></sub></a><br /></td>
   </tbody>
 </table>
+   
+</details>
 
-
-<br>
 
 ## 📊 프로젝트 개요
+<details>
+   <summary>프로젝트 개요</summary>
 
 ### 1️⃣ 소개
 
@@ -223,8 +221,7 @@ Across The Pacific은 위의 문제점들을 보완하여 꾸준히 높아지는
 </details>
 
 </details>
-
-<br>
+</details>
 
 ## 📁 백엔드 및 DB 관련 요구사항
 
@@ -476,7 +473,6 @@ Backend 서버를 Web Layer, Service Layer, Repository Layer의 3개의 계층�
 <summary>프로필 및 설정</summary>
 
 
-
 </details>
 
 <br>
@@ -497,10 +493,6 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Por
 **포트폴리오 목록을 조회수 내림차순으로 불러오되, 페이지네이션 외에는 특별한 처리를 하지 않은 JPA 코드*
 
 </details>
-
-![before_3](./images/before_nplus1%20(3).png)
-![before_2](./images/before_nplus1%20(2).png)
-![before_1](./images/before_nplus1%20(1).png)
 
 #### 🔎기존 문제점 (N+1 문제 발생)
 
@@ -569,10 +561,6 @@ public interface PortfolioCustomRepository {
 
 </details>
 
-![afterNplus1_3](./images/after_nplus1%20(3).png)
-![afterNplus1_2](./images/after_nplus1%20(2).png)
-![afterNplus1_1](./images/after_nplus1%20(1).png)
-
 #### 🔎성능 개선 내용
 
 1. QueryDSL을 사용하여 불필요한 개별 쿼리 실행 없이 포트폴리오 데이터 조회
@@ -582,7 +570,15 @@ public interface PortfolioCustomRepository {
 
 ### 결과 비교
 
-#### 🔍 1. 요청 수 증가
+![afterNplus1_3](./images/compare_nplus1%20(3).png)
+
+#### ✔️ 1. 페이지네이션을 적용했음에도 n+1문제로 인해 33번 호출되던 Select가 Join이 필요한 테이블의 수(3)만큼 줄었다.
+
+![afterNplus1_2](./images/compare_nplus1%20(2).png)
+![afterNplus1_1](./images/compare_nplus1%20(1).png)
+
+
+#### 🔍 2. 요청 수 증가
 
 |항목	|기존 결과	|개선 결과	|개선 효과|
 |---|----------|----------|-------|
@@ -591,7 +587,7 @@ public interface PortfolioCustomRepository {
 - 동일 시간 내 처리 가능한 요청 수가 2배 이상 증가
 - 시스템의 처리량이 증가했음을 의미
 
-#### 🚀 2. 응답 속도 개선
+#### 🚀 3. 응답 속도 개선
 
 |항목	|기존 결과	|개선 결과	|개선 효과|
 |-----|--------|-----------|---------|
@@ -606,7 +602,7 @@ public interface PortfolioCustomRepository {
 - 95~99% 구간에서도 응답 시간이 크게 줄어 일관된 성능 제공 가능
 - 최소 응답 시간(337ms)도 크게 감소, 빠른 응답이 가능해짐
 
-#### ⚡ 3. 처리량 및 성능 지표 향상
+#### ⚡ 4. 처리량 및 성능 지표 향상
 
 |항목	|기존 결과	|개선 결과	|개선 효과|
 |-----|--------|-----------|---------|
@@ -616,7 +612,7 @@ public interface PortfolioCustomRepository {
 - RPS(초당 요청 수)가 32.1 → 90.9로 약 2.8배 증가 → 서버가 더 많은 요청을 처리 가능
 - 응답 크기가 5,502 → 31,245로 증가 → 더 많은 데이터가 포함되었음을 의미 (추가 정보 포함 가능성)
 
-#### 🎯 4. 결론
+#### 🎯 5. 결론
 ✅ N+1 문제를 해결하고 QueryDSL을 적용한 결과, 응답 속도와 처리량이 크게 향상되었음.
 
 ✅ 요청 처리량이 2배 이상 증가했으며, 평균 응답 시간은 3배 가까이 단축됨.
