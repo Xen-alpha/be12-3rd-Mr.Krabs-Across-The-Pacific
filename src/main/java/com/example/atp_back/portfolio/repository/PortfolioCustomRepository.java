@@ -17,6 +17,9 @@ public interface PortfolioCustomRepository {
   //메인 페이지에서 포트폴리오 목록 조회
   Page<PortfolioInstanceResp> findAllByOrderByKeyword(Pageable pageable, String keyword);
 
+  //메인 페이지에서 포트폴리오 목록 조회
+  Page<PortfolioInstanceResp> findAllByOrderByUserId(Pageable pageable, String keyword, Long userIdx);
+
   //포트폴리오 클릭시 조회수 증가
   void incrementViewCnt(Long portfolioIdx);
 

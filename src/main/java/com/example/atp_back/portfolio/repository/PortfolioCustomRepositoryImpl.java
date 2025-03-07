@@ -113,7 +113,8 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
     List<Tuple> portfolioList = queryFactory
         .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
         .from(portfolio)
-        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio)).fetchJoin()  // fetchJoin 추가
+        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio)).fetchJoin()
+        .where(portfolio.isPublic.eq(true))
         .orderBy(orderSpecifier)
         .groupBy(portfolio)
         .offset(pageable.getOffset())
@@ -135,10 +136,29 @@ public class PortfolioCustomRepositoryImpl implements PortfolioCustomRepository 
         .leftJoin(acquisition.stock, stock)
         .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio)).fetchJoin()
         .where(
-            portfolio.name.contains(keyword).or(user.name.contains(keyword)).or(stock.name.contains(keyword))
+            portfolio.name.contains(keyword).or(user.name.contains(keyword)).or(stock.name.contains(keyword)).and(portfolio.isPublic.eq(true))
         )
         .groupBy(portfolio)
         .orderBy(portfolio.viewCnt.desc())
+        .fetch();
+
+    // 최종 응답 데이터 변환
+    List<PortfolioInstanceResp> result = PortfolioInstanceResp(portfolioList);
+    return new PageImpl<>(result, pageable, result.size());
+  }
+
+  @Override
+  public Page<PortfolioInstanceResp> findAllByOrderByUserId(Pageable pageable, String keyword, Long userIdx) {
+    OrderSpecifier<?> orderSpecifier = getSortedColumn(keyword);
+    List<Tuple> portfolioList = queryFactory
+        .select(portfolio.idx, portfolio.name, portfolio.imageUrl, portfolio.viewCnt, bookmark.count(), portfolio.badges)
+        .from(portfolio)
+        .leftJoin(bookmark).on(bookmark.portfolio.eq(portfolio)).fetchJoin()
+        .where(portfolio.user.idx.eq(userIdx).and(portfolio.isPublic.eq(true)))
+        .orderBy(orderSpecifier)
+        .groupBy(portfolio)
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
         .fetch();
 
     // 최종 응답 데이터 변환

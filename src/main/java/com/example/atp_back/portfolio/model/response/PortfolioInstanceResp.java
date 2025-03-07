@@ -32,6 +32,7 @@ public class PortfolioInstanceResp {
     private Long userIdx;
   @Schema(description = "포트폴리오 이름", example = "Crab's Portfolio")
     private String name;
+  private String userName;
   @Schema(description = "생성된 포트폴리오의 정보를 담은 이미지")
     private String imageUrl;
   @Schema(description = "포트폴리오가 조회된 횟수", example = "100")
@@ -85,9 +86,11 @@ public class PortfolioInstanceResp {
         .idx(portfolio.getIdx())
         .name(portfolio.getName())
         .userIdx(portfolio.getUser().getIdx())
+        .userName(portfolio.getUser().getName())
         .profileImage(portfolio.getUser().getProfileImage())
         .isOwn(user!=null && user.getIdx().equals(portfolio.getUser().getIdx()))// 포트폴리오 소유 여부 확인
         .topStocks(topStocks)
+        .acquisitionList(portfolio.getAcquisitionList().stream().map(AcquisitionInstanceResp::from).collect(Collectors.toList()))
         .build();
   }
 

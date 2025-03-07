@@ -41,14 +41,11 @@
 <details>
    <summary>기술 스택</summary>
    
-   ### ☑️ 기획
-<img src="https://img.shields.io/badge/figma-%23F24E1E.svg?&style=for-the-badge&logo=figma&logoColor=white" />
-
 ### ☑️ 배포
 <img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/ubuntu-%23E95420.svg?&style=for-the-badge&logo=ubuntu&logoColor=white" />
 
-### ☑️ DB & Monitoring
-<img src="https://img.shields.io/badge/mariadb-%23003545.svg?&style=for-the-badge&logo=mariadb&logoColor=white" /><img src="https://img.shields.io/badge/mysql-%234479A1.svg?&style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/grafana-%23F46800.svg?&style=for-the-badge&logo=grafana&logoColor=white" /><img src="https://img.shields.io/badge/prometheus-%23E6522C.svg?&style=for-the-badge&logo=prometheus&logoColor=white" /><img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
+### ☑️ DB
+<img src="https://img.shields.io/badge/mariadb-%23003545.svg?&style=for-the-badge&logo=mariadb&logoColor=white" />
 ![Static Badge](https://img.shields.io/badge/MongoDB-%2347A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ### ☑️ BACK END
@@ -61,13 +58,10 @@
 ![Static Badge](https://img.shields.io/badge/JJWT-%23888888?style=for-the-badge&logoColor=white)
 ![Static Badge](https://img.shields.io/badge/slf4j-%23888888?style=for-the-badge&logoColor=white)
 ![Static Badge](https://img.shields.io/badge/aspectj-%23888888?style=for-the-badge&logoColor=white)
-![Static Badge](https://img.shields.io/badge/gradle-%2302303A?style=for-the-badge&logo=gradle&logoColor=white)
-<img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 
 **크롤러**
 
 ![Static Badge](https://img.shields.io/badge/node.js-%235FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)
-<img src="https://img.shields.io/badge/linux-%23FCC624.svg?&style=for-the-badge&logo=linux&logoColor=black" />
 
 * [크롤러 리포지토리](https://github.com/Xen-alpha/polygon.io-crawler)
 
