@@ -87,7 +87,7 @@ public class PortfolioInstanceResp {
         .userIdx(portfolio.getUser().getIdx())
         .profileImage(portfolio.getUser().getProfileImage())
         .isOwn(user!=null && user.getIdx().equals(portfolio.getUser().getIdx()))// 포트폴리오 소유 여부 확인
-        .topStocks(topStocks)
+        .topStocks(topStocks).acquisitionList(acquisitionList)
         .build();
   }
 
