@@ -8,6 +8,7 @@ import com.example.atp_back.user.model.follow.UserFollow;
 import com.example.atp_back.user.model.follow.response.FolloweeResp;
 import com.example.atp_back.user.model.follow.response.FollowerResp;
 import com.example.atp_back.user.model.request.SignupReq;
+import com.example.atp_back.user.model.request.UserUpdateReq;
 import com.example.atp_back.user.model.response.UserInfoResp;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
@@ -170,19 +171,26 @@ public class UserService implements UserDetailsService {
         return followee;
     }
 
-    /*
     @Transactional
     public void UpdateUser(UserUpdateReq req, String originalMail) {
         LocalDate thistime = LocalDate.now();
-        User user = userRepository.findByEmail(originalMail).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        User user = userRepository.findByEmail(originalMail).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_UPDATE_FAILED));
         user.setName(req.getName());
         user.setEmail(req.getEmail());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setProfileImage(req.getImage());
-        user.setUpdatedAt(thistime)
+        user.setUpdatedAt(thistime);
         userRepository.save(user);
     }
+    /*
+    @Transactional
+    public void DeleteUser(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserHandler(ErrorStatus.MEMBER_DELETE_FAILED));
+        // TODO: 유저의 포트폴리오와 거기 달린 댓글, 주식 종목에 달린 댓글에 대한 처리가 필요
+        userRepository.delete(user);
+    }
     */
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
