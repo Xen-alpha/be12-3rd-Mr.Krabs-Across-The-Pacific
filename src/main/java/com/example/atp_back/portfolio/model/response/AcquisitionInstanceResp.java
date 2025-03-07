@@ -32,8 +32,6 @@ public class AcquisitionInstanceResp {
   private String stockCode;
   @Schema(description = "주식 이름", example = "Apple Inc. Common Stock")
     private String stockName;
-
-    private String stockCode;
   @Schema(description = "메인 페이지에서 수익률 계산을 위한 주식 구매 총합산 금액", example = "750000")
     private BigDecimal stockPrice;
 
