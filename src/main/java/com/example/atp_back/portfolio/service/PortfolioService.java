@@ -8,6 +8,8 @@ import com.example.atp_back.portfolio.model.request.PortfolioCreateReqDto;
 import com.example.atp_back.portfolio.model.response.*;
 import com.example.atp_back.portfolio.repository.*;
 import com.example.atp_back.stock.model.Stock;
+import com.example.atp_back.stock.model.StockGraphDocument;
+import com.example.atp_back.stock.repository.StockGraphRepository;
 import com.example.atp_back.stock.repository.StockRepository;
 import com.example.atp_back.user.model.User;
 import jakarta.annotation.Nullable;
@@ -32,6 +34,7 @@ public class PortfolioService {
     private final PortfolioReplyService portfolioReplyService;
     private final AcquisitionRepository acquisitionRepository;
     private final StockRepository stockRepository;
+    private final StockGraphRepository stockGraphRepository;
 
     @Transactional
     public Long register(User user, PortfolioCreateReqDto dto) {
