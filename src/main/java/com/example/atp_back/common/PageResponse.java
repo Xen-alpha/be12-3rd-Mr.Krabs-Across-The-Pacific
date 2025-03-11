@@ -22,7 +22,7 @@ public class PageResponse<T> {
     private boolean hasPrevious;
     private List<T> instances;
 
-    public static <T> PageResponse<T> from(Page<T> page, List<T> dto) {
+    public static <T> PageResponse<T> from(Page page, List<T> dto) {
         return PageResponse.<T>builder()
                 .page(page.getNumber())
                 .size(page.getSize())
