@@ -11,6 +11,9 @@ spring:
       hibernate:
         format_sql: false
     database-platform: org.hibernate.dialect.MariaDBDialect
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGODB_ID}:${MONGODB_PASS}@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0
 
 logging:
   level:

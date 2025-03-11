@@ -1,6 +1,11 @@
 FROM openjdk:17-ea-slim-buster
 
 ADD ./build/libs/ATP_Back-0.0.1-SNAPSHOT.jar /app.jar
+
+CMD ["mkdir", "/images", "&&", "chmod", "-R", "777", "/images"]
+
+ENV FILEPATH=/images
+
 EXPOSE 8080
 
 ENTRYPOINT java -jar /app.jar
