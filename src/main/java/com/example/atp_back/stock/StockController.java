@@ -1,6 +1,7 @@
 package com.example.atp_back.stock;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.common.PageResponse;
 import com.example.atp_back.stock.model.StockReply;
 import com.example.atp_back.stock.model.req.StockReplyRegisterReq;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
@@ -54,9 +55,21 @@ public class StockController {
             /stock/list 값을 입력 받는다. \n
             주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
             """)
-    @GetMapping("/list")
+    @GetMapping("/list/all")
     public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks() {
         BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks());
+        return ResponseEntity.ok(resp);
+    }
+
+    @Operation(summary = "주식 목록 조회 페이지", description = """
+            /stock/list 값을 입력 받는다. \n
+            주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
+            """)
+    @GetMapping("/list")
+    public ResponseEntity<BaseResponse<PageResponse<StockListResp>>> getStocks(Integer page, Integer size) {
+        if(page == null || page < 1) page=0;
+        if(size==null || size < 1) size=10;
+        BaseResponse<PageResponse<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks(page, size));
         return ResponseEntity.ok(resp);
     }
 
@@ -79,9 +92,9 @@ public class StockController {
             contents 값을 전달 받아서 인가 사용자와 입력받은 주식 id 값을 바탕으로 댓글을 저장한다.
             """)
     @PostMapping("/reply/{stockId}")
-    public ResponseEntity<BaseResponse<String>> PostStockReply(@RequestBody @Valid StockReplyRegisterReq dto,
-                                                              @AuthenticationPrincipal @Valid @NotNull User user,
-                                                              @PathVariable @Valid @PositiveOrZero Long stockId) {
+    public ResponseEntity<BaseResponse<String>> PostStockReply(@RequestBody StockReplyRegisterReq dto,
+                                                              @AuthenticationPrincipal User user,
+                                                              @PathVariable Long stockId) {
         stockReplyService.addReply(dto, user, stockId);
         BaseResponse<String> resp = BaseResponse.success("success");
         return ResponseEntity.ok(resp);

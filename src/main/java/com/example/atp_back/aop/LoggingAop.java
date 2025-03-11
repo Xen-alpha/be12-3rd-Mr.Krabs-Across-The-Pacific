@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 @Aspect
@@ -51,6 +53,15 @@ public class LoggingAop {
         log.info("{} - {} [{}] \"{}\" - {}", remoteHost, username, timestamp, requestLine, "REQUEST_RECEIVED");
 
         int responseCode = 500; // 기본 응답 코드 (예외 발생 시 500 반환)
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String methodName = signature.getMethod().getName();
+
+        // 파라미터 가져오기
+        Object[] args = joinPoint.getArgs();
+        String params = Arrays.toString(args);
+
+        // 로그 출력
+        log.info("Method: {} | Params: {}", methodName, params);
 
         try {
             // 컨트롤러 메서드 실행
