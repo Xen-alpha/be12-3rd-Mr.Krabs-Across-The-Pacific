@@ -157,7 +157,8 @@ public class PortfolioService {
     @Scheduled(fixedDelay = 86400000) // 하루에 한 번 정기적으로 실행
     @Transactional
     public void runProfitData() {
-        // 먼저 주식 종목 수 싱크를 맞춘다.
+        // 주식 종목 수 싱크를 맞추지 않음
+        /*
         List<StockGraphDocument> newstocks = stockGraphRepository.findAllByDateBetweenOrderByCodeAsc(System.currentTimeMillis()-86400000*2, System.currentTimeMillis()-86400000*1).stream().sorted((o1, o2) -> o1.getCode().compareTo(o2.getCode())).toList();
         List<Stock> oldStocks = stockRepository.findAll();
         // 길이가 다르면 갱신한다
@@ -187,6 +188,8 @@ public class PortfolioService {
             }
         }
         stockRepository.saveAll(newList);
+        */
+        int i;
         // 포트폴리오 수익률 및 순위 갱신
         List<Portfolio> portfolios = portfolioRepository.findAll();
         for (Portfolio portfolio : portfolios) {

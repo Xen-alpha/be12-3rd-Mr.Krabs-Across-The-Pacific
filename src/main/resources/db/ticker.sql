@@ -852,7 +852,7 @@ INSERT INTO stock(name, market, code) VALUES ('Costco Wholesale Corporation Comm
 INSERT INTO stock(name, market, code) VALUES ('Coya Therapeutics Inc. Common Stock', 'nasdaq', 'COYA');
 INSERT INTO stock(name, market, code) VALUES ('The Campbell\'s Company Common Stock', 'nasdaq', 'CPB');
 INSERT INTO stock(name, market, code) VALUES ('Central Plains Bancshares Inc. Common Stock', 'nasdaq', 'CPBI');
-INSERT INTO stock(name, market, code) VALUES ('Canterbury Park Holding Corporation \'New' Common Stock', 'nasdaq', 'CPHC');
+INSERT INTO stock(name, market, code) VALUES ('Canterbury Park Holding Corporation \'New\' Common Stock', 'nasdaq', 'CPHC');
 INSERT INTO stock(name, market, code) VALUES ('Cumberland Pharmaceuticals Inc. Common Stock', 'nasdaq', 'CPIX');
 INSERT INTO stock(name, market, code) VALUES ('Pop Culture Group Co. Ltd Class A Ordinary Shares', 'nasdaq', 'CPOP');
 INSERT INTO stock(name, market, code) VALUES ('Copart Inc. (DE) Common Stock', 'nasdaq', 'CPRT');
