@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.atp_back.common.code.status.ErrorStatus.STOCK_GRAPH_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class PortfolioService {
@@ -60,8 +62,20 @@ public class PortfolioService {
     public PortfolioInstanceResp read(@Nullable User user, Long portfolioIdx) {
         //포트폴리오 idx를 이용해서 acquisition 목록 반환
         Portfolio portfolio = portfolioRepository.findWithAcquisitionsById(portfolioIdx);
+        //포트폴리오의 acquisitionList와 원형차트를 위한 상위 5개 주 반환
         return PortfolioInstanceResp.fromDetail(user, portfolio);
     }
+
+    //포트폴리오 상세 페이지에서 하단의 그래프를 위한 주식 최근 가격
+    public Double getRecentPrice(String tickerCode) {
+      StockGraphDocument priceDoc = stockGraphRepository.findFirstByCodeOrderByDateDesc(tickerCode).orElseThrow(() -> new UserHandler(STOCK_GRAPH_NOT_FOUND));
+      if (priceDoc == null) {
+        return 0.0;
+      } else {
+        return priceDoc.getPrice();
+      }
+    }
+
 
     /*포트폴리오 검색*/
     public PortfolioPageResp searchByKeyword(@Nullable User user, Pageable pageable, String keyword) {

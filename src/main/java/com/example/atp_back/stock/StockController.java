@@ -1,6 +1,8 @@
 package com.example.atp_back.stock;
 
 import com.example.atp_back.common.BaseResponse;
+import com.example.atp_back.common.PageResponse;
+import com.example.atp_back.portfolio.model.response.PortfolioPageResp;
 import com.example.atp_back.stock.model.req.StockReplyRegisterReq;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
 import com.example.atp_back.stock.model.resp.StockListResp;
@@ -11,11 +13,14 @@ import com.example.atp_back.stock.service.StockService;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -52,11 +57,11 @@ public class StockController {
             주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
             """)
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks() {
-        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks());
-        return ResponseEntity.ok(resp);
+    public ResponseEntity<BaseResponse<PageResponse<StockListResp>>> getStocks(@PageableDefault(page = 0, size = 10) Pageable pageable) {
+      PageResponse<StockListResp> pageResponse = stockService.getAllStocks(pageable);
+      BaseResponse<PageResponse<StockListResp>> resp = BaseResponse.success(pageResponse);
+      return ResponseEntity.ok(resp);
     }
-
 
     @Operation(summary = "주식 댓글 작성", description = """
             /stock/reply/{stockId} 값을 입력 받는다. 인가된 사용자만 사용할 수 있다. \n

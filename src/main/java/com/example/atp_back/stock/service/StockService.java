@@ -1,11 +1,14 @@
 package com.example.atp_back.stock.service;
 
+import com.example.atp_back.common.PageResponse;
 import com.example.atp_back.common.code.status.ErrorStatus;
 import com.example.atp_back.common.exception.handler.StockHandler;
 import com.example.atp_back.stock.model.resp.StockListResp;
 import com.example.atp_back.stock.repository.StockRepository;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +25,8 @@ public class StockService {
         );
     }
 
-    public List<StockListResp> getAllStocks() {
-        return StockListResp.from(stockRepository.findAll());
+    public PageResponse<StockListResp> getAllStocks(Pageable pageable) {
+      Slice<StockListResp> stockSlice = stockRepository.findAllBy(pageable);
+      return PageResponse.from(stockSlice);
     }
 }
