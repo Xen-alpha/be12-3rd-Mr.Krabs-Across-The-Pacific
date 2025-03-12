@@ -26,3 +26,5 @@ jwtData:
   expiration: ${JWT_EXPIRATION}
 filepath:
   default: ${FILEPATH}
+
+url: ${SERVER_URL}
