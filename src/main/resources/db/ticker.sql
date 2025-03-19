@@ -1,3 +1,4 @@
+START TRANSACTION;
 CREATE TABLE IF NOT EXISTS stock( idx BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL, market VARCHAR(100) NOT NULL, code VARCHAR(10) NOT NULL);
 
 INSERT INTO stock(name, market, code) VALUES ('Artius II Acquisition Inc. Units', 'nasdaq', 'AACBU');
@@ -6931,3 +6932,4 @@ INSERT INTO stock(name, market, code) VALUES ('cbdMD Inc. Common Stock', 'amex',
 INSERT INTO stock(name, market, code) VALUES ('cbdMD Inc. 8.0% Series A Cumulative Convertible Preferred Stock', 'amex', 'YCBD^A');
 INSERT INTO stock(name, market, code) VALUES ('Zedge Inc. Class B Common Stock ', 'amex', 'ZDGE');
 INSERT INTO stock(name, market, code) VALUES ('CleanCore Solutions Inc. Class B Common Stock', 'amex', 'ZONE');
+COMMIT;
