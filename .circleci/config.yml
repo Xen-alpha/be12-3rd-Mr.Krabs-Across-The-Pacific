@@ -43,7 +43,7 @@ jobs:
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-            docker push $DOCKERHUB_USERNAME/testback:$TAG
+            docker push $DOCKERHUB_USERNAME/atp_back:$TAG
 
 workflows:
   version: 2
