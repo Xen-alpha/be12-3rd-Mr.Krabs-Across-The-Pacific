@@ -45,9 +45,7 @@ public class SecurityConfig {
                     .requestMatchers("/user/logout", "/user/signup", "/login", "/logout").permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
                     .requestMatchers("/portfolio/bookmark").hasRole("USER")
-                    .requestMatchers("/actuator/health/**").permitAll()
                     .anyRequest().permitAll();
-
         });
         http.logout(logout -> {
             logout.logoutUrl("/logout").permitAll().clearAuthentication(true).logoutSuccessUrl("/user/logout").deleteCookies("ATOKEN", "JSESSIONID").invalidateHttpSession(true);

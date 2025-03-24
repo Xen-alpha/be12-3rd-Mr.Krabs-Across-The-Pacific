@@ -111,9 +111,4 @@ public class StockController {
         BaseResponse<String> resp = BaseResponse.success("success");
         return ResponseEntity.ok(resp);
     }
-
-    @PostMapping("/test")
-    public ResponseEntity<String> test01() {
-        return ResponseEntity.ok("test01");
-    }
 }
