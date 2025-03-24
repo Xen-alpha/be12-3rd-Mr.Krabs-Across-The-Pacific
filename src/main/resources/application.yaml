@@ -31,3 +31,8 @@ jwtData:
   expiration: ${JWT_EXPIRATION}
 filepath:
   default: ${FILEPATH}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
