@@ -31,3 +31,13 @@ jwtData:
   expiration: ${JWT_EXPIRATION}
 filepath:
   default: ${FILEPATH}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false
