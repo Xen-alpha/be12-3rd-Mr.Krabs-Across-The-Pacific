@@ -9,10 +9,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     // TODO: N+1 문제 해결할 것: SELECT ... FROM user JOIN  WHERE user.email = ...
-    @Query("select u from User u join fetch u.tierGrade t " +
+    @Query("select u from User u " +
             "join fetch u.portfolios p " +
-            "join fetch u.followers f " +
-            "join fetch u.followees g " +
             "where u.email = :email")
     Optional<User> findByEmail(String email);
 }
