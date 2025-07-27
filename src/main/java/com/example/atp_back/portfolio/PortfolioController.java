@@ -127,7 +127,6 @@ public class PortfolioController {
   @Operation(summary = "포트폴리오 수익률 계산", description="포트폴리오 수익률 계산을 수동으로 새로고침")
   @GetMapping("/profit/renew")
   public ResponseEntity<BaseResponse<Boolean>> renew(@AuthenticationPrincipal User user) {
-    portfolioService.runProfitData();
     return ResponseEntity.ok(BaseResponse.success(true));
   }
 }
