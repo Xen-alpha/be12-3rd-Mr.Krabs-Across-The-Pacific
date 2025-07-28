@@ -1,11 +1,6 @@
 spring:
-  web:
-    cors:
-      allowed-origins: "https://celarim.kro.kr:443" # 프론트엔드 URL을 설정
-      allowed-methods: "*"
-      allowed-headers: "*"
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mariadb://127.0.0.1:3306/atp?protocol=tcp&useHostsInPrivileges=true
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
@@ -14,20 +9,24 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
     database-platform: org.hibernate.dialect.MariaDBDialect
-  sql:
-    init:
-      mode: always
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGODB_ID}:${MONGODB_PASS}@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0
 
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration: DEBUG
+    com.zaxxer.hikari.HikariConfig: DEBUG
 
 jwtData:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
 filepath:
   default: ${FILEPATH}
+
+url: ${SERVER_URL}
