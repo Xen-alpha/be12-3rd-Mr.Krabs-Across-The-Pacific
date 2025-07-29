@@ -6,6 +6,8 @@ import com.example.atp_back.stock.model.resp.StockListResp;
 import com.example.atp_back.stock.repository.StockRepository;
 import com.example.atp_back.stock.model.resp.StockDetailResp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class StockService {
         );
     }
 
-    public List<StockListResp> getAllStocks() {
-        return StockListResp.from(stockRepository.findAll());
+    public List<StockListResp> getStocks(Integer page, Integer size) {
+        return stockRepository.findAllBy(PageRequest.of(page, size)).toList();
     }
 }

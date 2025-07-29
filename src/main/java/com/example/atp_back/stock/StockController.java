@@ -52,8 +52,8 @@ public class StockController {
             주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
             """)
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks() {
-        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks());
+    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks(@RequestParam Integer page, @RequestParam Integer size) {
+        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getStocks(page, size));
         return ResponseEntity.ok(resp);
     }
 
