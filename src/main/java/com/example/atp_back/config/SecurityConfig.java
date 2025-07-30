@@ -43,13 +43,13 @@ public class SecurityConfig {
         );
         http.authorizeHttpRequests(authorizeRequests -> {
             authorizeRequests
-                    .requestMatchers("/user/logout", "/user/signup", "/login", "/logout").permitAll()
+                    .requestMatchers("/user/checkMe","/user/logout", "/user/signup", "/login", "/logout").permitAll()
                     .requestMatchers("/user/**").hasRole("USER")
                     .requestMatchers("/portfolio/bookmark").hasRole("USER")
                     .anyRequest().permitAll();
         });
         http.logout(logout -> {
-            logout.logoutUrl("/logout").permitAll().clearAuthentication(true).logoutSuccessUrl("/user/logout").deleteCookies("ATOKEN", "JSESSIONID").invalidateHttpSession(true);
+            logout.logoutUrl("/logout").permitAll().clearAuthentication(true).logoutSuccessUrl("/user/logout").deleteCookies("ATOKEN").invalidateHttpSession(true);
         });
         // 세션은 그냥 쓰지 않음
         http.sessionManagement(AbstractHttpConfigurer::disable);

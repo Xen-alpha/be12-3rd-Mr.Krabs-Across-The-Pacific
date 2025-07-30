@@ -52,11 +52,20 @@ public class StockController {
             주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
             """)
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks() {
-        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getAllStocks());
+    public ResponseEntity<BaseResponse<List<StockListResp>>> getStocks(@RequestParam Integer page, @RequestParam Integer size) {
+        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getStocks(page, size));
         return ResponseEntity.ok(resp);
     }
 
+    @Operation(summary = "주식 종목 검색", description = """
+            URL 쿼리 파라미터로 이름 키워드를 입력한다. \n
+            주식들의 id, 주식 이름, 주식 코드, 주식 거래소 값들을 반환한다.
+            """)
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponse<List<StockListResp>>> getSearchedStocks(@RequestParam String keyword) {
+        BaseResponse<List<StockListResp>> resp = BaseResponse.success(stockService.getSearchedStocks(keyword));
+        return ResponseEntity.ok(resp);
+    }
 
     @Operation(summary = "주식 댓글 작성", description = """
             /stock/reply/{stockId} 값을 입력 받는다. 인가된 사용자만 사용할 수 있다. \n

@@ -1,6 +1,8 @@
+server:
+  port: 8080
 spring:
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/atp?protocol=tcp&useHostsInPrivileges=true
+    url: jdbc:mariadb://localhost:3306/atp?protocol=tcp&useHostsInPrivileges=true
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver

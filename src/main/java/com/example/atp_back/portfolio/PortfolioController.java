@@ -96,7 +96,6 @@ public class PortfolioController {
           @AuthenticationPrincipal User user,
           @RequestBody PortfolioReplyReq dto,
           @PathVariable Long portfolioIdx) {
-    user.setVersion(0L);
     Long idx = portfolioReplyService.registerReply(dto, user, portfolioIdx);
     BaseResponse<Long> resp = BaseResponse.success(idx);
     return ResponseEntity.ok(resp);

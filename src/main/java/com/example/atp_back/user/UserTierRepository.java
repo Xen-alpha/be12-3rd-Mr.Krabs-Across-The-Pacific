@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserTierRepository extends JpaRepository<UserTier, Long> {
     @Query("select u from UserTier u " +
-            "join fetch u.userList l " +
+            //"join fetch u.userList l " +
             "where u.grade = :grade")
-    public Optional<UserTier> findByGrade(String grade);
+    Optional<UserTier> findByGrade(String grade);
 }

@@ -17,15 +17,14 @@ public class PortfolioCreateReqDto {
     private String name;
   @Schema(description = "타 유저에게 보여줄지 여부")
     private Boolean isPublic;
-  @Schema(description = "포트폴리오 생성 날짜")
-    private LocalDateTime createdAt;
   @Schema(description = "포트폴리오에 등록되는 구매 주식 목록")
-    private List<AcquisitionCreateReqDto> acquisitionList = new ArrayList<>();
+    private List<AcquisitionCreateReqDto> acquisitionList;
     public Portfolio toEntity(User user) {
         return Portfolio.builder()
                 .name(name)
                 .isPublic(true)
                 .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .user(user)
                 .build();
     }

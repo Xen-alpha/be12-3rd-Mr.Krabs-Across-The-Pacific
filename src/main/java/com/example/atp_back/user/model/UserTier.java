@@ -18,7 +18,7 @@ public class UserTier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
-    @Schema(description="유저 티어 이름(문자열): 브론즈부터 실버, 골드, 플래티넘까지")
+    @Schema(description="유저 티어 이름(문자열): 영어로 브론즈부터 실버, 골드, 플래티넘까지")
     @Column(nullable = false)
     private String grade;
 
