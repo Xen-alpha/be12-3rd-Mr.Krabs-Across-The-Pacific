@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mariadb://${DB_URL}:3306/atp?protocol=tcp&useHostsInPrivileges=true
+    url: "jdbc:mariadb://${DB_URL}:3306/atp?protocol=tcp&useHostsInPrivileges=true"
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver
@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
   data:
     mongodb:
-      uri: mongodb+srv://${MONGODB_ID}:${MONGODB_PASS}@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0
+      uri: "mongodb+srv://${MONGODB_ID}:${MONGODB_PASS}@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0"
 
 logging:
   level:
