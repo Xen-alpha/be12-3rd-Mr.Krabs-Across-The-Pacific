@@ -10,7 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
-    public Optional<Stock> findByCode(String code);
+    Optional<Stock> findByCode(String code);
     @Query("SELECT new com.example.atp_back.stock.model.resp.StockListResp(s.idx, s.name, s.code, s.market) FROM Stock s")
     Slice<StockListResp> findAllBy(Pageable pageable);
+    @Query("SELECT new com.example.atp_back.stock.model.resp.StockListResp(s.idx, s.name, s.code, s.market) FROM Stock s WHERE s.name LIKE :keyword" + "%")
+    Slice<StockListResp> findAllByKeyword(String keyword, Pageable pageable);
 }

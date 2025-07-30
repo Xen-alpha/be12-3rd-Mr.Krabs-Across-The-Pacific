@@ -27,4 +27,8 @@ public class StockService {
     public List<StockListResp> getStocks(Integer page, Integer size) {
         return stockRepository.findAllBy(PageRequest.of(page, size)).toList();
     }
+
+    public List<StockListResp> getSearchedStocks(String keyword) {
+        return stockRepository.findAllByKeyword(keyword, PageRequest.of(0, 10)).toList();
+    }
 }

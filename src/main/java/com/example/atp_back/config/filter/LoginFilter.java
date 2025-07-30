@@ -47,12 +47,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         User user = (User) auth.getPrincipal();
         String jwt = JwtUtil.generateToken(user.getIdx(), user.getEmail(), user.getRole());
-        // logger.info("{}({})님에게 {} JWT 토큰 부여",user.getIdx(), user.getEmail(), jwt);
+        logger.info("{}({})님에게 {} JWT 토큰 부여",user.getIdx(), user.getEmail(), jwt);
         ResponseCookie cookie = ResponseCookie.from("ATOKEN", jwt)
                 .path("/")
                 .httpOnly(true)
                 .secure(true)
-                .maxAge(3600) // 1시간(3600초) 유효시간
+                .maxAge(86400) // 24시간 유효시간
                 .build();
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         response.setContentType("application/json");

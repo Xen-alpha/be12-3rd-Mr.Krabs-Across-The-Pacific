@@ -56,6 +56,12 @@ public class UserController {
         return ResponseEntity.ok(BaseResponse.success(result));
     }
 
+    @GetMapping("/checkMe")
+    public ResponseEntity<Boolean> checkLogin(@AuthenticationPrincipal User user) {
+        if (user == null) return ResponseEntity.ok(false);
+        return ResponseEntity.ok(true);
+    }
+
 
     @Operation(summary="사용자 팔로우", description="사용자 간 팔로우 기능")
     @ApiResponse(responseCode="200", description="정상적으로 반환하였습니다")
