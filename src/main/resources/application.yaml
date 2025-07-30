@@ -3,8 +3,8 @@ server:
 spring:
   datasource:
     url: "jdbc:mariadb://database-xena.cr2awsc2ysrw.ap-northeast-2.rds.amazonaws.com:3306/atp?protocol=tcp&useHostsInPrivileges=true"
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    username: admin
+    password: fowltm556
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
   data:
     mongodb:
-      uri: "mongodb+srv://${MONGODB_ID}:${MONGODB_PASS}@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0"
+      uri: "mongodb+srv://atpadmin:4JTBTOqa3qWcUPSO@cluster0.e5il1.mongodb.net/americastock?retryWrites=true&w=majority&appName=Cluster0"
 logging:
   level:
     org.hibernate.SQL: debug
@@ -25,9 +25,9 @@ logging:
     com.zaxxer.hikari.HikariConfig: DEBUG
 
 jwtData:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
+  secret: acbdegfhikjlmonpqsrtuwvxzy0123456789acbdegfhikjlmonpqsrtuwvxzy0123456789
+  expiration: 86400000
 filepath:
-  default: ${FILEPATH}
+  default: "."
 
-url: ${SERVER_URL}
+url: atp.xena.p-e.kr
