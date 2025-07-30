@@ -22,7 +22,7 @@
 <br>
 
 ## 🚀 배포 링크
-🔗[Across The Pacific](https://celarim.kro.kr)  
+🔗[Across The Pacific](https://atp.xena.p-e.kr)  
 
 ### swagger 링크
 🔗[Swagger](http://www.atp-back.kro.kr:8080/swagger-ui/index.html)
