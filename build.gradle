@@ -24,11 +24,52 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 인증, 인가관련 Spring Security, jjwt, validation
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // DataBase 연결관련 Spring jpa, mariadb
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+    // DataBase 연결 관련 mongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //Swagger-ui
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+
+    // Logger
+    implementation 'org.aspectj:aspectjweaver'
+
+    //QueryDsl을 사용하기 위한 gradle
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation "com.querydsl:querydsl-collections:5.0.0" // GroupBy 사용 시 필요
+
+    // 로깅 설정 (SLF4J 및 Logback 설정)
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'ch.qos.logback:logback-classic'
+
+    //로깅 aop 설정
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // 불필요한 로깅 라이브러리 충돌 방지
+    configurations {
+        all {
+            exclude group: 'org.slf4j', module: 'slf4j-simple'
+            exclude group: 'commons-logging', module: 'commons-logging'
+        }
+    }
 }
 
 tasks.named('test') {
