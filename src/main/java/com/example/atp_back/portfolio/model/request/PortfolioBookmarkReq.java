@@ -4,9 +4,12 @@ import com.example.atp_back.portfolio.model.entity.Bookmark;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Schema(description = "포트폴리오 bookmark 요청")
 public class PortfolioBookmarkReq {
