@@ -5,8 +5,12 @@ import com.example.atp_back.portfolio.model.entity.PortfolioReply;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Schema(description = "포트폴리오 상세 페이지에서 해당 포트폴리오에 달린 댓글을 확인하는 DTO")
 public class PortfolioReplyReq {

@@ -3,13 +3,17 @@ package com.example.atp_back.portfolio.model.request;
 import com.example.atp_back.portfolio.model.entity.Portfolio;
 import com.example.atp_back.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Schema(description = "포트폴리오 생성 요청 DTO")
 public class PortfolioCreateReqDto {
