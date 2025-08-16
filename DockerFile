@@ -6,4 +6,4 @@ ENV FILEPATH=/images
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/app.jar"]
+CMD ["java", "-jar", "/app.jar", "-Dfile.encoding=UTF-8", "-Dconsole.encoding=UTF-8"]
